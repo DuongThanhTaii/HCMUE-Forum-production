@@ -1,0 +1,356 @@
+{
+  "title": "Forum",
+  "createPost": {
+    "pageTitle": "Create post",
+    "title": "New topic",
+    "subtitle": "Pick a category and write your content. Submissions stay pending until a moderator approves them.",
+    "backToList": "Back to list",
+    "submit": "Submit",
+    "pendingNote": "After you submit, moderators will review. You can keep browsing published topics in the forum.",
+    "noticeAttachments": "Image and file attachments for forum posts are not supported yet (the API accepts plain text and tags only).",
+    "noticeMentions": "@username mentions and notifications are not implemented yet.",
+    "noticeChat": "Real-time messaging: the backend includes a Chat module and SignalR hub, but the /chat route in the web app is still a placeholder — the inbox UI is not wired up yet.",
+    "fields": {
+      "title": "Title",
+      "type": "Type",
+      "category": "Category",
+      "categoryPlaceholder": "— Select category —",
+      "content": "Content",
+      "tagPicker": "Tags — pick suggestions or add your own",
+      "noSuggestedTags": "No suggested tags yet. Add tags using the field below.",
+      "addCustomTags": "Add more tags (press Enter to add each)",
+      "addCustomTagsPlaceholder": "e.g. makeup-class — Enter",
+      "removeTag": "Remove tag"
+    },
+    "types": {
+      "discussion": "Discussion",
+      "question": "Q&A"
+    },
+    "validation": {
+      "required": "Please enter both title and content.",
+      "submitFailed": "Could not submit. Please try again."
+    }
+  },
+  "editPost": "Edit post",
+  "deletePost": "Delete post",
+  "allPosts": "All posts",
+  "myPosts": "My posts",
+  "trending": "Trending",
+  "recent": "Recent",
+  "post": "Post",
+  "posts": "posts",
+  "comment": "Comment",
+  "comments": "comments",
+  "replies": "Replies",
+  "vote": "Vote",
+  "votes": "votes",
+  "upvote": "Upvote",
+  "downvote": "Downvote",
+  "share": "Share",
+  "bookmark": "Bookmark",
+  "unbookmark": "Remove bookmark",
+  "report": "Report",
+  "pinned": "Pinned",
+  "pin": "Pin post",
+  "category": "Category",
+  "categories": "Categories",
+  "allCategories": "All categories",
+  "tag": "Tag",
+  "tags": "Tags",
+  "popularTags": "Popular tags",
+  "addTag": "Add tag",
+  "type": {
+    "discussion": "Discussion",
+    "question": "Question",
+    "announcement": "Announcement"
+  },
+  "status": {
+    "draft": "Draft",
+    "published": "Published",
+    "archived": "Archived"
+  },
+  "filter": {
+    "allTypes": "All types",
+    "clearFilters": "Clear filters"
+  },
+  "form": {
+    "title": "Title",
+    "titlePlaceholder": "Enter post title...",
+    "content": "Content",
+    "contentPlaceholder": "Write your post content...",
+    "selectCategory": "Select category",
+    "selectType": "Select post type",
+    "tagPlaceholder": "Enter tag and press Enter...",
+    "saveDraft": "Save draft",
+    "publish": "Publish post",
+    "update": "Update post",
+    "minTitleLength": "Title must be at least 10 characters",
+    "maxTitleLength": "Title must not exceed 200 characters",
+    "minContentLength": "Content must be at least 50 characters",
+    "minTags": "Please add at least 1 tag",
+    "maxTags": "Maximum 5 tags"
+  },
+  "commentSection": {
+    "title": "Comments",
+    "noComments": "No comments yet. Be the first!",
+    "writeComment": "Write your comment...",
+    "minLength": "Minimum 10 characters",
+    "postComment": "Post comment",
+    "reply": "Reply",
+    "acceptAnswer": "Accept answer",
+    "pinComment": "Pin",
+    "unpinComment": "Unpin",
+    "pinnedComment": "Pinned",
+    "cancelReply": "Cancel reply",
+    "sortLabel": "Sort",
+    "sortTop": "Top",
+    "sortNew": "Newest",
+    "collapseThread": "Collapse",
+    "expandThread": "Expand",
+    "quotePrefix": "@{{author}} wrote:",
+    "acceptedAnswer": "Accepted answer",
+    "author": "Author"
+  },
+  "meta": {
+    "views": "views",
+    "postedBy": "Posted by",
+    "lastUpdated": "Last updated",
+    "createdAt": "Created at"
+  },
+  "empty": {
+    "noPosts": "No posts yet",
+    "noPostsDescription": "Be the first to share your knowledge",
+    "createFirstPost": "Create first post"
+  },
+  "error": {
+    "loadFailed": "Failed to load posts",
+    "notFound": "Post not found",
+    "notFoundDescription": "The post may have been deleted or you don't have access",
+    "createFailed": "Failed to create post",
+    "updateFailed": "Failed to update post",
+    "deleteFailed": "Failed to delete post",
+    "voteFailed": "Failed to vote",
+    "bookmarkFailed": "Failed to bookmark",
+    "commentFailed": "Failed to add comment"
+  },
+  "success": {
+    "created": "Post created successfully!",
+    "updated": "Post updated successfully!",
+    "deleted": "Post deleted successfully!",
+    "commented": "Comment added successfully!"
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete this post?"
+  },
+  "topbar": {
+    "brand": "UniHub Forum",
+    "searchPlaceholder": "Search topics...",
+    "assistant": "Assistant",
+    "threads": "Threads",
+    "saved": "Saved",
+    "moderation": "Moderation",
+    "admin": "Admin",
+    "backToForum": "Forum",
+    "backHome": "Home"
+  },
+  "index": {
+    "eyebrow": "Forum map",
+    "title": "Discussion zones",
+    "subtitle": "Grouped by purpose: academic, community, official news, and career — similar to VOZ section layout.",
+    "viewAllPosts": "All posts",
+    "backToZones": "Back to zone map",
+    "allPostsTitle": "All posts",
+    "colForum": "Forum",
+    "threads": "Threads",
+    "messages": "Replies",
+    "latest": "Latest",
+    "noPostsYet": "No posts in this section yet",
+    "statsZones": "Zones",
+    "statsCategories": "Sections",
+    "statsThreads": "Posts",
+    "learningShortcut": "Learning document library",
+    "threadsShortcut": "Thread board by topic",
+    "zones": {
+      "official": "Main lobby",
+      "officialDesc": "Announcements, feedback, and official updates from moderators.",
+      "academic": "Academic & professional",
+      "academicDesc": "Study materials, Q&A, programming and tech.",
+      "community": "Community & campus life",
+      "communityDesc": "General chat, student life, casual discussion.",
+      "career": "Career",
+      "careerDesc": "Internships, jobs, and career guidance.",
+      "other": "Other",
+      "otherDesc": "Uncategorized sections."
+    }
+  },
+  "sidebar": {
+    "main": {
+      "assistant": "Assistant",
+      "saved": "Saved posts",
+      "forumIndex": "Zone map",
+      "allPosts": "All posts"
+    },
+    "sections": {
+      "main": "Main",
+      "topics": "Topics",
+      "categories": "Categories",
+      "tags": "Tags",
+      "learningCareer": "Learning & career"
+    },
+    "topics": {
+      "all": "All topics",
+      "threads": "Thread board",
+      "announcements": "Announcements"
+    },
+    "categories": {
+      "learningDocs": "Learning documents",
+      "learningFaculties": "Learning · faculties",
+      "learningCourses": "Learning · courses",
+      "career": "Career opportunities"
+    },
+    "tags": {
+      "hot": "hot",
+      "qa": "q&a"
+    },
+    "notice": "Note: new content is updated in real time."
+  },
+  "reportModal": {
+    "title": "Report this post",
+    "subtitle": "Moderators will review your report. Optional details help us act faster.",
+    "reasonLabel": "Reason",
+    "detailsLabel": "Details (optional)",
+    "detailsPlaceholder": "Describe what is wrong…",
+    "cancel": "Cancel",
+    "submit": "Submit report",
+    "reasons": {
+      "spam": "Spam",
+      "harassment": "Harassment",
+      "inappropriate": "Inappropriate content",
+      "misinformation": "Misinformation",
+      "offTopic": "Off-topic",
+      "copyright": "Copyright violation",
+      "other": "Other"
+    }
+  },
+  "actions": {
+    "reply": "Reply",
+    "upvote": "Upvote",
+    "downvote": "Downvote",
+    "report": "Report",
+    "share": "Share",
+    "bookmark": "Bookmark",
+    "unbookmark": "Remove bookmark"
+  },
+  "feedback": {
+    "loginRequired": "Please sign in to perform this action.",
+    "actionFailed": "Action failed. Please try again.",
+    "commentRequired": "Please enter a comment.",
+    "commentCooldown": "Please wait a few seconds before posting another comment.",
+    "commentSuccess": "Comment submitted successfully.",
+    "commentFailed": "Unable to submit comment. Please try again.",
+    "voteSuccess": "Your upvote has been recorded.",
+    "voteFailed": "Unable to record your upvote.",
+    "bookmarkSuccess": "Post saved.",
+    "bookmarkFailed": "Unable to save this post.",
+    "unbookmarkSuccess": "Post removed from saved items.",
+    "unbookmarkFailed": "Unable to remove saved post.",
+    "reportSuccess": "Report submitted. Thank you!",
+    "reportFailed": "Unable to submit report right now.",
+    "acceptAnswerSuccess": "Answer marked as accepted.",
+    "acceptAnswerFailed": "Unable to accept this answer.",
+    "pinCommentSuccess": "Comment pin state updated.",
+    "pinCommentFailed": "Unable to update comment pin state.",
+    "shareSuccess": "Post link copied to clipboard.",
+    "shareUnavailable": "Cannot copy link in this browser.",
+    "facebookShareReady": "Post content and link copied. Paste it into your Facebook share text."
+  },
+  "saved": {
+    "title": "Saved posts",
+    "empty": "You have no saved posts yet.",
+    "loadFailed": "Failed to load saved posts.",
+    "backToForum": "Back to forum"
+  },
+  "threads": {
+    "title": "Thread board",
+    "subtitle": "Topic-first discussions. Open a thread and continue conversation in comments.",
+    "openThread": "Open thread",
+    "empty": "No posts in this thread channel yet. Create a post and pick this channel (e.g. General Thread); after approval it will show up here."
+  },
+  "threadMode": {
+    "badge": "Thread mode",
+    "description": "This topic is comment-first. Continue discussion in replies to keep context in one place.",
+    "point1": "The original post is only context to open the topic; the main content lives in comments.",
+    "point2": "Discussion flow is preserved via nested replies instead of splitting into many new posts.",
+    "point3": "Best for long multi-opinion discussions; regular posts are better for announcements or complete writeups.",
+    "replyTitle": "Discussion flow",
+    "replyLabel": "Add your take to this thread",
+    "replyPlaceholder": "Write your thoughts to continue this discussion...",
+    "replyAction": "Reply to thread"
+  },
+  "mod": {
+    "reportsTitle": "Moderation reports",
+    "pendingPostsTitle": "Pending posts",
+    "pendingPostsHint": "Open «Details» to read the full post and use the AI moderation hint in the side panel.",
+    "totalReports": "Total reports",
+    "noReports": "No reports in this status.",
+    "noPendingPosts": "No pending posts to review.",
+    "targetDeleted": "[removed]",
+    "status": {
+      "pending": "Pending",
+      "resolvedKeep": "Resolved (Keep)",
+      "resolvedRemove": "Resolved (Remove)"
+    },
+    "columns": {
+      "type": "Type",
+      "reason": "Reason",
+      "preview": "Target preview",
+      "createdAt": "Created at",
+      "actions": "Actions",
+      "title": "Title",
+      "author": "Author",
+      "category": "Category",
+      "comments": "Comments"
+    },
+    "actions": {
+      "keep": "Resolve keep",
+      "remove": "Resolve remove",
+      "approve": "Approve & publish",
+      "viewDetail": "Details"
+    },
+    "pendingDetail": {
+      "drawerTitle": "Pending post",
+      "loadError": "Could not load this post.",
+      "openInForum": "Open on forum",
+      "tags": "Tags",
+      "content": "Body",
+      "aiHint": "AI moderation hint",
+      "aiAnalyzing": "Analyzing…",
+      "aiDisclaimer": "Suggestions are advisory; moderators make the final decision.",
+      "aiError": "Could not load AI hint.",
+      "recommendation": "Suggestion",
+      "reason": "Reason",
+      "violations": "Flags",
+      "recAllow": "Allow publish",
+      "recReview": "Review carefully",
+      "recHide": "Reject / remove"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load moderation data.",
+      "resolveSuccess": "Report resolved successfully.",
+      "resolveFailed": "Failed to resolve report.",
+      "approveSuccess": "Post approved and published.",
+      "approveFailed": "Could not approve this post."
+    }
+  },
+  "detail": {
+    "fallbackTitle": "Forum topic detail",
+    "fallbackContent": "This discussion highlights key updates from the forum thread. Open comments below for follow-up points and additional context from members.",
+    "commentPlaceholder": "Write your comment...",
+    "attachmentsLabel": "Attachments",
+    "attachmentImageAlt": "Attached image",
+    "sampleComment1": "Thanks for sharing. I agree this should be prioritized for the next sprint.",
+    "sampleComment2": "Could you add more details about expected timeline and impact?",
+    "sampleTime1": "2 hours ago",
+    "sampleTime2": "1 hour ago"
+  }
+}

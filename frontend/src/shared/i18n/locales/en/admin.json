@@ -1,0 +1,406 @@
+{
+  "title": "Admin",
+  "dashboard": "Dashboard",
+  "users": "Users",
+  "roles": "Roles",
+  "permissions": "Permissions",
+  "toggles": "Feature toggles",
+  "threadChannels": "Thread channels",
+  "logs": {
+    "actions": "Action logs",
+    "audit": "Audit logs"
+  },
+  "overrides": {
+    "users": "Per User",
+    "groups": "Per Group"
+  },
+  "reports": "Reports",
+  "analytics": "Analytics",
+  "dashboardPage": {
+    "title": "Dashboard",
+    "subtitle": "Users, roles, endpoints and logs — weekly visibility for administrators.",
+    "kpis": {
+      "users": "Users",
+      "roles": "Roles",
+      "endpointsOn": "Endpoints enabled",
+      "actionLogsSample": "Action logs (sample)"
+    },
+    "endpointHealth": "Share of endpoints enabled",
+    "endpointHealthHint": "{{enabled}} / {{total}} endpoints in the toggle list.",
+    "weeklyAuditTitle": "Audit logs — last 7 days",
+    "weeklyAuditHint": "Audit events per day (UTC, from loaded sample).",
+    "weeklyActionsTitle": "Action logs — last 7 days",
+    "weeklyActionsHint": "HTTP requests per day (UTC, from loaded sample).",
+    "topEndpointsTitle": "Most frequent endpoints",
+    "topEndpointsHint": "Top {{count}} in the sampled logs.",
+    "errorRatesTitle": "Log quality (sample)",
+    "actionErrorsLabel": "HTTP errors (action logs)",
+    "auditFailuresLabel": "Failed audits"
+  },
+  "sidebar": {
+    "groups": {
+      "access": "Access control",
+      "overrides": "Overrides",
+      "forum": "Forum",
+      "observability": "Observability"
+    }
+  },
+  "threadChannelsPage": {
+    "title": "Thread channels",
+    "subtitle": "Official discussion channels and per-channel policy (pin, accepted answer, moderator actions).",
+    "badges": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "policy": {
+      "on": "On",
+      "off": "Off"
+    },
+    "policyLabels": {
+      "pin": "Pin comments",
+      "accepted": "Accepted answers",
+      "mod": "Moderator actions"
+    },
+    "table": {
+      "policiesGroup": "Channel policies",
+      "policyLegend": "Each policy column shows On or Off for that channel (pin comments, mark best answer, moderation actions)."
+    },
+    "fields": {
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "displayOrder": "Display order",
+      "isActive": "Active",
+      "allowPin": "Allow pinned comments",
+      "allowAccepted": "Allow accepted answers",
+      "allowMod": "Allow moderator actions"
+    },
+    "actions": {
+      "reviewSave": "Review & save",
+      "edit": "Edit"
+    },
+    "create": {
+      "title": "Create channel",
+      "hint": "New channels need a unique code and display name. Review the diff before applying.",
+      "review": "Review & create"
+    },
+    "confirm": {
+      "updateTitle": "Confirm changes — {{name}}",
+      "createTitle": "Confirm new channel",
+      "subtitle": "Values below will be sent to the server.",
+      "field": "Field",
+      "before": "Before",
+      "after": "After",
+      "apply": "Apply"
+    },
+    "messages": {
+      "loadError": "Failed to load thread channels.",
+      "noChanges": "No changes to save.",
+      "codeNameRequired": "Code and name are required.",
+      "saved": "Saved “{{name}}”.",
+      "created": "Channel created.",
+      "saveFailed": "Save failed. Check permissions and try again."
+    }
+  },
+  "rolesPage": {
+    "title": "Role management",
+    "subtitle": "Select a role and configure permissions.",
+    "createRole": "Create role",
+    "messages": {
+      "loadError": "Failed to load roles data.",
+      "noRoleSelected": "No role selected."
+    },
+    "createModal": {
+      "title": "Create role",
+      "name": "Role name",
+      "description": "Description"
+    }
+  },
+  "overridesPage": {
+    "title": "Permission overrides",
+    "subtitle": "Apply per-user exceptions before group-level rules.",
+    "messages": {
+      "loadError": "Failed to load overrides data."
+    },
+    "groups": {
+      "available": "Group overrides source is available, but UI wiring is intentionally deferred in Task 7.",
+      "unavailable": "Group override source is currently unavailable. User override workflow remains fully operational.",
+      "empty": "No groups available for override configuration yet."
+    },
+    "form": {
+      "title": "Add override",
+      "permission": "Permission",
+      "selectPermission": "Select permission",
+      "effect": "Effect",
+      "effectOptions": {
+        "allow": "Allow",
+        "deny": "Deny"
+      },
+      "scopeType": "Scope type",
+      "scopeTypeOptions": {
+        "global": "Global",
+        "faculty": "Faculty",
+        "course": "Course"
+      },
+      "scopeValue": "Scope value",
+      "scopeValuePlaceholderGlobal": "(empty for Global)",
+      "scopeValuePlaceholder": "e.g. faculty:it",
+      "reason": "Reason",
+      "reasonPlaceholder": "Optional reason",
+      "expiresAt": "Expires at (UTC ISO)",
+      "expiresAtPlaceholder": "2026-12-31T23:59:59Z",
+      "submit": "Add override",
+      "pickPermission": "Pick permission to override",
+      "searchPermission": "Search by code or name…",
+      "noPermissions": "No permissions left at this scope.",
+      "selectPermissionHint": "Select a permission on the left to set Allow/Deny.",
+      "selectFaculty": "Select faculty",
+      "selectCourse": "Select course",
+      "effectStatusActive": "Active override: {{effect}} (will be replaced on save).",
+      "effectStatusFromRole": "No override at this scope — using role/group defaults."
+    },
+    "table": {
+      "revoked": "Revoked"
+    },
+    "userPanel": {
+      "searchUser": "Search user",
+      "searchPlaceholder": "Name or email",
+      "table": {
+        "permission": "Permission",
+        "scope": "Scope",
+        "effect": "Effect",
+        "action": "Action"
+      },
+      "actions": {
+        "revoke": "Revoke"
+      },
+      "messages": {
+        "noUsers": "No users found.",
+        "selectUser": "Select a user to manage overrides.",
+        "noOverrides": "No overrides."
+      }
+    }
+  },
+  "togglesPage": {
+    "title": "Endpoint toggles",
+    "subtitle": "Temporarily enable or disable protected admin endpoints.",
+    "messages": {
+      "loadError": "Failed to load endpoint toggles.",
+      "empty": "No toggles found."
+    },
+    "row": {
+      "version": "Version",
+      "enable": "Enable",
+      "disable": "Disable",
+      "lastReason": "Last reason",
+      "notAvailable": "N/A",
+      "disableReason": "Disable reason",
+      "reasonRequired": "Reason is required.",
+      "confirmDisable": "Confirm disable"
+    }
+  },
+  "auditLogsPage": {
+    "title": "Authorization audit logs",
+    "filters": {
+      "userId": "User ID",
+      "endpointKey": "Endpoint key",
+      "result": "Result",
+      "resultOptions": {
+        "all": "All",
+        "success": "Success",
+        "failure": "Failure"
+      },
+      "take": "Take"
+    },
+    "table": {
+      "action": "Action",
+      "target": "Target",
+      "result": "Result",
+      "when": "When"
+    },
+    "result": {
+      "success": "Success",
+      "failure": "Failure"
+    },
+    "messages": {
+      "loadError": "Failed to load audit logs.",
+      "empty": "No audit logs found."
+    }
+  },
+  "actionLogsPage": {
+    "title": "User action logs",
+    "viewType": {
+      "Developer": "Developer",
+      "DeveloperHint": "headers + body preview",
+      "Administrator": "Administrator",
+      "AdministratorHint": "metadata only"
+    },
+    "hero": {
+      "kicker": "Observability",
+      "subtitle": "Query by user, correlation identifier, or trace identifier. Developer view includes captured request/response previews (size-limited, sensitive headers redacted).",
+      "autoRefresh": "Auto-refresh · 5s",
+      "export": "Export JSON"
+    },
+    "stats": {
+      "inPage": "Rows (this page)",
+      "inPageHint": "Stats reflect the current result set only.",
+      "ok": "2xx / 3xx",
+      "errors": "4xx / 5xx",
+      "p95": "p95 latency"
+    },
+    "banner": {
+      "correlationTitle": "Correlation journey",
+      "correlationBody": "Requests are sorted by start time. The same Correlation ID may include multiple users if the gateway reused the header—compare Actor in each step.",
+      "traceTitle": "Trace lookup",
+      "traceBody": "Showing all logged requests matching this Trace ID (W3C / Activity)."
+    },
+    "filters": {
+      "actorUserId": "Actor user ID",
+      "method": "Method",
+      "pathContains": "Path contains",
+      "pageSize": "Page size",
+      "user": "User",
+      "userPlaceholder": "Select or type User ID…",
+      "feature": "Feature / API area",
+      "correlationId": "Correlation ID",
+      "correlationPlaceholder": "Paste X-Correlation-Id…",
+      "correlationHint": "No user required. Loads the full chain (increase page size if needed).",
+      "traceId": "Trace ID",
+      "tracePlaceholder": "Trace / Activity id…",
+      "outcome": "HTTP outcome",
+      "outcomeAll": "All statuses",
+      "outcomeSuccess": "Success (2xx–3xx)",
+      "outcomeClientError": "Client error (4xx)",
+      "outcomeServerError": "Server error (5xx)"
+    },
+    "features": {
+      "all": "All APIs",
+      "posts": "Forum · Posts",
+      "comments": "Forum · Comments",
+      "categories": "Forum · Categories",
+      "tags": "Forum · Tags",
+      "search": "Forum · Search",
+      "threadChannels": "Forum · Thread channels",
+      "mod": "Moderation",
+      "adminAuth": "Admin · Authorization",
+      "adminObservability": "Admin · Observability",
+      "users": "Identity · Users",
+      "auth": "Identity · Auth",
+      "roles": "Identity · Roles",
+      "permissions": "Identity · Permissions",
+      "jobs": "Career · Jobs",
+      "applications": "Career · Applications",
+      "companies": "Career · Companies",
+      "recruiters": "Career · Recruiters",
+      "documents": "Learning · Documents",
+      "courses": "Learning · Courses",
+      "faculties": "Learning · Faculties",
+      "chat": "Chat",
+      "notifications": "Notifications",
+      "ai": "AI",
+      "assistant": "Assistant tools",
+      "integrations": "Integrations",
+      "other": "Other"
+    },
+    "empty": {
+      "needScopeTitle": "Choose how to search",
+      "needScopeBody": "Enter a User ID, paste a Correlation ID, or a Trace ID. Correlation mode is ideal for following one browser or API session across many endpoints."
+    },
+    "loading": "Loading action logs…",
+    "timeline": {
+      "prompt": "correlation-timeline --id=\"{{id}}\""
+    },
+    "row": {
+      "copy": "Copy",
+      "copyCorrelation": "Copy correlation id"
+    },
+    "detail": {
+      "kicker": "HTTP request record",
+      "summary": "Summary",
+      "requestSection": "Request",
+      "responseSection": "Response",
+      "headers": "Headers",
+      "body": "Body",
+      "bodyTruncated": "Preview truncated at the configured byte limit.",
+      "endpoint": "ASP.NET endpoint",
+      "fullUrl": "Full URL",
+      "copy": "Copy",
+      "correlation": "Correlation",
+      "followCorrelation": "Open correlation journey",
+      "trace": "Trace",
+      "actor": "Actor user",
+      "network": "Client",
+      "timing": "Timing",
+      "started": "Started (UTC)",
+      "completed": "Completed (UTC)",
+      "exception": "Exception",
+      "terminalLine": "Log line",
+      "httpPayloadHiddenTitle": "Request & response payloads",
+      "httpPayloadHiddenBody": "Administrator view does not return captured HTTP headers or bodies (by design). Switch to Developer above to see redacted headers and size-limited body previews.",
+      "currentViewBadge": "List view",
+      "noRequestBodyForMethod": "This method usually has no request body (for example GET).",
+      "noResponseBody204": "No response body for status 204."
+    },
+    "table": {
+      "method": "Method",
+      "path": "Path",
+      "status": "Status",
+      "durationMs": "Duration (ms)"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "summary": "{{total}} total · showing {{from}}–{{to}}"
+    },
+    "messages": {
+      "loadError": "Failed to load action logs.",
+      "empty": "No action logs found."
+    }
+  },
+  "usersPage": {
+    "title": "User management",
+    "subtitle": "Filter by role and status; assign or remove roles inline per user.",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by name or email",
+      "role": "Role",
+      "status": "Status",
+      "allRoles": "All roles",
+      "allStatuses": "All statuses"
+    },
+    "table": {
+      "user": "User",
+      "status": "Status",
+      "roles": "Roles",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "banned": "Banned"
+    },
+    "roles": {
+      "none": "No roles",
+      "assigned": "Assigned roles",
+      "add": "Add role",
+      "emptyAssigned": "No roles assigned yet.",
+      "emptyAvailable": "All available roles are assigned.",
+      "search": "Search roles…"
+    },
+    "actions": {
+      "manageRoles": "Manage roles",
+      "closeRoles": "Collapse"
+    },
+    "messages": {
+      "loadError": "Failed to load users data.",
+      "noResults": "No users found.",
+      "assignRoleFailed": "Could not assign role (it may already exist).",
+      "removeRoleFailed": "Could not remove role.",
+      "cannotRemoveLastRole": "Cannot remove the user's last role."
+    }
+  },
+  "layout": {
+    "title": "Admin Zone"
+  }
+}

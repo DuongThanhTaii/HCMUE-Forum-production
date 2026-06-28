@@ -1,0 +1,228 @@
+{
+  "title": "Tin nhắn",
+  "conversations": "Cuộc trò chuyện",
+  "channels": "Kênh",
+  "aiBot": "UniBot AI",
+  "typeMessage": "Nhập tin nhắn...",
+  "send": "Gửi",
+  "online": "Trực tuyến",
+  "offline": "Ngoại tuyến",
+  "typing": "đang nhập...",
+  "welcome": "Chào mừng đến với Chat",
+  "selectConversation": "Chọn một cuộc trò chuyện để bắt đầu",
+  "noConversations": "Chưa có cuộc trò chuyện nào",
+  "loadError": "Không thể tải danh sách cuộc trò chuyện",
+  "cannotLoadMessages": "Không thể tải tin nhắn",
+  "sendError": "Không thể gửi tin nhắn",
+  "uploadError": "Không thể tải file lên",
+  "maxFileSize": "Kích thước file tối đa 10MB",
+  "attachFile": "Đính kèm file",
+  "attachment": "File đính kèm",
+  "loadMore": "Tải thêm tin nhắn",
+  "edited": "đã chỉnh sửa",
+  "channelsPage": {
+    "title": "Kênh trò chuyện",
+    "subtitle": "Tham gia các kênh công khai và trò chuyện với mọi người",
+    "publicChannels": "Kênh công khai",
+    "myChannels": "Kênh của tôi",
+    "noPublicChannels": "Không có kênh công khai nào",
+    "notJoinedAny": "Bạn chưa tham gia kênh nào",
+    "joinChannel": "Tham gia kênh",
+    "openChannel": "Mở kênh",
+    "createdBy": "Tạo bởi:",
+    "members": "thành viên",
+    "noDescription": "Không có mô tả",
+    "joinSuccess": "Đã tham gia kênh",
+    "joinError": "Không thể tham gia kênh"
+  },
+  "aiPage": {
+    "title": "UniBot AI",
+    "assistant": "Trợ lý AI thông minh của bạn",
+    "newConversation": "Cuộc trò chuyện mới",
+    "noConversations": "Chưa có cuộc trò chuyện nào",
+    "messageCount": "{count} tin nhắn",
+    "greeting": "Xin chào! Tôi là UniBot AI",
+    "description": "Tôi có thể giúp bạn trả lời câu hỏi, tìm kiếm thông tin, và hỗ trợ các tác vụ học tập. Hãy hỏi tôi bất cứ điều gì!",
+    "askUniBot": "Hỏi UniBot...",
+    "sendError": "Không thể gửi tin nhắn đến AI",
+    "toolCalling": "Calling: {tool}"
+  },
+  "typingIndicator": {
+    "single": "{user} đang nhập...",
+    "double": "{user1} và {user2} đang nhập...",
+    "multiple": "{user} và {count} người khác đang nhập..."
+  },
+  "connectionStatus": {
+    "connecting": "Đang kết nối...",
+    "connected": "Đã kết nối",
+    "reconnecting": "Đang kết nối lại...",
+    "disconnected": "Mất kết nối",
+    "connectionFailed": "Không thể kết nối đến máy chủ chat"
+  },
+  "presence": {
+    "activeNow": "Đang hoạt động"
+  },
+  "channelHistoryNotice": "Lịch sử kênh qua REST chưa được nối. Tin nhắn hiển thị ở đây là realtime tới khi backend gắn kênh với cuộc trò chuyện.",
+  "channelEmptyLive": "Chưa có tin nhắn. Chào một tiếng nhé!",
+  "mobile": {
+    "back": "Quay lại"
+  },
+  "dm": {
+    "search": "Nhắn riêng",
+    "searchPlaceholder": "Tìm theo tên hoặc email…",
+    "createError": "Không thể tạo cuộc trò chuyện",
+    "newChat": "Tin nhắn mới",
+    "closePicker": "Đóng hộp thoại",
+    "searchHint": "Gõ ít nhất 2 ký tự để tìm người.",
+    "typeToSearch": "Gõ ít nhất 2 chữ cái để tìm.",
+    "noResults": "Không tìm thấy người phù hợp.",
+    "directChat": "Nhắn trực tiếp"
+  },
+  "thread": {
+    "noMessagesYet": "Chưa có tin nhắn. Hãy gửi tin đầu tiên bên dưới.",
+    "pickConversation": "Chọn cuộc trò chuyện bên trái, hoặc bấm “Tin nhắn mới” để tìm người."
+  },
+  "scroll": {
+    "toBottom": "Cuộn xuống tin mới nhất",
+    "newMessages": "{{count}} tin mới",
+    "loadingOlder": "Đang tải tin cũ…",
+    "pullOlderHint": "Kéo lên để xem tin cũ hơn"
+  },
+  "search": {
+    "title": "Tìm trong hội thoại",
+    "open": "Tìm tin nhắn",
+    "placeholder": "Tìm nội dung tin nhắn…",
+    "minChars": "Nhập ít nhất 2 ký tự",
+    "noResults": "Không có kết quả",
+    "error": "Không thể tìm kiếm"
+  },
+  "safety": {
+    "menu": "Tùy chọn hội thoại",
+    "mute": "Tắt tiếng",
+    "unmute": "Bật tiếng",
+    "mutedBadge": "Đã tắt tiếng",
+    "block": "Chặn người này",
+    "blockConfirm": "Chặn {{name}}? Bạn sẽ không thể nhắn tin với nhau.",
+    "blockedBanner": "Bạn đã chặn người này hoặc bị chặn — không thể gửi tin.",
+    "composerDisabled": "Không thể gửi tin trong hội thoại này",
+    "report": "Báo cáo tin",
+    "reportTitle": "Báo cáo tin nhắn",
+    "reportPlaceholder": "Mô tả thêm (tuỳ chọn)",
+    "reportSubmitted": "Đã gửi báo cáo. Cảm ơn bạn.",
+    "reportError": "Không thể gửi báo cáo",
+    "reasonSpam": "Spam",
+    "reasonHarassment": "Quấy rối",
+    "reasonInappropriate": "Không phù hợp",
+    "reasonOther": "Khác"
+  },
+  "info": {
+    "title": "Thông tin hội thoại",
+    "open": "Media & file",
+    "peer": "Người chat",
+    "mutedOn": "Đã tắt tiếng thông báo",
+    "mutedOff": "Thông báo bật",
+    "shortcutsHint": "Dùng menu ⋮ để tắt tiếng hoặc chặn; tab bên dưới xem media và link.",
+    "media": "Ảnh",
+    "files": "File",
+    "links": "Link",
+    "emptyMedia": "Chưa có ảnh nào trong hội thoại này.",
+    "emptyFiles": "Chưa có file hoặc ghi âm nào.",
+    "emptyLinks": "Chưa có link nào được gửi.",
+    "loadError": "Không tải được danh sách media. Thử tải lại trang."
+  },
+  "notifications": {
+    "enable": "Bật thông báo trình duyệt"
+  },
+  "dock": {
+    "open": "Mở ô chat",
+    "backToList": "Về danh sách hội thoại",
+    "emptyConversations": "Chưa có cuộc trò chuyện nào.",
+    "minimize": "Thu nhỏ ô chat",
+    "expandFull": "Mở trang chat đầy đủ",
+    "hint": "Dùng trang chat đầy đủ cho hội thoại, file đính kèm và ghi âm.",
+    "hintShort": "Mở trang đầy đủ để xem cuộc trò chuyện, gửi file và ghi âm.",
+    "openFullCta": "Mở trang tin nhắn"
+  },
+  "message": {
+    "actions": "Thao tác tin nhắn",
+    "edit": "Chỉnh sửa",
+    "copy": "Sao chép",
+    "unsend": "Thu hồi",
+    "saveEdit": "Lưu",
+    "confirmUnsend": "Thu hồi tin nhắn này cho mọi người?",
+    "removedSelf": "Bạn đã thu hồi một tin nhắn",
+    "removedOther": "Tin nhắn đã bị thu hồi",
+    "editedLabel": "Đã chỉnh sửa"
+  },
+  "reactions": {
+    "add": "Thêm cảm xúc"
+  },
+  "read": {
+    "seen": "Đã xem",
+    "seenByMany": "Đã xem bởi nhiều người"
+  },
+  "reply": {
+    "action": "Trả lời",
+    "replyingTo": "Trả lời {{name}}",
+    "cancel": "Huỷ trả lời",
+    "attachmentPreview": "Tệp đính kèm",
+    "emptyPreview": "Tin nhắn"
+  },
+  "delivery": {
+    "sending": "Đang gửi…",
+    "failed": "Gửi thất bại",
+    "retry": "Thử lại",
+    "dismiss": "Ẩn"
+  },
+  "outbox": {
+    "full": "Hàng đợi offline đầy. Thử lại khi có mạng."
+  },
+  "voice": {
+    "start": "Ghi âm",
+    "stop": "Dừng",
+    "discard": "Huỷ",
+    "recording": "Đang ghi",
+    "preview": "Sẵn sàng gửi ghi âm",
+    "send": "Gửi",
+    "empty": "Bản ghi rỗng. Hãy thử lại.",
+    "play": "Phát tin thoại",
+    "pause": "Tạm dừng",
+    "messageBubble": "Tin nhắn thoại",
+    "loadError": "Không phát được — kiểm tra API đã bật phục vụ wwwroot chưa"
+  },
+  "uploadNeedLogin": "Hãy đăng nhập để tải file hoặc ghi âm (API cần token).",
+  "calls": {
+    "voice": "Gọi thoại",
+    "video": "Gọi video",
+    "screen": "Chỉ màn hình",
+    "comingSoon": "Sắp có",
+    "comingSoonDetail": "Gọi 1-1 dùng WebRTC; mạng hạn chế có thể cần TURN. Cấu hình VITE_WEBRTC_ICE_SERVERS nếu cần.",
+    "directOnly": "Chỉ hỗ trợ cuộc gọi 1-1 (đúng hai người).",
+    "incomingTitle": "Cuộc gọi đến từ {{name}}",
+    "accept": "Trả lời",
+    "decline": "Từ chối",
+    "connecting": "Đang kết nối…",
+    "voiceInProgress": "Đang gọi thoại",
+    "mute": "Tắt mic",
+    "unmute": "Bật mic",
+    "shareScreen": "Chia sẻ màn hình",
+    "hangUp": "Kết thúc",
+    "peerP2pHint": "Media đi thẳng giữa hai máy; một số mạng cần máy chủ TURN.",
+    "peerOffline": "Đối phương chưa kết nối chat (ngoại tuyến hoặc phiên máy chủ khác). Họ cần mở ứng dụng và giữ trực tuyến.",
+    "hubNotConnected": "Chat chưa kết nối. Chờ thanh trạng thái hiện “Đã kết nối” hoặc tải lại trang.",
+    "stopSharing": "Dừng chia sẻ",
+    "statusRinging": "Đang gọi…",
+    "statusLive": "Đang trong cuộc gọi",
+    "statusSharing": "Bạn đang chia sẻ màn hình",
+    "incomingSubtitle": "Cuộc gọi đến",
+    "badgeLive": "Trực tiếp",
+    "dialogLabel": "Cuộc gọi",
+    "previewYou": "Bạn",
+    "cancelCall": "Huỷ gọi",
+    "youAreSharing": "Bạn đang chia sẻ màn hình",
+    "missedCallSent": "Bạn đã gọi — không có người bắt máy",
+    "missedCallReceived": "Cuộc gọi nhỡ từ {{name}}",
+    "callEnded": "Cuộc gọi đã kết thúc",
+    "callEndedWithDuration": "Cuộc gọi đã kết thúc ({{minutes}} phút)"
+  }
+}

@@ -1,0 +1,23 @@
+---
+description: Split oversized modules early to keep features maintainable
+globs: src/features/**/*.{ts,tsx},frontend/src/features/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Module Size Splitting
+
+- When a feature folder becomes too large, split by sub-domain before adding more behavior.
+- Target structure: `api/`, `components/`, `hooks/`, `lib/`, `types/`, and subfolders by domain (`users/`, `roles/`, `overrides/`, etc.).
+- Prefer move-first refactors (no behavior change) before optimization/refinement.
+
+## Split Triggers
+
+- A single feature folder exceeds ~15 files or mixed concerns become hard to scan.
+- A single component/hook grows beyond ~250-300 lines and handles multiple flows.
+- Frequent merge conflicts happen in the same feature files.
+
+## Required Follow-up
+
+- Add/update index exports after moving files.
+- Keep import paths consistent with project aliases.
+- Run focused verification for touched areas after each split batch.

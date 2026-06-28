@@ -1,0 +1,172 @@
+{
+  "title": "Learning",
+  "documents": "Documents",
+  "courses": "Courses",
+  "faculties": "Faculties",
+  "uploadDocument": "Upload document",
+  "myDocuments": "My documents",
+  "pendingApproval": "Pending approval",
+  "approvalQueue": "Document approval",
+  "documentList": "Document list",
+  "documentDetail": "Document detail",
+  "courseList": "Course list",
+  "facultyList": "Faculty list",
+  "contribute": {
+    "ctaQuestion": "Have learning materials to share with the community?",
+    "hint": "Materials are reviewed before they go public. Pick the right course so faculty/course moderators can process them faster.",
+    "expand": "Upload / contribute",
+    "collapse": "Hide form",
+    "libraryHeading": "Library",
+    "permissionNote": "Document moderation is scoped by course/faculty: moderators assigned to a course only approve uploads tied to those courses. Global Moderator/Admin roles can approve all materials. Forum post moderation is a separate workflow (category / thread scope)."
+  },
+  "uploadPage": {
+    "title": "Upload document",
+    "subtitle": "Share learning materials with the student community",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter document title",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe the document content",
+    "facultyLabel": "Faculty",
+    "facultyPlaceholder": "Select faculty",
+    "courseLabel": "Course",
+    "coursePlaceholder": "Select course",
+    "documentTypeLabel": "Document type",
+    "documentTypePlaceholder": "Select document type",
+    "fileLabel": "Document file",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Upload successful! Waiting for approval.",
+    "uploadError": "Cannot upload document",
+    "note": "Note:",
+    "noteItems": [
+      "Documents will be reviewed before being published",
+      "Only upload valid learning materials",
+      "Do not upload copyrighted materials",
+      "Maximum file size: 10MB"
+    ]
+  },
+  "documentTypes": {
+    "lecture": "Lecture",
+    "assignment": "Assignment",
+    "exam": "Exam",
+    "reference": "Reference material",
+    "other": "Other"
+  },
+  "documentStatus": {
+    "draft": "Draft",
+    "pendingApproval": "Pending approval",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "deleted": "Deleted"
+  },
+  "filters": {
+    "search": "Search documents...",
+    "allFaculties": "All faculties",
+    "allCourses": "All courses",
+    "allTypes": "All types",
+    "clearFilters": "Clear filters",
+    "selectFaculty": "Select faculty",
+    "selectCourse": "Select course",
+    "selectType": "Document type",
+    "allSemesters": "All semesters",
+    "semester": "Semester",
+    "searchCourse": "Filter by course (code or name)"
+  },
+  "documentCard": {
+    "viewDetail": "View detail",
+    "uploadedBy": "Uploaded by:",
+    "downloads": "downloads",
+    "views": "views",
+    "ratings": "ratings",
+    "unknownUploader": "Unknown uploader",
+    "noDescription": "No description",
+    "downloadsLabel": "Downloads",
+    "ratingsLabel": "Rating"
+  },
+  "documentDetailPage": {
+    "downloadHint": "Recording a download updates statistics. Actual file access may be provided separately.",
+    "downloadDocument": "Download document",
+    "rateDocument": "Rate document",
+    "yourRating": "Your rating",
+    "reviewLabel": "Review (optional)",
+    "reviewPlaceholder": "Share your thoughts about this document...",
+    "submitRating": "Submit rating",
+    "sendingRating": "Sending...",
+    "documentInfo": "Document information",
+    "fileName": "File name",
+    "fileSize": "Size",
+    "uploadDate": "Upload date",
+    "uploader": "Uploaded by",
+    "course": "Course",
+    "faculty": "Faculty",
+    "code": "Code",
+    "starRatingAria": "Rate {{count}} out of 5 stars"
+  },
+  "fileUploader": {
+    "dragDrop": "Drag and drop file here or click to select",
+    "supportedFormats": "Supported:",
+    "maxSize": "Maximum size:",
+    "fileSizeExceeded": "File size exceeded",
+    "unsupportedFormat": "File format not supported",
+    "selectFile": "Please select a document file"
+  },
+  "coursesPage": {
+    "title": "Course list",
+    "subtitle": "Explore courses and related materials",
+    "credits": "Credits:",
+    "documentsCount": "documents",
+    "viewDocuments": "View documents",
+    "showingRange": "Showing {{from}}–{{to}} of {{total}}"
+  },
+  "facultiesPage": {
+    "title": "Faculty list",
+    "subtitle": "Explore faculties and related courses",
+    "courses": "Courses",
+    "documents": "Documents",
+    "viewCourses": "View courses",
+    "viewDocuments": "View documents"
+  },
+  "approvalPage": {
+    "title": "Document approval",
+    "subtitle": "Approve or reject pending documents",
+    "approve": "Approve",
+    "reject": "Reject",
+    "viewFile": "View file",
+    "uploader": "Uploader",
+    "uploadDate": "Upload date",
+    "rejectDialog": {
+      "title": "Reject document",
+      "description": "Please enter the reason for rejecting this document",
+      "reasonLabel": "Rejection reason",
+      "reasonPlaceholder": "Enter rejection reason...",
+      "confirmReject": "Confirm rejection",
+      "processing": "Processing...",
+      "cancel": "Cancel"
+    },
+    "approveSuccess": "Document approved successfully!",
+    "approveError": "Cannot approve document",
+    "rejectSuccess": "Document rejected",
+    "rejectError": "Cannot reject document"
+  },
+  "messages": {
+    "rateSuccess": "Thanks for your rating.",
+    "rateError": "Could not submit rating.",
+    "downloadTracked": "Download recorded successfully.",
+    "downloadError": "Could not record download.",
+    "loginToInteract": "Sign in to rate or record downloads.",
+    "noDocuments": "No documents found",
+    "noCourses": "No courses found",
+    "noFaculties": "No faculties",
+    "noPendingDocuments": "No pending documents",
+    "loadError": "Cannot load list",
+    "notFound": "Document not found",
+    "uploadCloudinaryError": "Cannot upload file. Please try again.",
+    "validationError": "Invalid data. Please check again.",
+    "fillAllFields": "Please fill in all information"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page"
+  }
+}

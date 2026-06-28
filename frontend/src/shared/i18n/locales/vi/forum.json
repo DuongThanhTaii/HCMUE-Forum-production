@@ -1,0 +1,356 @@
+{
+  "title": "Diễn đàn",
+  "createPost": {
+    "pageTitle": "Tạo bài viết",
+    "title": "Đăng bài lên diễn đàn",
+    "subtitle": "Chọn danh mục và nhập nội dung — bài sẽ ở trạng thái chờ duyệt trước khi hiển thị công khai.",
+    "backToList": "Quay lại danh sách",
+    "submit": "Gửi bài",
+    "pendingNote": "Sau khi gửi, ban kiểm duyệt sẽ xem xét. Bạn có thể tiếp tục xem diễn đàn và các bài đã được duyệt.",
+    "noticeAttachments": "Đính kèm ảnh hoặc file trong bài viết diễn đàn hiện chưa được hỗ trợ (API chỉ nhận văn bản và danh sách thẻ).",
+    "noticeMentions": "Gắn thẻ người dùng (@username) và thông báo tự động hiện chưa có — có thể bổ sung sau khi có API người dùng và thông báo.",
+    "noticeChat": "Nhắn tin realtime giữa người dùng/nhóm: backend đã có module Chat và SignalR, nhưng trang /chat trên web vẫn là placeholder — UI tin nhắn chưa được nối vào.",
+    "fields": {
+      "title": "Tiêu đề",
+      "type": "Loại bài",
+      "category": "Danh mục",
+      "categoryPlaceholder": "— Chọn danh mục —",
+      "content": "Nội dung",
+      "tagPicker": "Thẻ — chọn gợi ý hoặc thêm tay",
+      "noSuggestedTags": "Chưa có thẻ gợi ý từ hệ thống. Bạn có thể thêm thẻ bên dưới.",
+      "addCustomTags": "Thêm thẻ khác (Enter để thêm từng thẻ)",
+      "addCustomTagsPlaceholder": "ví dụ: hoc-bu — Enter",
+      "removeTag": "Xóa thẻ"
+    },
+    "types": {
+      "discussion": "Thảo luận",
+      "question": "Hỏi đáp"
+    },
+    "validation": {
+      "required": "Vui lòng nhập đủ tiêu đề và nội dung.",
+      "submitFailed": "Không thể gửi bài. Vui lòng thử lại."
+    }
+  },
+  "editPost": "Chỉnh sửa bài viết",
+  "deletePost": "Xóa bài viết",
+  "allPosts": "Tất cả bài viết",
+  "myPosts": "Bài viết của tôi",
+  "trending": "Xu hướng",
+  "recent": "Gần đây",
+  "post": "Bài viết",
+  "posts": "bài viết",
+  "comment": "Bình luận",
+  "comments": "bình luận",
+  "replies": "Trả lời",
+  "vote": "Bình chọn",
+  "votes": "lượt bình chọn",
+  "upvote": "Upvote",
+  "downvote": "Downvote",
+  "share": "Chia sẻ",
+  "bookmark": "Đánh dấu",
+  "unbookmark": "Bỏ lưu",
+  "report": "Báo cáo",
+  "pinned": "Đã ghim",
+  "pin": "Ghim bài viết",
+  "category": "Danh mục",
+  "categories": "Danh mục",
+  "allCategories": "Tất cả danh mục",
+  "tag": "Tag",
+  "tags": "Tags",
+  "popularTags": "Tags phổ biến",
+  "addTag": "Thêm tag",
+  "type": {
+    "discussion": "Thảo luận",
+    "question": "Câu hỏi",
+    "announcement": "Thông báo"
+  },
+  "status": {
+    "draft": "Nháp",
+    "published": "Đã đăng",
+    "archived": "Lưu trữ"
+  },
+  "filter": {
+    "allTypes": "Tất cả loại",
+    "clearFilters": "Xóa bộ lọc"
+  },
+  "form": {
+    "title": "Tiêu đề",
+    "titlePlaceholder": "Nhập tiêu đề bài viết...",
+    "content": "Nội dung",
+    "contentPlaceholder": "Viết nội dung bài viết của bạn...",
+    "selectCategory": "Chọn danh mục",
+    "selectType": "Chọn loại bài viết",
+    "tagPlaceholder": "Nhập tag và nhấn Enter...",
+    "saveDraft": "Lưu nháp",
+    "publish": "Đăng bài viết",
+    "update": "Cập nhật bài viết",
+    "minTitleLength": "Tiêu đề phải có ít nhất 10 ký tự",
+    "maxTitleLength": "Tiêu đề không được vượt quá 200 ký tự",
+    "minContentLength": "Nội dung phải có ít nhất 50 ký tự",
+    "minTags": "Vui lòng thêm ít nhất 1 tag",
+    "maxTags": "Tối đa 5 tags"
+  },
+  "commentSection": {
+    "title": "Bình luận",
+    "noComments": "Chưa có bình luận nào. Hãy là người đầu tiên!",
+    "writeComment": "Viết bình luận của bạn...",
+    "minLength": "Tối thiểu 10 ký tự",
+    "postComment": "Gửi bình luận",
+    "reply": "Trả lời",
+    "acceptAnswer": "Chọn làm câu trả lời đúng",
+    "pinComment": "Ghim",
+    "unpinComment": "Bỏ ghim",
+    "pinnedComment": "Đã ghim",
+    "cancelReply": "Hủy trả lời",
+    "sortLabel": "Sắp xếp",
+    "sortTop": "Top",
+    "sortNew": "Mới nhất",
+    "collapseThread": "Thu gọn",
+    "expandThread": "Mở rộng",
+    "quotePrefix": "@{{author}} đã viết:",
+    "acceptedAnswer": "Câu trả lời đúng",
+    "author": "Tác giả"
+  },
+  "meta": {
+    "views": "lượt xem",
+    "postedBy": "Đăng bởi",
+    "lastUpdated": "Cập nhật lần cuối",
+    "createdAt": "Tạo lúc"
+  },
+  "empty": {
+    "noPosts": "Chưa có bài viết nào",
+    "noPostsDescription": "Hãy là người đầu tiên chia sẻ kiến thức của bạn",
+    "createFirstPost": "Tạo bài viết đầu tiên"
+  },
+  "error": {
+    "loadFailed": "Không thể tải bài viết",
+    "notFound": "Không tìm thấy bài viết",
+    "notFoundDescription": "Bài viết có thể đã bị xóa hoặc bạn không có quyền truy cập",
+    "createFailed": "Không thể tạo bài viết",
+    "updateFailed": "Không thể cập nhật bài viết",
+    "deleteFailed": "Không thể xóa bài viết",
+    "voteFailed": "Không thể vote",
+    "bookmarkFailed": "Không thể bookmark",
+    "commentFailed": "Không thể thêm bình luận"
+  },
+  "success": {
+    "created": "Tạo bài viết thành công!",
+    "updated": "Cập nhật bài viết thành công!",
+    "deleted": "Xóa bài viết thành công!",
+    "commented": "Thêm bình luận thành công!"
+  },
+  "confirm": {
+    "delete": "Bạn có chắc muốn xóa bài viết này?"
+  },
+  "topbar": {
+    "brand": "UniHub Forum",
+    "searchPlaceholder": "Tìm chủ đề...",
+    "assistant": "Trợ lý ảo",
+    "threads": "Thread",
+    "saved": "Đã lưu",
+    "moderation": "Kiểm duyệt",
+    "admin": "Quản trị",
+    "backToForum": "Về diễn đàn",
+    "backHome": "Trang chủ"
+  },
+  "index": {
+    "eyebrow": "Bản đồ diễn đàn",
+    "title": "Khu vực thảo luận",
+    "subtitle": "Chia theo mục đích: học thuật, cộng đồng, thông báo và sự nghiệp — giống cách VOZ nhóm Đại sảnh, Máy tính, Khu vui chơi.",
+    "viewAllPosts": "Tất cả bài viết",
+    "backToZones": "Về bản đồ khu vực",
+    "allPostsTitle": "Tất cả bài viết",
+    "colForum": "Diễn đàn",
+    "threads": "Chủ đề",
+    "messages": "Phản hồi",
+    "latest": "Mới nhất",
+    "noPostsYet": "Chưa có bài trong mục này",
+    "statsZones": "Khu",
+    "statsCategories": "Mục",
+    "statsThreads": "Bài",
+    "learningShortcut": "Thư viện tài liệu học tập",
+    "threadsShortcut": "Bảng thread theo chủ đề",
+    "zones": {
+      "official": "Đại sảnh",
+      "officialDesc": "Thông báo, góp ý hệ thống và sự kiện chính thức từ ban quản trị.",
+      "academic": "Học thuật",
+      "academicDesc": "Học bài, hỏi đáp, báo cáo và đồ án.",
+      "community": "Cộng đồng",
+      "communityDesc": "Thảo luận chung, đời sống sinh viên, giải trí.",
+      "career": "Việc làm",
+      "careerDesc": "Tuyển dụng và thực tập.",
+      "other": "Khác",
+      "otherDesc": "Các mục chưa phân loại."
+    }
+  },
+  "sidebar": {
+    "main": {
+      "assistant": "Trợ lý ảo",
+      "saved": "Bài đã lưu",
+      "forumIndex": "Bản đồ khu vực",
+      "allPosts": "Tất cả bài viết"
+    },
+    "sections": {
+      "main": "Chính",
+      "topics": "Chủ đề",
+      "categories": "Danh mục",
+      "tags": "Thẻ",
+      "learningCareer": "Học tập & Việc làm"
+    },
+    "topics": {
+      "all": "Tất cả chủ đề",
+      "threads": "Bảng thread",
+      "announcements": "Thông báo"
+    },
+    "categories": {
+      "learningDocs": "Tài liệu học tập",
+      "learningFaculties": "Học tập · các khoa",
+      "learningCourses": "Học tập · môn học",
+      "career": "Cơ hội nghề nghiệp"
+    },
+    "tags": {
+      "hot": "hot",
+      "qa": "hỏi-đáp"
+    },
+    "notice": "Lưu ý: nội dung mới được cập nhật theo thời gian thực."
+  },
+  "reportModal": {
+    "title": "Báo cáo bài viết",
+    "subtitle": "Đội ngũ kiểm duyệt sẽ xem xét. Mô tả thêm (nếu có) giúp xử lý nhanh hơn.",
+    "reasonLabel": "Lý do",
+    "detailsLabel": "Chi tiết (không bắt buộc)",
+    "detailsPlaceholder": "Mô tả vấn đề…",
+    "cancel": "Hủy",
+    "submit": "Gửi báo cáo",
+    "reasons": {
+      "spam": "Spam / quảng cáo",
+      "harassment": "Quấy rối",
+      "inappropriate": "Nội dung không phù hợp",
+      "misinformation": "Thông tin sai lệch",
+      "offTopic": "Không đúng chủ đề",
+      "copyright": "Vi phạm bản quyền",
+      "other": "Khác"
+    }
+  },
+  "actions": {
+    "reply": "Trả lời",
+    "upvote": "Thích",
+    "downvote": "Không thích",
+    "report": "Báo cáo",
+    "share": "Chia sẻ",
+    "bookmark": "Lưu bài",
+    "unbookmark": "Bỏ lưu"
+  },
+  "feedback": {
+    "loginRequired": "Bạn cần đăng nhập để thực hiện thao tác này.",
+    "actionFailed": "Thao tác thất bại, vui lòng thử lại.",
+    "commentRequired": "Vui lòng nhập nội dung bình luận.",
+    "commentCooldown": "Vui lòng chờ vài giây trước khi gửi bình luận tiếp theo.",
+    "commentSuccess": "Đã gửi bình luận thành công.",
+    "commentFailed": "Không thể gửi bình luận, vui lòng thử lại.",
+    "voteSuccess": "Đã ghi nhận lượt thích.",
+    "voteFailed": "Không thể ghi nhận lượt thích.",
+    "bookmarkSuccess": "Đã lưu bài viết.",
+    "bookmarkFailed": "Không thể lưu bài viết.",
+    "unbookmarkSuccess": "Đã bỏ lưu bài viết.",
+    "unbookmarkFailed": "Không thể bỏ lưu bài viết.",
+    "reportSuccess": "Đã gửi báo cáo. Cảm ơn bạn!",
+    "reportFailed": "Không thể gửi báo cáo lúc này.",
+    "acceptAnswerSuccess": "Đã đánh dấu đây là câu trả lời đúng.",
+    "acceptAnswerFailed": "Không thể đánh dấu câu trả lời đúng lúc này.",
+    "pinCommentSuccess": "Đã cập nhật trạng thái ghim bình luận.",
+    "pinCommentFailed": "Không thể cập nhật trạng thái ghim bình luận.",
+    "shareSuccess": "Đã sao chép liên kết bài viết.",
+    "shareUnavailable": "Không thể sao chép liên kết trên trình duyệt hiện tại.",
+    "facebookShareReady": "Đã sao chép nội dung + liên kết để bạn dán khi chia sẻ Facebook."
+  },
+  "saved": {
+    "title": "Bài viết đã lưu",
+    "empty": "Bạn chưa lưu bài viết nào.",
+    "loadFailed": "Không thể tải danh sách bài đã lưu.",
+    "backToForum": "Quay lại diễn đàn"
+  },
+  "threads": {
+    "title": "Bảng thread",
+    "subtitle": "Thảo luận theo topic. Mở thread và trao đổi chủ yếu bằng bình luận để giữ đúng ngữ cảnh.",
+    "openThread": "Mở thread",
+    "empty": "Chưa có bài nào trong kênh thread này. Hãy tạo bài mới và chọn đúng kênh (ví dụ General Thread), sau khi bài được duyệt sẽ hiển thị ở đây."
+  },
+  "threadMode": {
+    "badge": "Chế độ thread",
+    "description": "Topic này ưu tiên trao đổi qua bình luận. Hãy tiếp tục thảo luận trong phần reply để giữ đúng mạch.",
+    "point1": "Post gốc chỉ là bối cảnh mở topic; nội dung chính nằm ở các bình luận.",
+    "point2": "Mạch trao đổi được giữ bằng reply theo nhánh, không tách thành nhiều bài mới.",
+    "point3": "Phù hợp thảo luận dài nhiều ý kiến; bài thường phù hợp thông báo hoặc bài viết hoàn chỉnh.",
+    "replyTitle": "Luồng thảo luận",
+    "replyLabel": "Thêm ý kiến vào thread",
+    "replyPlaceholder": "Viết ý kiến để tiếp tục mạch thảo luận...",
+    "replyAction": "Gửi vào thread"
+  },
+  "mod": {
+    "reportsTitle": "Báo cáo kiểm duyệt",
+    "pendingPostsTitle": "Bài viết chờ duyệt",
+    "pendingPostsHint": "Chọn «Chi tiết» để xem toàn bộ nội dung và dùng gợi ý kiểm duyệt AI trong panel bên phải.",
+    "totalReports": "Tổng báo cáo",
+    "noReports": "Không có báo cáo ở trạng thái này.",
+    "noPendingPosts": "Hiện không có bài chờ duyệt.",
+    "targetDeleted": "[đã gỡ]",
+    "status": {
+      "pending": "Chờ xử lý",
+      "resolvedKeep": "Đã xử lý (Giữ lại)",
+      "resolvedRemove": "Đã xử lý (Gỡ bỏ)"
+    },
+    "columns": {
+      "type": "Loại",
+      "reason": "Lý do",
+      "preview": "Xem trước nội dung",
+      "createdAt": "Thời gian tạo",
+      "actions": "Thao tác",
+      "title": "Tiêu đề",
+      "author": "Tác giả",
+      "category": "Danh mục",
+      "comments": "Bình luận"
+    },
+    "actions": {
+      "keep": "Xử lý giữ lại",
+      "remove": "Xử lý gỡ bỏ",
+      "approve": "Duyệt & đăng",
+      "viewDetail": "Chi tiết"
+    },
+    "pendingDetail": {
+      "drawerTitle": "Bài chờ duyệt",
+      "loadError": "Không tải được nội dung bài viết.",
+      "openInForum": "Mở trên diễn đàn",
+      "tags": "Thẻ",
+      "content": "Nội dung",
+      "aiHint": "Gợi ý kiểm duyệt (AI)",
+      "aiAnalyzing": "Đang phân tích…",
+      "aiDisclaimer": "Kết quả mang tính tham khảo; quyết định cuối thuộc người kiểm duyệt.",
+      "aiError": "Không lấy được gợi ý AI.",
+      "recommendation": "Đề xuất",
+      "reason": "Lý do",
+      "violations": "Ghi nhận",
+      "recAllow": "Cho phép đăng",
+      "recReview": "Nên xem xét kỹ",
+      "recHide": "Nên từ chối / gỡ"
+    },
+    "feedback": {
+      "loadFailed": "Không thể tải dữ liệu kiểm duyệt.",
+      "resolveSuccess": "Đã xử lý báo cáo thành công.",
+      "resolveFailed": "Không thể xử lý báo cáo.",
+      "approveSuccess": "Đã duyệt và đăng bài.",
+      "approveFailed": "Không thể duyệt bài lúc này."
+    }
+  },
+  "detail": {
+    "fallbackTitle": "Chi tiết chủ đề",
+    "fallbackContent": "Chủ đề này đang tổng hợp các cập nhật chính từ thảo luận. Xem phần bình luận để theo dõi các ý kiến bổ sung từ thành viên.",
+    "commentPlaceholder": "Viết bình luận của bạn...",
+    "attachmentsLabel": "Tệp đính kèm",
+    "attachmentImageAlt": "Ảnh đính kèm",
+    "sampleComment1": "Cảm ơn bạn đã chia sẻ. Mình đồng ý nên ưu tiên nội dung này trong sprint tới.",
+    "sampleComment2": "Bạn có thể bổ sung thêm mốc thời gian dự kiến và mức độ ảnh hưởng không?",
+    "sampleTime1": "2 giờ trước",
+    "sampleTime2": "1 giờ trước"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "layout": {
+    "title": "Moderation",
+    "home": "Home",
+    "forum": "Forum",
+    "reports": "Reports",
+    "dashboard": "Overview",
+    "pendingPosts": "Pending posts",
+    "threadChannels": "Thread channels",
+    "learningApproval": "Learning approvals"
+  },
+  "dashboard": {
+    "title": "Moderation overview",
+    "subtitle": "Queue depth and resolution summary.",
+    "metrics": {
+      "pendingReports": "Pending reports",
+      "pendingPosts": "Posts awaiting approval",
+      "pendingDocuments": "Documents awaiting approval",
+      "resolved": "Resolved reports"
+    },
+    "charts": {
+      "backlogTitle": "Report backlog",
+      "backlogHint": "{{pct}}% of all reports are still pending",
+      "removeRateTitle": "Removal share (resolved)",
+      "removeRateHint": "{{pct}}% of resolved reports resulted in removal",
+      "weeklyPendingPostsTitle": "Pending posts activity (7 days)",
+      "weeklyPendingPostsHint": "Distribution by creation date within the current pending queue.",
+      "forumVsLearningTitle": "Forum vs learning",
+      "forumVsLearningForum": "Forum workflow (reports + pending posts)",
+      "forumVsLearningLearning": "Learning materials (pending approval)",
+      "leaderboardTitle": "Authors most frequent in the pending queue",
+      "leaderboardSubtitle": "Prioritisation hint from the current snapshot.",
+      "leaderboardUnknown": "Unknown author",
+      "leaderboardEmpty": "Not enough data to rank."
+    }
+  },
+  "learning": {
+    "title": "Learning document review",
+    "totalPending": "Pending documents: {{count}}",
+    "scopeTitle": "Who can approve documents",
+    "scopeBody": "Course-scoped moderators only approve uploads linked to their courses (faculty-internal scope). Global Moderator/Admin roles may approve all materials. Forum post moderation is handled separately on Pending posts — by category or official thread channel.",
+    "columns": {
+      "title": "Title",
+      "uploader": "Uploader",
+      "created": "Created",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "view": "View",
+    "approve": "Approve",
+    "reject": "Reject",
+    "requestRevision": "Request revision",
+    "noPending": "No documents awaiting review.",
+    "loadError": "Could not load pending documents.",
+    "descriptionLabel": "Description",
+    "fileNameLabel": "File name",
+    "detailTitle": "Document details",
+    "close": "Close",
+    "loading": "Loading…",
+    "detailLoadError": "Could not load document details.",
+    "reasonReject": "Rejection reason",
+    "reasonRevision": "Revision request",
+    "reasonPlaceholderReject": "e.g. Format does not meet guidelines; sources missing…",
+    "reasonPlaceholderRevision": "e.g. Add a fuller description and upload the revised file…",
+    "reasonMinLength": "Reason must be at least 10 characters.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "processing": "Processing…"
+  },
+  "reportsTitle": "Reports Queue",
+  "totalReports": "Total reports",
+  "noReports": "No reports found for this filter.",
+  "targetDeleted": "(content deleted)",
+  "status": {
+    "pending": "Pending",
+    "resolvedKeep": "Kept",
+    "resolvedRemove": "Removed"
+  },
+  "reason": {
+    "1": "Spam",
+    "2": "Hate speech",
+    "3": "Harassment",
+    "4": "Misinformation",
+    "5": "Inappropriate content",
+    "6": "Other",
+    "unknown": "Reason #{{value}}"
+  },
+  "columns": {
+    "type": "Type",
+    "reason": "Reason",
+    "preview": "Preview",
+    "createdAt": "Reported at",
+    "actions": "Actions"
+  },
+  "itemType": {
+    "post": "Post",
+    "comment": "Comment"
+  },
+  "actions": {
+    "keep": "Keep",
+    "remove": "Remove",
+    "openPost": "Open post",
+    "openComment": "Open comment"
+  },
+  "feedback": {
+    "resolveSuccess": "Report resolved successfully.",
+    "resolveFailed": "Failed to resolve report.",
+    "resolveForbidden": "You are not allowed to resolve this report (out of your moderation scope).",
+    "loadFailed": "Failed to load reports."
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} of {{total}}"
+  }
+}

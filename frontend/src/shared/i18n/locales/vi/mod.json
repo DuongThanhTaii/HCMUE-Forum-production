@@ -1,0 +1,117 @@
+{
+  "layout": {
+    "title": "Kiểm duyệt",
+    "home": "Trang chủ",
+    "forum": "Diễn đàn",
+    "reports": "Báo cáo",
+    "dashboard": "Tổng quan",
+    "pendingPosts": "Bài chờ duyệt",
+    "threadChannels": "Kênh chủ đề",
+    "learningApproval": "Duyệt tài liệu"
+  },
+  "dashboard": {
+    "title": "Tổng quan kiểm duyệt",
+    "subtitle": "Độ sâu hàng đợi và tóm tắt xử lý.",
+    "metrics": {
+      "pendingReports": "Báo cáo chờ xử lý",
+      "pendingPosts": "Bài chờ duyệt",
+      "pendingDocuments": "Tài liệu chờ duyệt",
+      "resolved": "Báo cáo đã xử lý"
+    },
+    "charts": {
+      "backlogTitle": "Tỷ lệ tồn đọng báo cáo",
+      "backlogHint": "{{pct}}% tổng số báo cáo vẫn đang chờ xử lý",
+      "removeRateTitle": "Tỷ lệ gỡ bỏ (đã xử lý)",
+      "removeRateHint": "{{pct}}% báo cáo đã xử lý kết thúc bằng gỡ bỏ",
+      "weeklyPendingPostsTitle": "Hoạt động bài chờ duyệt (7 ngày)",
+      "weeklyPendingPostsHint": "Phân bổ theo ngày tạo trong danh sách chờ duyệt hiện tại.",
+      "forumVsLearningTitle": "Diễn đàn và học tập",
+      "forumVsLearningForum": "Luồng diễn đàn (báo cáo + bài chờ duyệt)",
+      "forumVsLearningLearning": "Luồng tài liệu học tập (chờ duyệt)",
+      "leaderboardTitle": "Tác giả xuất hiện nhiều trong hàng đợi bài",
+      "leaderboardSubtitle": "Gợi ý ưu tiên duyệt (theo dữ liệu snapshot hiện tại).",
+      "leaderboardUnknown": "Không rõ tên",
+      "leaderboardEmpty": "Không đủ dữ liệu để xếp hạng."
+    }
+  },
+  "learning": {
+    "title": "Kiểm duyệt tài liệu học tập",
+    "totalPending": "Tài liệu chờ duyệt: {{count}}",
+    "scopeTitle": "Phân quyền duyệt tài liệu",
+    "scopeBody": "Mod được gán vào môn học chỉ duyệt tài liệu gắn với các môn đó (phạm vi khoa/nội bộ). Moderator/Admin hệ thống có thể duyệt toàn bộ. Duyệt bài viết diễn đàn thực hiện ở trang «Bài chờ duyệt» — có thể theo danh mục hoặc kênh chủ đề.",
+    "columns": {
+      "title": "Tiêu đề",
+      "uploader": "Người tải lên",
+      "created": "Ngày tạo",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "view": "Xem",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "requestRevision": "Yêu cầu sửa",
+    "noPending": "Không có tài liệu chờ duyệt.",
+    "loadError": "Không thể tải danh sách tài liệu chờ duyệt.",
+    "descriptionLabel": "Mô tả",
+    "fileNameLabel": "Tên file",
+    "detailTitle": "Chi tiết tài liệu",
+    "close": "Đóng",
+    "loading": "Đang tải…",
+    "detailLoadError": "Không tải được chi tiết tài liệu.",
+    "reasonReject": "Nhập lý do từ chối",
+    "reasonRevision": "Nhập yêu cầu chỉnh sửa",
+    "reasonPlaceholderReject": "Ví dụ: Nội dung chưa đúng định dạng, thiếu nguồn tham khảo…",
+    "reasonPlaceholderRevision": "Ví dụ: Cần bổ sung mô tả chi tiết và cập nhật file phiên bản mới…",
+    "reasonMinLength": "Lý do phải có ít nhất 10 ký tự.",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "processing": "Đang xử lý…"
+  },
+  "reportsTitle": "Hàng đợi báo cáo",
+  "totalReports": "Tổng báo cáo",
+  "noReports": "Không có báo cáo nào cho bộ lọc này.",
+  "targetDeleted": "(nội dung đã bị xóa)",
+  "status": {
+    "pending": "Chờ xử lý",
+    "resolvedKeep": "Giữ nội dung",
+    "resolvedRemove": "Đã xóa"
+  },
+  "reason": {
+    "1": "Spam",
+    "2": "Ngôn từ thù địch",
+    "3": "Quấy rối",
+    "4": "Thông tin sai lệch",
+    "5": "Nội dung không phù hợp",
+    "6": "Khác",
+    "unknown": "Lý do #{{value}}"
+  },
+  "columns": {
+    "type": "Loại",
+    "reason": "Lý do",
+    "preview": "Nội dung",
+    "createdAt": "Thời điểm báo cáo",
+    "actions": "Hành động"
+  },
+  "itemType": {
+    "post": "Bài viết",
+    "comment": "Bình luận"
+  },
+  "actions": {
+    "keep": "Giữ lại",
+    "remove": "Xóa",
+    "openPost": "Xem bài viết",
+    "openComment": "Xem bình luận"
+  },
+  "feedback": {
+    "resolveSuccess": "Xử lý báo cáo thành công.",
+    "resolveFailed": "Xử lý báo cáo thất bại.",
+    "resolveForbidden": "Bạn không có quyền xử lý báo cáo này (ngoài phạm vi kiểm duyệt của bạn).",
+    "loadFailed": "Không thể tải danh sách báo cáo."
+  },
+  "pagination": {
+    "prev": "Trước",
+    "next": "Tiếp",
+    "page": "Trang {{page}} / {{total}}"
+  }
+}
+

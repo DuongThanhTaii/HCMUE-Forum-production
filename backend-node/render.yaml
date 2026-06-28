@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: unihub-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: ohio # Adjust depending on where your users/Render preference
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      # Prisma Database Connection
+      - key: DATABASE_URL
+        sync: false
+      # JWT Authentication
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "30d"
+      # Redis Socket.io Backplane
+      - key: REDIS_URL
+        sync: false
+      # Cloudinary (Forum Media)
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      # AWS S3 (Learning Documents & Career Resumes)
+      - key: AWS_REGION
+        value: us-east-1
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_S3_BUCKET_NAME
+        sync: false
+      - key: CAREER_S3_BUCKET_NAME
+        sync: false

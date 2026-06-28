@@ -1,0 +1,106 @@
+{
+  "title": "Career",
+  "jobs": "Jobs",
+  "companies": "Companies",
+  "applications": "Applications",
+  "savedJobs": "Saved jobs",
+  "postJob": "Post job",
+  "jobTypes": {
+    "fullTime": "Full-time",
+    "partTime": "Part-time",
+    "contract": "Contract",
+    "internship": "Internship",
+    "freelance": "Freelance"
+  },
+  "experienceLevels": {
+    "intern": "Intern",
+    "fresher": "Fresher",
+    "junior": "Junior",
+    "middle": "Middle",
+    "senior": "Senior",
+    "lead": "Lead"
+  },
+  "applicationStatus": {
+    "pending": "Pending",
+    "reviewing": "Reviewing",
+    "interviewed": "Interviewed",
+    "offered": "Offered",
+    "rejected": "Rejected",
+    "withdrawn": "Withdrawn"
+  },
+  "filters": {
+    "location": "Location",
+    "jobType": "Job Type",
+    "experienceLevel": "Experience Level",
+    "salaryMin": "Minimum Salary",
+    "salaryMax": "Maximum Salary",
+    "clearFilters": "Clear Filters"
+  },
+  "jobDetail": {
+    "description": "Job Description",
+    "requirements": "Requirements",
+    "benefits": "Benefits",
+    "deadline": "Deadline",
+    "applyNow": "Apply Now",
+    "saveJob": "Save Job",
+    "unsaveJob": "Unsave"
+  },
+  "apply": {
+    "title": "Apply for Job",
+    "coverLetter": "Cover Letter",
+    "coverLetterPlaceholder": "Write a few lines about yourself...",
+    "cv": "CV (PDF)",
+    "submit": "Submit Application",
+    "submitting": "Submitting...",
+    "success": "Application submitted successfully!",
+    "error": "Unable to submit application",
+    "fillRequired": "Please fill in all required information"
+  },
+  "myApplications": {
+    "title": "My Applications",
+    "noApplications": "No applications yet",
+    "appliedAt": "Applied on",
+    "viewDetail": "View Detail",
+    "withdraw": "Withdraw",
+    "withdrawSuccess": "Application withdrawn",
+    "notes": "Notes from employer"
+  },
+  "savedJobsPage": {
+    "title": "Saved Jobs",
+    "noSavedJobs": "No saved jobs yet",
+    "saveHint": "Save jobs you're interested in to view later"
+  },
+  "company": {
+    "about": "About",
+    "jobsCount": "open positions",
+    "website": "Website",
+    "visitWebsite": "Visit Website",
+    "noJobs": "No job listings available at this time",
+    "industry": "Industry",
+    "size": "Company Size",
+    "location": "Location"
+  },
+  "common": {
+    "salary": "Salary",
+    "negotiable": "Negotiable",
+    "from": "From",
+    "upTo": "Up to",
+    "to": "to",
+    "vnd": "VND",
+    "viewDetail": "View Detail",
+    "notFound": "Not Found",
+    "loading": "Loading...",
+    "previousPage": "Previous",
+    "nextPage": "Next",
+    "page": "Page",
+    "unknownCompany": "Unknown company",
+    "unknownCity": "Unknown city",
+    "remote": "Remote",
+    "onSite": "On-site",
+    "postedAt": "Posted"
+  },
+  "messages": {
+    "loadError": "Failed to load jobs list",
+    "noJobs": "No job postings yet"
+  }
+}

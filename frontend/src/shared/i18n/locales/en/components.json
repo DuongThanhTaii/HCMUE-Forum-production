@@ -1,0 +1,69 @@
+{
+  "title": "Component Library",
+  "subtitle": "UniHub component collection with Shadcn UI & GAIA UI",
+  "buttons": {
+    "title": "Buttons",
+    "default": "Default",
+    "secondary": "Secondary",
+    "destructive": "Destructive",
+    "outline": "Outline",
+    "ghost": "Ghost",
+    "link": "Link",
+    "withIcon": "With icon",
+    "sizes": "Sizes"
+  },
+  "forms": {
+    "title": "Forms",
+    "loginTitle": "Login",
+    "loginSubtitle": "Enter your credentials to login",
+    "emailPlaceholder": "email@example.com",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "Login",
+    "profileTitle": "Profile Settings",
+    "profileSubtitle": "Manage your personal information",
+    "namePlaceholder": "John Doe",
+    "bioPlaceholder": "Tell us about yourself...",
+    "saveButton": "Save changes"
+  },
+  "cards": {
+    "title": "Cards & Badges",
+    "modules": "Modules",
+    "forum": {
+      "title": "Forum",
+      "description": "Discuss and share",
+      "posts": "posts"
+    },
+    "documents": {
+      "title": "Documents",
+      "description": "Learning materials",
+      "count": "documents"
+    },
+    "jobs": {
+      "title": "Jobs",
+      "description": "Career opportunities",
+      "new": "new"
+    }
+  },
+  "avatars": {
+    "title": "Avatars & Dialogs",
+    "default": "Default",
+    "fallback": "Fallback",
+    "large": "Large",
+    "openDialog": "Open dialog",
+    "dialogTitle": "Are you sure?",
+    "dialogDescription": "This action cannot be undone. This will permanently delete your data.",
+    "dialogCancel": "Cancel",
+    "dialogContinue": "Continue"
+  },
+  "colorPalette": {
+    "title": "Color Palette",
+    "cerulean": "Cerulean Blue (Primary)",
+    "jasper": "Jasper Red (Accent)",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode"
+  },
+  "status": {
+    "title": "TASK-102 Status",
+    "completed": "Completed"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "home": "Home",
+  "forum": "Forum",
+  "learning": "Learning",
+  "chat": "Messages",
+  "career": "Career",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "login": "Login",
+  "register": "Register",
+  "aiAssistant": "AI UniBot",
+  "notifications": "Notifications",
+  "admin": "Admin",
+  "mod": "Moderation",
+  "language": "Language"
+}

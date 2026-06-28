@@ -1,0 +1,22 @@
+---
+description: Mandatory sub-agent and quality flow for large migrations
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Large Wave Execution Flow
+
+- Run an `explore` sub-agent before implementation to confirm scope and dependencies.
+- Implement in two steps:
+  - Step A: usable end-to-end feature path.
+  - Step B: hardening (i18n, edge cases, guard behavior, docs).
+- Run a `code-reviewer` sub-agent after implementation.
+- Fix all critical/high findings before marking done.
+- Run `npm run verify` and record evidence in verification docs.
+
+## Definition of Done
+
+- In-scope routes/features implemented.
+- Sub-agent review completed.
+- Verification gates passing.
+- Verification artifact updated with pass/fail notes.

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniHub.Identity.Application\UniHub.Identity.Application.csproj" />
+    <ProjectReference Include="..\UniHub.Identity.Infrastructure\UniHub.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\UniHub.Contracts\UniHub.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

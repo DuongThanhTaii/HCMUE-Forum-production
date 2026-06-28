@@ -1,0 +1,146 @@
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    container_name: unihub-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-unihub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-unihub_dev_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-unihub}
+    # Host: 5433 matches src/UniHub.API/appsettings.Development.json (avoids local Postgres on 5432)
+    ports:
+    - "${DB_BIND_HOST:-127.0.0.1}:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-unihub}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - unihub-network
+
+  mongodb:
+    image: ${MONGODB_IMAGE:-mongo:7-jammy}
+    container_name: unihub-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-unihub}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-unihub_dev_2026}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-unihub}
+    ports:
+    - "${DB_BIND_HOST:-127.0.0.1}:${MONGODB_PORT:-27018}:27017"
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - unihub-network
+
+  redis:
+    image: ${REDIS_IMAGE:-redis:7-alpine}
+    container_name: unihub-redis
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD:-change_me_redis}
+      - --appendonly
+      - ${REDIS_APPENDONLY:-yes}
+    ports:
+    - "${DB_BIND_HOST:-127.0.0.1}:${REDIS_PORT:-6380}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-change_me_redis}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - unihub-network
+
+  # .NET API — use internal hostnames (postgres, mongodb, redis). Public URL for browser: http://localhost:${API_PORT:-5034}
+  # Run: docker compose --env-file .env.docker up -d --build
+  api:
+    build:
+      context: .
+      dockerfile: src/UniHub.API/Dockerfile
+    container_name: unihub-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-unihub};Username=${POSTGRES_USER:-unihub};Password=${POSTGRES_PASSWORD:-unihub_dev_2026}"
+      ConnectionStrings__PostgreSQL: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-unihub};Username=${POSTGRES_USER:-unihub};Password=${POSTGRES_PASSWORD:-unihub_dev_2026}"
+      ConnectionStrings__MongoDB: "mongodb://${MONGO_ROOT_USER:-unihub}:${MONGO_ROOT_PASSWORD:-unihub_dev_2026}@mongodb:27017/?authSource=admin"
+      ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD:-change_me_redis}"
+      MongoDbSettings__ConnectionString: "mongodb://${MONGO_ROOT_USER:-unihub}:${MONGO_ROOT_PASSWORD:-unihub_dev_2026}@mongodb:27017/?authSource=admin"
+      MongoDbSettings__DatabaseName: unihub_db_dev
+      Chat__BaseUrl: "${VITE_API_URL:-http://localhost:5034}"
+      Cors__AllowedOrigins__0: "http://localhost:3000"
+      Cors__AllowedOrigins__1: "http://localhost:5173"
+      Cors__AllowedOrigins__2: "http://127.0.0.1:5173"
+    ports:
+      - "${API_PORT:-5034}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - unihub-network
+
+  # Production build + nginx only — NO Vite HMR. For hot reload: docker compose stop web && cd frontend && npm run dev
+  # Vite production build + nginx; SPA at http://localhost:${WEB_PORT:-5173}
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5034}
+    container_name: unihub-web
+    ports:
+      - "${WEB_PORT:-5173}:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - unihub-network
+
+volumes:
+  postgres_data:
+    driver: local
+  mongo_data:
+    driver: local
+  mongo_config:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  unihub-network:
+    driver: bridge

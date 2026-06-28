@@ -1,0 +1,28 @@
+---
+description: Feature components should stay presentational; move logic to hooks
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Feature Hook Architecture
+
+- In `src/features/**/components`, keep components focused on rendering.
+- Move form/query orchestration, derived state, and submit handlers into `src/features/**/hooks`.
+- Prefer one hook per screen flow (`useXxxPage`, `useXxxForm`) with explicit return shape.
+- Keep API adapters in `api/`, state in `model/`, pure helpers in `lib/`.
+
+## Pattern
+
+```tsx
+// component
+const vm = useCareerJobsPage();
+return <CareerJobsView {...vm} />;
+```
+
+```ts
+// hook
+export function useCareerJobsPage() {
+  // query + mapping + handlers
+  return { items, isLoading, isError };
+}
+```

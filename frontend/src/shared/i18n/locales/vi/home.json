@@ -1,0 +1,43 @@
+{
+  "welcomeTitle": "Diễn đàn học tập dành cho sinh viên Đại học Sư phạm Thành phố Hồ Chí Minh",
+  "welcomeSubtitle": "Chia sẻ kiến thức, hỏi đáp bài tập và kết nối với bạn học — không gian gọn, thân thiện, tập trung vào nội dung học thuật.",
+  "gotoForum": "Xem bản đồ khu vực",
+  "latestTopics": "Chủ đề mới",
+  "viewAll": "Xem tất cả trong diễn đàn",
+  "studentDashboard": {
+    "title": "Bảng tin sinh viên",
+    "subtitle": "Gợi ý từ dữ liệu thực trên hệ thống. «Đang hot» và «Tuần này» được tính trên trình duyệt từ danh sách bài — có thể thay bằng API tổng hợp sau.",
+    "hot": {
+      "title": "Đang được quan tâm",
+      "empty": "Chưa có đủ bài để xếp hạng."
+    },
+    "week": {
+      "title": "Tuần này trên diễn đàn",
+      "hint": "Theo hoạt động ~7 ngày gần đây.",
+      "empty": "Tuần này chưa có thread nổi bật."
+    },
+    "tags": {
+      "title": "Tag đang phổ biến",
+      "empty": "Chưa có thống kê tag."
+    },
+    "shortcuts": {
+      "title": "Truy cập nhanh",
+      "newPost": "Đăng bài mới",
+      "threads": "Kênh & chủ đề",
+      "learning": "Tài liệu học tập",
+      "career": "Việc làm / thực tập",
+      "loginHint": "Đăng nhập để xem việc làm và nội dung dành cho thành viên."
+    },
+    "docs": {
+      "title": "Tài liệu đã duyệt",
+      "viewAll": "Thư viện",
+      "empty": "Chưa có tài liệu công khai."
+    },
+    "jobs": {
+      "title": "Việc làm gợi ý",
+      "viewAll": "Xem tất cả",
+      "empty": "Chưa có tin tuyển.",
+      "loginPrompt": "Đăng nhập để xem tin việc làm và ứng tuyển."
+    }
+  }
+}

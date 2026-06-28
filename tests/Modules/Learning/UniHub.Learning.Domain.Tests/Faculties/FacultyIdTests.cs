@@ -1,0 +1,71 @@
+using UniHub.Learning.Domain.Faculties;
+
+namespace UniHub.Learning.Domain.Tests.Faculties;
+
+public class FacultyIdTests
+{
+    [Fact]
+    public void CreateUnique_ShouldReturnNewGuidEachTime()
+    {
+        // Act
+        var id1 = FacultyId.CreateUnique();
+        var id2 = FacultyId.CreateUnique();
+
+        // Assert
+        id1.Should().NotBe(id2);
+        id1.Value.Should().NotBeEmpty();
+        id2.Value.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void Create_WithValidGuid_ShouldReturnFacultyId()
+    {
+        // Arrange
+        var guid = Guid.NewGuid();
+
+        // Act
+        var id = FacultyId.Create(guid);
+
+        // Assert
+        id.Value.Should().Be(guid);
+    }
+
+    [Fact]
+    public void ToString_ShouldReturnGuidString()
+    {
+        // Arrange
+        var guid = Guid.NewGuid();
+        var id = FacultyId.Create(guid);
+
+        // Act
+        var result = id.ToString();
+
+        // Assert
+        result.Should().Be(guid.ToString());
+    }
+
+    [Fact]
+    public void TwoFacultyIds_WithSameValue_ShouldBeEqual()
+    {
+        // Arrange
+        var guid = Guid.NewGuid();
+        var id1 = FacultyId.Create(guid);
+        var id2 = FacultyId.Create(guid);
+
+        // Assert
+        id1.Should().Be(id2);
+        (id1 == id2).Should().BeTrue();
+    }
+
+    [Fact]
+    public void TwoFacultyIds_WithDifferentValues_ShouldNotBeEqual()
+    {
+        // Arrange
+        var id1 = FacultyId.CreateUnique();
+        var id2 = FacultyId.CreateUnique();
+
+        // Assert
+        id1.Should().NotBe(id2);
+        (id1 != id2).Should().BeTrue();
+    }
+}

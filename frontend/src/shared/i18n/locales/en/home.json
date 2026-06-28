@@ -1,0 +1,43 @@
+{
+  "welcomeTitle": "A learning forum for HCMUE students",
+  "welcomeSubtitle": "Share knowledge, ask questions, and connect with peers — a clean, content-first space for academic discussion.",
+  "gotoForum": "Browse forum",
+  "latestTopics": "Latest topics",
+  "viewAll": "View all in forum",
+  "studentDashboard": {
+    "title": "Student highlights",
+    "subtitle": "Suggestions from live data on the platform. “Trending” and “This week” are computed in your browser from the post list — a dedicated API snapshot may replace this later.",
+    "hot": {
+      "title": "Trending now",
+      "empty": "Not enough posts to rank yet."
+    },
+    "week": {
+      "title": "This week on the forum",
+      "hint": "Based on activity in roughly the last 7 days.",
+      "empty": "No standout threads this week yet."
+    },
+    "tags": {
+      "title": "Popular tags",
+      "empty": "No tag statistics yet."
+    },
+    "shortcuts": {
+      "title": "Quick links",
+      "newPost": "New post",
+      "threads": "Threads & channels",
+      "learning": "Learning library",
+      "career": "Jobs & internships",
+      "loginHint": "Sign in to see jobs and member-only content."
+    },
+    "docs": {
+      "title": "Approved materials",
+      "viewAll": "Library",
+      "empty": "No published documents yet."
+    },
+    "jobs": {
+      "title": "Job picks",
+      "viewAll": "All jobs",
+      "empty": "No openings yet.",
+      "loginPrompt": "Sign in to browse jobs and apply."
+    }
+  }
+}

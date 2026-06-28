@@ -1,0 +1,9 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "src/UniHub.API/Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

@@ -1,0 +1,723 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["career", "chat", "forum", "identity", "learning", "notification", "public"]
+}
+
+model applications {
+  id                     String    @id(map: "PK_applications") @db.Uuid
+  job_posting_id         String    @db.Uuid
+  applicant_id           String    @db.Uuid
+  status                 Int
+  resume_file_name       String    @db.VarChar(255)
+  resume_file_url        String    @db.VarChar(2000)
+  resume_file_size_bytes BigInt
+  resume_content_type    String    @db.VarChar(100)
+  cover_letter_content   String?   @db.VarChar(5000)
+  submitted_at           DateTime  @db.Timestamptz(6)
+  last_status_changed_at DateTime? @db.Timestamptz(6)
+  last_status_changed_by String?   @db.Uuid
+  review_notes           String?   @db.VarChar(2000)
+
+  @@unique([job_posting_id, applicant_id], map: "IX_applications_job_posting_id_applicant_id")
+  @@index([applicant_id], map: "IX_applications_applicant_id")
+  @@index([job_posting_id], map: "IX_applications_job_posting_id")
+  @@index([status], map: "IX_applications_status")
+  @@index([submitted_at], map: "IX_applications_submitted_at")
+  @@schema("career")
+}
+
+model companies {
+  id                 String    @id(map: "PK_companies") @db.Uuid
+  name               String    @db.VarChar(200)
+  description        String    @db.VarChar(5000)
+  industry           Int
+  size               Int
+  website            String?   @db.VarChar(500)
+  logo_url           String?   @db.VarChar(1000)
+  founded_year       Int?
+  status             Int
+  contact_email      String    @db.VarChar(256)
+  contact_phone      String?   @db.VarChar(20)
+  contact_address    String?   @db.VarChar(500)
+  social_linkedin    String?   @db.VarChar(500)
+  social_facebook    String?   @db.VarChar(500)
+  social_twitter     String?   @db.VarChar(500)
+  social_instagram   String?   @db.VarChar(500)
+  social_youtube     String?   @db.VarChar(500)
+  registered_by      String    @db.Uuid
+  registered_at      DateTime  @db.Timestamptz(6)
+  verified_at        DateTime? @db.Timestamptz(6)
+  verified_by        String?   @db.Uuid
+  updated_at         DateTime? @db.Timestamptz(6)
+  total_job_postings Int       @default(0)
+  benefits           Json
+
+  @@index([industry], map: "IX_companies_industry")
+  @@index([name], map: "IX_companies_name")
+  @@index([registered_at], map: "IX_companies_registered_at")
+  @@index([registered_by], map: "IX_companies_registered_by")
+  @@index([status], map: "IX_companies_status")
+  @@schema("career")
+}
+
+model job_posting_requirements {
+  skill          String       @db.VarChar(100)
+  job_posting_id String       @db.Uuid
+  is_required    Boolean      @default(true)
+  job_postings   job_postings @relation(fields: [job_posting_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_job_posting_requirements_job_postings_job_posting_id")
+
+  @@id([job_posting_id, skill], map: "PK_job_posting_requirements")
+  @@schema("career")
+}
+
+model job_postings {
+  id                       String                     @id(map: "PK_job_postings") @db.Uuid
+  title                    String                     @db.VarChar(200)
+  description              String                     @db.VarChar(10000)
+  company_id               String                     @db.Uuid
+  posted_by                String                     @db.Uuid
+  job_type                 Int
+  experience_level         Int
+  status                   Int
+  salary_min_amount        Decimal?                   @db.Decimal(18, 2)
+  salary_max_amount        Decimal?                   @db.Decimal(18, 2)
+  salary_currency          String?                    @db.VarChar(10)
+  salary_period            String?                    @db.VarChar(20)
+  location_city            String                     @db.VarChar(100)
+  location_district        String?                    @db.VarChar(100)
+  location_address         String?                    @db.VarChar(300)
+  location_is_remote       Boolean                    @default(false)
+  deadline                 DateTime?                  @db.Timestamptz(6)
+  created_at               DateTime                   @db.Timestamptz(6)
+  updated_at               DateTime?                  @db.Timestamptz(6)
+  published_at             DateTime?                  @db.Timestamptz(6)
+  closed_at                DateTime?                  @db.Timestamptz(6)
+  view_count               Int                        @default(0)
+  application_count        Int                        @default(0)
+  tags                     Json
+  job_posting_requirements job_posting_requirements[]
+
+  @@index([company_id], map: "IX_job_postings_company_id")
+  @@index([created_at], map: "IX_job_postings_created_at")
+  @@index([deadline], map: "IX_job_postings_deadline")
+  @@index([experience_level], map: "IX_job_postings_experience_level")
+  @@index([job_type], map: "IX_job_postings_job_type")
+  @@index([posted_by], map: "IX_job_postings_posted_by")
+  @@index([status], map: "IX_job_postings_status")
+  @@schema("career")
+}
+
+model recruiters {
+  id                            String    @id(map: "PK_recruiters") @db.Uuid
+  user_id                       String    @db.Uuid
+  company_id                    String    @db.Uuid
+  can_manage_job_postings       Boolean   @default(false)
+  can_review_applications       Boolean   @default(false)
+  can_update_application_status Boolean   @default(false)
+  can_invite_recruiters         Boolean   @default(false)
+  status                        Int
+  added_by                      String    @db.Uuid
+  added_at                      DateTime  @db.Timestamptz(6)
+  last_modified_at              DateTime? @db.Timestamptz(6)
+
+  @@unique([user_id, company_id], map: "IX_recruiters_user_id_company_id")
+  @@index([company_id], map: "IX_recruiters_company_id")
+  @@index([status], map: "IX_recruiters_status")
+  @@index([user_id], map: "IX_recruiters_user_id")
+  @@schema("career")
+}
+
+model channels {
+  id          String    @id(map: "PK_channels") @db.Uuid
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(500)
+  type        Int
+  owner_id    String    @db.Uuid
+  created_at  DateTime  @db.Timestamptz(6)
+  is_archived Boolean   @default(false)
+  archived_at DateTime? @db.Timestamptz(6)
+  members     Json
+  moderators  Json
+
+  @@index([is_archived], map: "IX_channels_is_archived")
+  @@index([name], map: "IX_channels_name")
+  @@index([owner_id], map: "IX_channels_owner_id")
+  @@index([type], map: "IX_channels_type")
+  @@schema("chat")
+}
+
+model conversation_mutes {
+  user_id         String   @db.Uuid
+  conversation_id String   @db.Uuid
+  is_muted        Boolean  @default(false)
+  updated_at      DateTime @db.Timestamptz(6)
+
+  @@id([user_id, conversation_id])
+  @@schema("chat")
+}
+
+model conversations {
+  id              String    @id(map: "PK_conversations") @db.Uuid
+  type            Int
+  title           String?   @db.VarChar(100)
+  created_by      String    @db.Uuid
+  created_at      DateTime  @db.Timestamptz(6)
+  last_message_at DateTime? @db.Timestamptz(6)
+  is_archived     Boolean   @default(false)
+  participants    Json
+
+  @@index([created_by], map: "IX_conversations_created_by")
+  @@index([is_archived], map: "IX_conversations_is_archived")
+  @@index([last_message_at], map: "IX_conversations_last_message_at")
+  @@index([type], map: "IX_conversations_type")
+  @@schema("chat")
+}
+
+model message_attachments {
+  file_name       String   @db.VarChar(255)
+  message_id      String   @db.Uuid
+  file_url        String   @db.VarChar(2000)
+  file_size_bytes BigInt
+  mime_type       String   @db.VarChar(100)
+  thumbnail_url   String?  @db.VarChar(2000)
+  messages        messages @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_message_attachments_messages_message_id")
+
+  @@id([message_id, file_name], map: "PK_message_attachments")
+  @@schema("chat")
+}
+
+model message_reactions {
+  user_id    String   @db.Uuid
+  emoji      String   @db.VarChar(10)
+  message_id String   @db.Uuid
+  reacted_at DateTime @db.Timestamptz(6)
+  messages   messages @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_message_reactions_messages_message_id")
+
+  @@id([message_id, user_id, emoji], map: "PK_message_reactions")
+  @@schema("chat")
+}
+
+model message_read_receipts {
+  user_id    String   @db.Uuid
+  message_id String   @db.Uuid
+  read_at    DateTime @db.Timestamptz(6)
+  messages   messages @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_message_read_receipts_messages_message_id")
+
+  @@id([message_id, user_id], map: "PK_message_read_receipts")
+  @@schema("chat")
+}
+
+model message_reports {
+  id              Int      @id @default(autoincrement())
+  message_id      String   @db.Uuid
+  conversation_id String   @db.Uuid
+  reporter_id     String   @db.Uuid
+  reason          Int
+  description     String?  @db.VarChar(2000)
+  created_at      DateTime @db.Timestamptz(6)
+
+  @@unique([reporter_id, message_id], map: "ix_message_reports_reporter_message")
+  @@index([message_id], map: "ix_message_reports_message_id")
+  @@schema("chat")
+}
+
+model messages {
+  id                    String                  @id(map: "PK_messages") @db.Uuid
+  conversation_id       String                  @db.Uuid
+  sender_id             String                  @db.Uuid
+  content               String                  @db.VarChar(5000)
+  type                  Int
+  sent_at               DateTime                @db.Timestamptz(6)
+  edited_at             DateTime?               @db.Timestamptz(6)
+  is_deleted            Boolean                 @default(false)
+  deleted_at            DateTime?               @db.Timestamptz(6)
+  reply_to_message_id   String?                 @db.Uuid
+  message_attachments   message_attachments[]
+  message_reactions     message_reactions[]
+  message_read_receipts message_read_receipts[]
+
+  @@index([conversation_id], map: "IX_messages_conversation_id")
+  @@index([is_deleted], map: "IX_messages_is_deleted")
+  @@index([reply_to_message_id], map: "IX_messages_reply_to_message_id")
+  @@index([sender_id], map: "IX_messages_sender_id")
+  @@index([sent_at], map: "IX_messages_sent_at")
+  @@schema("chat")
+}
+
+model bookmarks {
+  post_id    String   @db.Uuid
+  user_id    String   @db.Uuid
+  created_at DateTime @db.Timestamptz(6)
+
+  @@id([post_id, user_id], map: "PK_bookmarks")
+  @@index([created_at], map: "IX_bookmarks_created_at")
+  @@index([post_id], map: "IX_bookmarks_post_id")
+  @@index([user_id], map: "IX_bookmarks_user_id")
+  @@schema("forum")
+}
+
+model categories {
+  id                 String    @id(map: "PK_categories") @db.Uuid
+  name               String    @unique(map: "IX_categories_name") @db.VarChar(100)
+  description        String    @db.VarChar(500)
+  slug               String    @unique(map: "IX_categories_slug") @db.VarChar(250)
+  parent_category_id String?   @db.Uuid
+  post_count         Int       @default(0)
+  display_order      Int       @default(0)
+  is_active          Boolean   @default(true)
+  created_at         DateTime  @db.Timestamptz(6)
+  updated_at         DateTime? @db.Timestamptz(6)
+  moderator_ids      Json
+
+  @@index([display_order], map: "IX_categories_display_order")
+  @@index([is_active], map: "IX_categories_is_active")
+  @@index([parent_category_id], map: "IX_categories_parent_category_id")
+  @@schema("forum")
+}
+
+model comment_votes {
+  user_id    String    @db.Uuid
+  comment_id String    @db.Uuid
+  vote_type  Int
+  created_at DateTime  @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  comments   comments  @relation(fields: [comment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_comment_votes_comments_comment_id")
+
+  @@id([comment_id, user_id], map: "PK_comment_votes")
+  @@schema("forum")
+}
+
+model comments {
+  id                 String          @id(map: "PK_comments") @db.Uuid
+  post_id            String          @db.Uuid
+  author_id          String          @db.Uuid
+  content            String          @db.VarChar(10000)
+  parent_comment_id  String?         @db.Uuid
+  is_accepted_answer Boolean         @default(false)
+  vote_score         Int             @default(0)
+  is_deleted         Boolean         @default(false)
+  created_at         DateTime        @db.Timestamptz(6)
+  updated_at         DateTime?       @db.Timestamptz(6)
+  is_pinned          Boolean         @default(false)
+  comment_votes      comment_votes[]
+
+  @@index([author_id], map: "IX_comments_author_id")
+  @@index([created_at], map: "IX_comments_created_at")
+  @@index([parent_comment_id], map: "IX_comments_parent_comment_id")
+  @@index([post_id], map: "IX_comments_post_id")
+  @@schema("forum")
+}
+
+model post_tags {
+  post_id  String   @db.Uuid
+  tag_id   Int
+  added_at DateTime @db.Timestamptz(6)
+
+  @@id([post_id, tag_id], map: "PK_post_tags")
+  @@index([post_id], map: "IX_post_tags_post_id")
+  @@index([tag_id], map: "IX_post_tags_tag_id")
+  @@schema("forum")
+}
+
+model post_votes {
+  user_id    String    @db.Uuid
+  post_id    String    @db.Uuid
+  vote_type  Int
+  created_at DateTime  @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  posts      posts     @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_post_votes_posts_post_id")
+
+  @@id([post_id, user_id], map: "PK_post_votes")
+  @@schema("forum")
+}
+
+model posts {
+  id                String           @id(map: "PK_posts") @db.Uuid
+  title             String           @db.VarChar(200)
+  content           String           @db.VarChar(50000)
+  slug              String           @unique(map: "IX_posts_slug") @db.VarChar(250)
+  type              Int
+  status            Int
+  author_id         String           @db.Uuid
+  category_id       String?          @db.Uuid
+  view_count        Int              @default(0)
+  vote_score        Int              @default(0)
+  comment_count     Int              @default(0)
+  is_pinned         Boolean          @default(false)
+  is_locked         Boolean          @default(false)
+  created_at        DateTime         @db.Timestamptz(6)
+  updated_at        DateTime?        @db.Timestamptz(6)
+  published_at      DateTime?        @db.Timestamptz(6)
+  tags              Json
+  thread_channel_id String?          @db.Uuid
+  post_votes        post_votes[]
+  thread_channels   thread_channels? @relation(fields: [thread_channel_id], references: [id], onUpdate: NoAction, map: "fk_posts_thread_channel_id")
+
+  @@index([author_id], map: "IX_posts_author_id")
+  @@index([category_id], map: "IX_posts_category_id")
+  @@index([created_at], map: "IX_posts_created_at")
+  @@index([status], map: "IX_posts_status")
+  @@index([thread_channel_id], map: "ix_posts_thread_channel_id")
+  @@schema("forum")
+}
+
+model reports {
+  id                  Int       @id(map: "PK_reports") @default(autoincrement())
+  reported_item_id    String    @db.Uuid
+  reported_item_type  Int
+  reporter_id         String    @db.Uuid
+  reason              Int
+  description         String?   @db.VarChar(1000)
+  status              Int
+  created_at          DateTime  @db.Timestamptz(6)
+  reviewed_at         DateTime? @db.Timestamptz(6)
+  reviewed_by         String?   @db.Uuid
+  resolution_decision Int?
+
+  @@index([created_at], map: "IX_reports_created_at")
+  @@index([reported_item_id], map: "IX_reports_reported_item_id")
+  @@index([reported_item_id, reported_item_type], map: "IX_reports_reported_item_id_reported_item_type")
+  @@index([reported_item_type], map: "IX_reports_reported_item_type")
+  @@index([reporter_id], map: "IX_reports_reporter_id")
+  @@index([status], map: "IX_reports_status")
+  @@schema("forum")
+}
+
+model tags {
+  id          Int       @id(map: "PK_tags") @default(autoincrement())
+  name        String    @unique(map: "IX_tags_name") @db.VarChar(50)
+  description String    @db.VarChar(200)
+  slug        String    @unique(map: "IX_tags_slug") @db.VarChar(250)
+  usage_count Int       @default(0)
+  created_at  DateTime  @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+
+  @@index([created_at], map: "IX_tags_created_at")
+  @@index([usage_count], map: "IX_tags_usage_count")
+  @@schema("forum")
+}
+
+model thread_channels {
+  id                      String    @id @db.Uuid
+  code                    String    @unique(map: "ix_thread_channels_code") @db.VarChar(64)
+  name                    String    @db.VarChar(120)
+  description             String?   @db.VarChar(500)
+  display_order           Int       @default(0)
+  is_active               Boolean   @default(true)
+  allow_pinned_comments   Boolean   @default(true)
+  allow_accepted_answers  Boolean   @default(true)
+  allow_moderator_actions Boolean   @default(true)
+  created_at              DateTime  @db.Timestamptz(6)
+  updated_at              DateTime? @db.Timestamptz(6)
+  posts                   posts[]
+
+  @@index([is_active, display_order], map: "ix_thread_channels_is_active_display_order")
+  @@schema("forum")
+}
+
+model password_reset_tokens {
+  id         String    @id(map: "PK_password_reset_tokens") @db.Uuid
+  user_id    String    @db.Uuid
+  token      String    @unique(map: "IX_password_reset_tokens_token") @db.VarChar(500)
+  expires_at DateTime  @db.Timestamptz(6)
+  created_at DateTime  @db.Timestamptz(6)
+  is_used    Boolean
+  used_at    DateTime? @db.Timestamptz(6)
+
+  @@schema("identity")
+}
+
+model permissions {
+  id          String   @id(map: "PK_permissions") @db.Uuid
+  code        String   @unique(map: "IX_permissions_code") @db.VarChar(100)
+  name        String   @db.VarChar(200)
+  description String?  @db.VarChar(500)
+  module      String   @db.VarChar(100)
+  resource    String   @db.VarChar(100)
+  action      String   @db.VarChar(100)
+  created_at  DateTime @db.Timestamptz(6)
+
+  @@schema("identity")
+}
+
+model refresh_tokens {
+  id                String    @id(map: "PK_refresh_tokens") @db.Uuid
+  token             String    @unique(map: "IX_refresh_tokens_token") @db.VarChar(500)
+  expires_at        DateTime  @db.Timestamptz(6)
+  created_at        DateTime  @db.Timestamptz(6)
+  created_by_ip     String?   @db.VarChar(50)
+  revoked_by        String?   @db.VarChar(200)
+  revoked_by_ip     String?   @db.VarChar(50)
+  revoked_at        DateTime? @db.Timestamptz(6)
+  replaced_by_token String?   @db.VarChar(500)
+  revoke_reason     String?   @db.VarChar(500)
+  user_id           String    @db.Uuid
+  users             users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_refresh_tokens_users_user_id")
+
+  @@index([user_id], map: "IX_refresh_tokens_user_id")
+  @@schema("identity")
+}
+
+model role_permissions {
+  id            String   @id(map: "PK_role_permissions") @db.Uuid
+  role_id       String   @db.Uuid
+  permission_id String   @db.Uuid
+  scope_type    Int
+  scope_value   String?  @db.VarChar(100)
+  assigned_at   DateTime @db.Timestamptz(6)
+  roles         roles    @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_role_permissions_roles_role_id")
+
+  @@unique([role_id, permission_id], map: "IX_role_permissions_role_id_permission_id")
+  @@schema("identity")
+}
+
+model roles {
+  id               String             @id(map: "PK_roles") @db.Uuid
+  name             String             @unique(map: "IX_roles_name") @db.VarChar(100)
+  description      String?            @db.VarChar(500)
+  is_default       Boolean
+  is_system_role   Boolean
+  created_at       DateTime           @db.Timestamptz(6)
+  updated_at       DateTime?          @db.Timestamptz(6)
+  role_permissions role_permissions[]
+
+  @@schema("identity")
+}
+
+model user_blocks {
+  blocker_user_id String   @db.Uuid
+  blocked_user_id String   @db.Uuid
+  created_at      DateTime @db.Timestamptz(6)
+
+  @@id([blocker_user_id, blocked_user_id])
+  @@index([blocked_user_id], map: "ix_user_blocks_blocked_user_id")
+  @@schema("identity")
+}
+
+model user_roles {
+  id          String   @id(map: "PK_user_roles") @db.Uuid
+  user_id     String   @db.Uuid
+  role_id     String   @db.Uuid
+  assigned_at DateTime @db.Timestamptz(6)
+  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_user_roles_users_user_id")
+
+  @@unique([user_id, role_id], map: "IX_user_roles_user_id_role_id")
+  @@schema("identity")
+}
+
+model users {
+  id                String           @id(map: "PK_users") @db.Uuid
+  email             String           @unique(map: "IX_users_email") @db.VarChar(256)
+  password_hash     String           @db.VarChar(500)
+  first_name        String           @db.VarChar(100)
+  last_name         String           @db.VarChar(100)
+  avatar            String?          @db.VarChar(1000)
+  bio               String?          @db.VarChar(500)
+  phone             String?          @db.VarChar(15)
+  date_of_birth     DateTime?        @db.Timestamptz(6)
+  status            Int
+  badge_type        Int?
+  badge_name        String?          @db.VarChar(100)
+  badge_description String?          @db.VarChar(200)
+  badge_verified_at DateTime?        @db.Timestamptz(6)
+  badge_verified_by String?          @db.VarChar(200)
+  created_at        DateTime         @db.Timestamptz(6)
+  updated_at        DateTime?        @db.Timestamptz(6)
+  refresh_tokens    refresh_tokens[]
+  user_roles        user_roles[]
+
+  @@schema("identity")
+}
+
+model courses {
+  id               String    @id(map: "PK_courses") @db.Uuid
+  code             String    @unique(map: "IX_courses_code") @db.VarChar(20)
+  name             String    @db.VarChar(200)
+  description      String    @db.VarChar(2000)
+  semester         String    @db.VarChar(50)
+  status           Int
+  faculty_id       String?   @db.Uuid
+  credits          Int
+  document_count   Int       @default(0)
+  enrollment_count Int       @default(0)
+  created_at       DateTime  @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+  created_by       String    @db.Uuid
+  moderator_ids    Json
+
+  @@index([created_at], map: "IX_courses_created_at")
+  @@index([created_by], map: "IX_courses_created_by")
+  @@index([faculty_id], map: "IX_courses_faculty_id")
+  @@index([status], map: "IX_courses_status")
+  @@schema("learning")
+}
+
+model documents {
+  id               String    @id(map: "PK_documents") @db.Uuid
+  title            String    @db.VarChar(200)
+  description      String    @db.VarChar(1000)
+  file_name        String    @db.VarChar(255)
+  file_path        String    @db.VarChar(500)
+  file_size        BigInt
+  content_type     String    @db.VarChar(100)
+  file_extension   String?   @db.VarChar(10)
+  type             Int
+  status           Int
+  uploader_id      String    @db.Uuid
+  course_id        String?   @db.Uuid
+  reviewer_id      String?   @db.Uuid
+  review_comment   String?   @db.VarChar(1000)
+  rejection_reason String?   @db.VarChar(500)
+  download_count   Int       @default(0)
+  view_count       Int       @default(0)
+  average_rating   Float     @default(0.0)
+  rating_count     Int       @default(0)
+  created_at       DateTime  @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+  submitted_at     DateTime? @db.Timestamptz(6)
+  reviewed_at      DateTime? @db.Timestamptz(6)
+
+  @@index([course_id], map: "IX_documents_course_id")
+  @@index([created_at], map: "IX_documents_created_at")
+  @@index([status], map: "IX_documents_status")
+  @@index([type], map: "IX_documents_type")
+  @@index([uploader_id], map: "IX_documents_uploader_id")
+  @@schema("learning")
+}
+
+model faculties {
+  id           String    @id(map: "PK_faculties") @db.Uuid
+  code         String    @unique(map: "IX_faculties_code") @db.VarChar(20)
+  name         String    @unique(map: "IX_faculties_name") @db.VarChar(200)
+  description  String    @db.VarChar(2000)
+  status       Int
+  manager_id   String?   @db.Uuid
+  course_count Int       @default(0)
+  created_at   DateTime  @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+  created_by   String    @db.Uuid
+
+  @@index([created_at], map: "IX_faculties_created_at")
+  @@index([manager_id], map: "IX_faculties_manager_id")
+  @@index([status], map: "IX_faculties_status")
+  @@schema("learning")
+}
+
+model notification_preferences {
+  id             String    @id(map: "PK_notification_preferences") @db.Uuid
+  user_id        String    @unique(map: "IX_notification_preferences_user_id") @db.Uuid
+  email_enabled  Boolean   @default(true)
+  push_enabled   Boolean   @default(true)
+  in_app_enabled Boolean   @default(true)
+  created_at     DateTime  @db.Timestamptz(6)
+  updated_at     DateTime? @db.Timestamptz(6)
+
+  @@schema("notification")
+}
+
+model notification_template_variables {
+  name                   String                 @db.VarChar(50)
+  template_id            String                 @db.Uuid
+  description            String                 @db.VarChar(500)
+  example_value          String?                @db.VarChar(200)
+  notification_templates notification_templates @relation(fields: [template_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_notification_template_variables_notification_templates_temp~")
+
+  @@id([template_id, name], map: "PK_notification_template_variables")
+  @@schema("notification")
+}
+
+model notification_templates {
+  id                              String                            @id(map: "PK_notification_templates") @db.Uuid
+  name                            String                            @unique(map: "IX_notification_templates_name") @db.VarChar(100)
+  display_name                    String                            @db.VarChar(200)
+  description                     String?                           @db.VarChar(1000)
+  category                        Int
+  status                          Int
+  email_subject                   String?                           @db.VarChar(200)
+  email_body                      String?                           @db.VarChar(50000)
+  email_from_name                 String?                           @db.VarChar(100)
+  email_from_email                String?                           @db.VarChar(256)
+  push_title                      String?                           @db.VarChar(100)
+  push_body                       String?                           @db.VarChar(500)
+  push_icon_url                   String?                           @db.VarChar(1000)
+  push_badge_count                Int?
+  inapp_title                     String?                           @db.VarChar(200)
+  inapp_body                      String?                           @db.VarChar(1000)
+  inapp_action_url                String?                           @db.VarChar(2000)
+  inapp_icon_url                  String?                           @db.VarChar(1000)
+  created_by                      String                            @db.Uuid
+  created_at                      DateTime                          @db.Timestamptz(6)
+  updated_by                      String?                           @db.Uuid
+  updated_at                      DateTime?                         @db.Timestamptz(6)
+  activated_at                    DateTime?                         @db.Timestamptz(6)
+  activated_by                    String?                           @db.Uuid
+  channels                        Json
+  notification_template_variables notification_template_variables[]
+
+  @@index([category], map: "IX_notification_templates_category")
+  @@index([created_at], map: "IX_notification_templates_created_at")
+  @@index([status], map: "IX_notification_templates_status")
+  @@schema("notification")
+}
+
+model notifications {
+  id                 String    @id(map: "PK_notifications") @db.Uuid
+  recipient_id       String    @db.Uuid
+  template_id        String?   @db.Uuid
+  channel            Int
+  status             Int
+  content_subject    String    @db.VarChar(200)
+  content_body       String    @db.VarChar(2000)
+  content_action_url String?   @db.VarChar(2000)
+  content_icon_url   String?   @db.VarChar(1000)
+  metadata           Json
+  created_at         DateTime  @db.Timestamptz(6)
+  sent_at            DateTime? @db.Timestamptz(6)
+  read_at            DateTime? @db.Timestamptz(6)
+  dismissed_at       DateTime? @db.Timestamptz(6)
+  failure_reason     String?   @db.VarChar(500)
+  send_attempts      Int       @default(0)
+
+  @@index([channel], map: "IX_notifications_channel")
+  @@index([created_at], map: "IX_notifications_created_at")
+  @@index([recipient_id], map: "IX_notifications_recipient_id")
+  @@index([recipient_id, status], map: "IX_notifications_recipient_id_status")
+  @@index([status], map: "IX_notifications_status")
+  @@index([template_id], map: "IX_notifications_template_id")
+  @@schema("notification")
+}
+
+model EFMigrationsHistory {
+  MigrationId    String @id(map: "PK___EFMigrationsHistory") @db.VarChar(150)
+  ProductVersion String @db.VarChar(32)
+
+  @@map("__EFMigrationsHistory")
+  @@schema("public")
+}
+
+model user_document_downloads {
+  user_id       String   @db.Uuid
+  document_id   String   @db.Uuid
+  downloaded_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@id([user_id, document_id], map: "pk_user_document_downloads")
+  @@index([document_id], map: "ix_udd_document")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user_document_ratings {
+  user_id     String   @db.Uuid
+  document_id String   @db.Uuid
+  rating      Int
+  rated_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  @@id([user_id, document_id], map: "pk_user_document_ratings")
+  @@index([document_id], map: "ix_udr_document")
+  @@schema("public")
+}

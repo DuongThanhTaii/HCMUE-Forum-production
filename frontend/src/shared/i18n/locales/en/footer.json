@@ -1,0 +1,16 @@
+{
+  "description": "Student learning and networking platform",
+  "products": "Products",
+  "forum": "Forum",
+  "learning": "Learning",
+  "chat": "Chat",
+  "career": "Career",
+  "support": "Support",
+  "help": "Help",
+  "about": "About us",
+  "contact": "Contact",
+  "legal": "Legal",
+  "privacy": "Privacy Policy",
+  "terms": "Terms of Service",
+  "copyright": "© {year} UniHub. All rights reserved."
+}

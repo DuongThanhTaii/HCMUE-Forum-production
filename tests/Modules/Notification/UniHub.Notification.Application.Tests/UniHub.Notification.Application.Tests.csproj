@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Modules\Notification\UniHub.Notification.Application\UniHub.Notification.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Modules\Notification\UniHub.Notification.Domain\UniHub.Notification.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Shared\UniHub.SharedKernel\UniHub.SharedKernel.csproj" />
+    <!-- Cross-module references for domain events in tests -->
+    <ProjectReference Include="..\..\..\..\src\Modules\Identity\UniHub.Identity.Domain\UniHub.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Modules\Forum\UniHub.Forum.Domain\UniHub.Forum.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Modules\Learning\UniHub.Learning.Domain\UniHub.Learning.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Modules\Chat\UniHub.Chat.Domain\UniHub.Chat.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Modules\Career\UniHub.Career.Domain\UniHub.Career.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

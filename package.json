@@ -1,0 +1,17 @@
+{
+  "name": "unihub-monorepo-dev",
+  "private": true,
+  "description": "Local dev orchestration for Forum + UEBot (single terminal)",
+  "scripts": {
+    "dev:all": "concurrently --kill-others-on-fail -n forum-be,forum-fe,uebot-be,uebot-fe -c blue,green,magenta,yellow \"npm run dev:forum-be\" \"npm run dev:forum-fe\" \"npm run dev:uebot-be\" \"npm run dev:uebot-fe\"",
+    "dev:forum": "concurrently -n forum-be,forum-fe -c blue,green \"npm run dev:forum-be\" \"npm run dev:forum-fe\"",
+    "dev:uebot": "concurrently -n uebot-be,uebot-fe -c magenta,yellow \"npm run dev:uebot-be\" \"npm run dev:uebot-fe\"",
+    "dev:forum-be": "dotnet watch run --project src/UniHub.API --launch-profile http",
+    "dev:forum-fe": "npm run dev --prefix frontend",
+    "dev:uebot-be": "npm run dev --prefix UEBot/UE-Bot/sync-api",
+    "dev:uebot-fe": "npm run dev --prefix UEBot/UE-Bot/web-app"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

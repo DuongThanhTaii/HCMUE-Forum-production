@@ -1,0 +1,172 @@
+{
+  "title": "Học tập",
+  "documents": "Tài liệu",
+  "courses": "Khóa học",
+  "faculties": "Khoa",
+  "uploadDocument": "Tải lên tài liệu",
+  "myDocuments": "Tài liệu của tôi",
+  "pendingApproval": "Chờ duyệt",
+  "approvalQueue": "Kiểm duyệt tài liệu",
+  "documentList": "Danh sách tài liệu",
+  "documentDetail": "Chi tiết tài liệu",
+  "courseList": "Danh sách môn học",
+  "facultyList": "Danh sách các khoa",
+  "contribute": {
+    "ctaQuestion": "Bạn có tài liệu muốn đóng góp cho cộng đồng?",
+    "hint": "Tài liệu được kiểm duyệt trước khi hiển thị công khai. Chọn đúng môn học để đội ngũ khoa/môn xử lý nhanh hơn.",
+    "expand": "Đăng tải / đóng góp",
+    "collapse": "Thu gọn biểu mẫu",
+    "libraryHeading": "Thư viện tài liệu",
+    "permissionNote": "Kiểm duyệt tài liệu theo khoa/môn: moderator được gán cho môn chỉ duyệt nội dung gắn với các môn đó. Vai trò Moderator/Admin toàn cục có thể duyệt mọi tài liệu. Kiểm duyệt bài viết diễn đàn là luồng riêng (phạm vi danh mục / kênh)."
+  },
+  "uploadPage": {
+    "title": "Tải lên tài liệu",
+    "subtitle": "Chia sẻ tài liệu học tập với cộng đồng sinh viên",
+    "titleLabel": "Tiêu đề",
+    "titlePlaceholder": "Nhập tiêu đề tài liệu",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Mô tả nội dung tài liệu",
+    "facultyLabel": "Khoa",
+    "facultyPlaceholder": "Chọn khoa",
+    "courseLabel": "Môn học",
+    "coursePlaceholder": "Chọn môn học",
+    "documentTypeLabel": "Loại tài liệu",
+    "documentTypePlaceholder": "Chọn loại tài liệu",
+    "fileLabel": "File tài liệu",
+    "uploading": "Đang tải lên...",
+    "uploadSuccess": "Tải lên thành công! Đang chờ duyệt.",
+    "uploadError": "Không thể tải lên tài liệu",
+    "note": "Lưu ý:",
+    "noteItems": [
+      "Tài liệu sẽ được kiểm duyệt trước khi công khai",
+      "Chỉ tải lên tài liệu học tập hợp lệ",
+      "Không tải lên tài liệu có bản quyền",
+      "Kích thước file tối đa: 10MB"
+    ]
+  },
+  "documentTypes": {
+    "lecture": "Bài giảng",
+    "assignment": "Bài tập",
+    "exam": "Đề thi",
+    "reference": "Tài liệu tham khảo",
+    "other": "Khác"
+  },
+  "documentStatus": {
+    "draft": "Bản nháp",
+    "pendingApproval": "Chờ duyệt",
+    "pending": "Chờ duyệt",
+    "approved": "Đã duyệt",
+    "rejected": "Đã từ chối",
+    "deleted": "Đã xóa"
+  },
+  "filters": {
+    "search": "Tìm kiếm tài liệu...",
+    "allFaculties": "Tất cả khoa",
+    "allCourses": "Tất cả môn học",
+    "allTypes": "Tất cả loại",
+    "clearFilters": "Xóa bộ lọc",
+    "selectFaculty": "Chọn khoa",
+    "selectCourse": "Chọn môn học",
+    "selectType": "Loại tài liệu",
+    "allSemesters": "Tất cả học kỳ",
+    "semester": "Học kỳ",
+    "searchCourse": "Lọc theo môn (mã hoặc tên)"
+  },
+  "documentCard": {
+    "viewDetail": "Xem chi tiết",
+    "uploadedBy": "Tải lên bởi:",
+    "downloads": "lượt tải",
+    "views": "lượt xem",
+    "ratings": "đánh giá",
+    "unknownUploader": "Không rõ người tải lên",
+    "noDescription": "Chưa có mô tả",
+    "downloadsLabel": "Lượt tải",
+    "ratingsLabel": "Đánh giá"
+  },
+  "documentDetailPage": {
+    "downloadHint": "Ghi nhận lượt tải để thống kê. Việc cấp file có thể được triển khai riêng.",
+    "downloadDocument": "Tải xuống tài liệu",
+    "rateDocument": "Đánh giá tài liệu",
+    "yourRating": "Đánh giá của bạn",
+    "reviewLabel": "Nhận xét (tùy chọn)",
+    "reviewPlaceholder": "Chia sẻ ý kiến của bạn về tài liệu này...",
+    "submitRating": "Gửi đánh giá",
+    "sendingRating": "Đang gửi...",
+    "documentInfo": "Thông tin tài liệu",
+    "fileName": "Tên file",
+    "fileSize": "Kích thước",
+    "uploadDate": "Ngày tải lên",
+    "uploader": "Tải lên bởi",
+    "course": "Môn học",
+    "faculty": "Khoa",
+    "code": "Mã",
+    "starRatingAria": "Đánh giá {{count}} trên 5 sao"
+  },
+  "fileUploader": {
+    "dragDrop": "Kéo thả file vào đây hoặc click để chọn",
+    "supportedFormats": "Hỗ trợ:",
+    "maxSize": "Kích thước tối đa:",
+    "fileSizeExceeded": "Kích thước file vượt quá",
+    "unsupportedFormat": "Định dạng file không được hỗ trợ",
+    "selectFile": "Vui lòng chọn file tài liệu"
+  },
+  "coursesPage": {
+    "title": "Danh sách môn học",
+    "subtitle": "Khám phá các môn học và tài liệu liên quan",
+    "credits": "Số tín chỉ:",
+    "documentsCount": "tài liệu",
+    "viewDocuments": "Xem tài liệu",
+    "showingRange": "Hiển thị {{from}}–{{to}} / {{total}}"
+  },
+  "facultiesPage": {
+    "title": "Danh sách các khoa",
+    "subtitle": "Khám phá các khoa và môn học liên quan",
+    "courses": "Môn học",
+    "documents": "Tài liệu",
+    "viewCourses": "Xem môn học",
+    "viewDocuments": "Xem tài liệu"
+  },
+  "approvalPage": {
+    "title": "Kiểm duyệt tài liệu",
+    "subtitle": "Phê duyệt hoặc từ chối tài liệu chờ kiểm duyệt",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "viewFile": "Xem file",
+    "uploader": "Người tải lên",
+    "uploadDate": "Ngày tải lên",
+    "rejectDialog": {
+      "title": "Từ chối tài liệu",
+      "description": "Vui lòng nhập lý do từ chối tài liệu này",
+      "reasonLabel": "Lý do từ chối",
+      "reasonPlaceholder": "Nhập lý do từ chối...",
+      "confirmReject": "Xác nhận từ chối",
+      "processing": "Đang xử lý...",
+      "cancel": "Hủy"
+    },
+    "approveSuccess": "Đã duyệt tài liệu thành công!",
+    "approveError": "Không thể duyệt tài liệu",
+    "rejectSuccess": "Đã từ chối tài liệu",
+    "rejectError": "Không thể từ chối tài liệu"
+  },
+  "messages": {
+    "rateSuccess": "Cảm ơn bạn đã đánh giá.",
+    "rateError": "Không thể gửi đánh giá.",
+    "downloadTracked": "Đã ghi nhận lượt tải.",
+    "downloadError": "Không thể ghi nhận lượt tải.",
+    "loginToInteract": "Đăng nhập để đánh giá hoặc ghi nhận lượt tải.",
+    "noDocuments": "Không tìm thấy tài liệu nào",
+    "noCourses": "Không tìm thấy môn học nào",
+    "noFaculties": "Không có khoa nào",
+    "noPendingDocuments": "Không có tài liệu nào đang chờ duyệt",
+    "loadError": "Không thể tải danh sách",
+    "notFound": "Không tìm thấy tài liệu",
+    "uploadCloudinaryError": "Không thể tải file lên. Vui lòng thử lại.",
+    "validationError": "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.",
+    "fillAllFields": "Vui lòng điền đầy đủ thông tin"
+  },
+  "pagination": {
+    "previous": "Trước",
+    "next": "Sau",
+    "page": "Trang"
+  }
+}

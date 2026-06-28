@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="MediatR" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniHub.Notification.Domain\UniHub.Notification.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\UniHub.SharedKernel\UniHub.SharedKernel.csproj" />
+    <!-- Cross-module references for domain events -->
+    <ProjectReference Include="..\..\Identity\UniHub.Identity.Domain\UniHub.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\Forum\UniHub.Forum.Domain\UniHub.Forum.Domain.csproj" />
+    <ProjectReference Include="..\..\Learning\UniHub.Learning.Domain\UniHub.Learning.Domain.csproj" />
+    <ProjectReference Include="..\..\Chat\UniHub.Chat.Domain\UniHub.Chat.Domain.csproj" />
+    <ProjectReference Include="..\..\Career\UniHub.Career.Domain\UniHub.Career.Domain.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

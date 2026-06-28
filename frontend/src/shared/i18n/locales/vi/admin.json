@@ -1,0 +1,406 @@
+{
+  "title": "Quản trị",
+  "dashboard": "Bảng điều khiển",
+  "users": "Người dùng",
+  "roles": "Vai trò",
+  "permissions": "Quyền",
+  "toggles": "Bật/tắt tính năng",
+  "threadChannels": "Kênh chủ đề",
+  "logs": {
+    "actions": "Nhật ký hành động",
+    "audit": "Nhật ký kiểm tra"
+  },
+  "overrides": {
+    "users": "Theo người dùng",
+    "groups": "Theo nhóm"
+  },
+  "reports": "Báo cáo",
+  "analytics": "Phân tích",
+  "dashboardPage": {
+    "title": "Bảng điều khiển",
+    "subtitle": "Người dùng, quyền, endpoint và nhật ký — theo tuần và theo vai trò Admin.",
+    "kpis": {
+      "users": "Người dùng",
+      "roles": "Vai trò",
+      "endpointsOn": "Endpoint đang bật",
+      "actionLogsSample": "Action logs (mẫu)"
+    },
+    "endpointHealth": "Phần endpoint đã kích hoạt",
+    "endpointHealthHint": "{{enabled}} / {{total}} endpoint trong danh sách toggle.",
+    "weeklyAuditTitle": "Audit logs — 7 ngày gần nhất",
+    "weeklyAuditHint": "Số sự kiện audit theo ngày (UTC, theo mẫu đã tải).",
+    "weeklyActionsTitle": "Action logs — 7 ngày gần nhất",
+    "weeklyActionsHint": "Số yêu cầu HTTP theo ngày (UTC, theo mẫu đã tải).",
+    "topEndpointsTitle": "Endpoint được gọi nhiều nhất",
+    "topEndpointsHint": "Top {{count}} trong nhật ký mẫu.",
+    "errorRatesTitle": "Chất lượng nhật ký (mẫu)",
+    "actionErrorsLabel": "HTTP lỗi (action logs)",
+    "auditFailuresLabel": "Audit thất bại"
+  },
+  "sidebar": {
+    "groups": {
+      "access": "Kiểm soát truy cập",
+      "overrides": "Ghi đè quyền",
+      "forum": "Diễn đàn",
+      "observability": "Giám sát"
+    }
+  },
+  "threadChannelsPage": {
+    "title": "Kênh chủ đề",
+    "subtitle": "Kênh thảo luận chính thức và chính sách theo từng kênh (ghim, câu trả lời được chọn, thao tác mod).",
+    "badges": {
+      "active": "Đang bật",
+      "inactive": "Đang tắt"
+    },
+    "policy": {
+      "on": "Bật",
+      "off": "Tắt"
+    },
+    "policyLabels": {
+      "pin": "Ghim bình luận",
+      "accepted": "Câu trả lời được chọn",
+      "mod": "Thao tác kiểm duyệt"
+    },
+    "table": {
+      "policiesGroup": "Chính sách theo kênh",
+      "policyLegend": "Mỗi cột chính sách hiển thị Bật hoặc Tắt cho kênh đó (ghim bình luận, đánh dấu câu trả lời hay nhất, thao tác kiểm duyệt)."
+    },
+    "fields": {
+      "code": "Mã",
+      "name": "Tên",
+      "description": "Mô tả",
+      "displayOrder": "Thứ tự hiển thị",
+      "isActive": "Kích hoạt",
+      "allowPin": "Cho phép ghim bình luận",
+      "allowAccepted": "Cho phép đánh dấu câu trả lời hay nhất",
+      "allowMod": "Cho phép thao tác kiểm duyệt"
+    },
+    "actions": {
+      "reviewSave": "Xem lại & lưu",
+      "edit": "Sửa"
+    },
+    "create": {
+      "title": "Tạo kênh",
+      "hint": "Kênh mới cần mã duy nhất và tên hiển thị. Xem bảng thay đổi trước khi áp dụng.",
+      "review": "Xem lại & tạo"
+    },
+    "confirm": {
+      "updateTitle": "Xác nhận thay đổi — {{name}}",
+      "createTitle": "Xác nhận kênh mới",
+      "subtitle": "Các giá trị dưới đây sẽ được gửi lên máy chủ.",
+      "field": "Trường",
+      "before": "Trước",
+      "after": "Sau",
+      "apply": "Áp dụng"
+    },
+    "messages": {
+      "loadError": "Không tải được danh sách kênh chủ đề.",
+      "noChanges": "Không có thay đổi để lưu.",
+      "codeNameRequired": "Bắt buộc nhập mã và tên.",
+      "saved": "Đã lưu “{{name}}”.",
+      "created": "Đã tạo kênh.",
+      "saveFailed": "Lưu thất bại. Kiểm tra quyền và thử lại."
+    }
+  },
+  "rolesPage": {
+    "title": "Quản lý vai trò",
+    "subtitle": "Chọn vai trò và cấu hình quyền truy cập.",
+    "createRole": "Tạo vai trò",
+    "messages": {
+      "loadError": "Không thể tải dữ liệu vai trò.",
+      "noRoleSelected": "Chưa chọn vai trò."
+    },
+    "createModal": {
+      "title": "Tạo vai trò",
+      "name": "Tên vai trò",
+      "description": "Mô tả"
+    }
+  },
+  "overridesPage": {
+    "title": "Ghi đè quyền",
+    "subtitle": "Áp dụng ngoại lệ theo người dùng trước khi xét quy tắc theo nhóm.",
+    "messages": {
+      "loadError": "Không thể tải dữ liệu ghi đè quyền."
+    },
+    "groups": {
+      "available": "Nguồn dữ liệu ghi đè theo nhóm đã sẵn sàng, nhưng phần UI được chủ động hoãn ở Task 7.",
+      "unavailable": "Nguồn dữ liệu ghi đè theo nhóm hiện chưa khả dụng. Luồng ghi đè theo người dùng vẫn hoạt động đầy đủ.",
+      "empty": "Chưa có nhóm nào để cấu hình ghi đè."
+    },
+    "form": {
+      "title": "Thêm ghi đè",
+      "permission": "Quyền",
+      "selectPermission": "Chọn quyền",
+      "effect": "Hiệu lực",
+      "effectOptions": {
+        "allow": "Cho phép",
+        "deny": "Từ chối"
+      },
+      "scopeType": "Loại phạm vi",
+      "scopeTypeOptions": {
+        "global": "Toàn cục",
+        "faculty": "Khoa",
+        "course": "Môn học"
+      },
+      "scopeValue": "Giá trị phạm vi",
+      "scopeValuePlaceholderGlobal": "(để trống cho Toàn cục)",
+      "scopeValuePlaceholder": "vd. faculty:it",
+      "reason": "Lý do",
+      "reasonPlaceholder": "Lý do (không bắt buộc)",
+      "expiresAt": "Hết hạn lúc (UTC ISO)",
+      "expiresAtPlaceholder": "2026-12-31T23:59:59Z",
+      "submit": "Thêm ghi đè",
+      "pickPermission": "Chọn quyền cần ghi đè",
+      "searchPermission": "Tìm theo mã hoặc tên…",
+      "noPermissions": "Không còn quyền nào tại phạm vi này.",
+      "selectPermissionHint": "Chọn một quyền bên trái để cấu hình Allow/Deny.",
+      "selectFaculty": "Chọn khoa",
+      "selectCourse": "Chọn môn học",
+      "effectStatusActive": "Đang có ghi đè: {{effect}} (sẽ được thay khi lưu).",
+      "effectStatusFromRole": "Chưa có ghi đè tại phạm vi này — đang theo vai trò/nhóm mặc định."
+    },
+    "table": {
+      "revoked": "Đã thu hồi"
+    },
+    "userPanel": {
+      "searchUser": "Tìm người dùng",
+      "searchPlaceholder": "Tên hoặc email",
+      "table": {
+        "permission": "Quyền",
+        "scope": "Phạm vi",
+        "effect": "Hiệu lực",
+        "action": "Thao tác"
+      },
+      "actions": {
+        "revoke": "Thu hồi"
+      },
+      "messages": {
+        "noUsers": "Không tìm thấy người dùng.",
+        "selectUser": "Chọn người dùng để quản lý ghi đè quyền.",
+        "noOverrides": "Không có ghi đè."
+      }
+    }
+  },
+  "togglesPage": {
+    "title": "Bật/tắt endpoint",
+    "subtitle": "Tạm thời bật hoặc tắt các endpoint quản trị được bảo vệ.",
+    "messages": {
+      "loadError": "Không thể tải danh sách bật/tắt endpoint.",
+      "empty": "Không có cấu hình bật/tắt nào."
+    },
+    "row": {
+      "version": "Phiên bản",
+      "enable": "Bật",
+      "disable": "Tắt",
+      "lastReason": "Lý do gần nhất",
+      "notAvailable": "Không có",
+      "disableReason": "Lý do tắt",
+      "reasonRequired": "Bắt buộc nhập lý do.",
+      "confirmDisable": "Xác nhận tắt"
+    }
+  },
+  "auditLogsPage": {
+    "title": "Nhật ký kiểm tra phân quyền",
+    "filters": {
+      "userId": "ID người dùng",
+      "endpointKey": "Khóa endpoint",
+      "result": "Kết quả",
+      "resultOptions": {
+        "all": "Tất cả",
+        "success": "Thành công",
+        "failure": "Thất bại"
+      },
+      "take": "Số lượng"
+    },
+    "table": {
+      "action": "Hành động",
+      "target": "Mục tiêu",
+      "result": "Kết quả",
+      "when": "Thời điểm"
+    },
+    "result": {
+      "success": "Thành công",
+      "failure": "Thất bại"
+    },
+    "messages": {
+      "loadError": "Không thể tải nhật ký kiểm tra.",
+      "empty": "Không có nhật ký kiểm tra."
+    }
+  },
+  "actionLogsPage": {
+    "title": "Nhật ký hành động người dùng",
+    "viewType": {
+      "Developer": "Developer",
+      "DeveloperHint": "có tiêu đề + body",
+      "Administrator": "Quản trị",
+      "AdministratorHint": "chỉ siêu dữ liệu"
+    },
+    "hero": {
+      "kicker": "Giám sát",
+      "subtitle": "Truy vấn theo người dùng, correlation hoặc trace. Chế độ Developer có bản xem trước request/response (giới hạn kích thước, tiêu đề nhạy cảm được che).",
+      "autoRefresh": "Tự làm mới · 5s",
+      "export": "Xuất JSON"
+    },
+    "stats": {
+      "inPage": "Số dòng (trang này)",
+      "inPageHint": "Thống kê theo bộ kết quả hiện tại.",
+      "ok": "2xx / 3xx",
+      "errors": "4xx / 5xx",
+      "p95": "Độ trễ p95"
+    },
+    "banner": {
+      "correlationTitle": "Hành trình Correlation",
+      "correlationBody": "Sắp xếp theo thời điểm bắt đầu. Cùng Correlation ID có thể gồm nhiều user nếu header bị tái sử dụng — đối chiếu Actor từng bước.",
+      "traceTitle": "Tra cứu Trace",
+      "traceBody": "Hiển thị mọi request log khớp Trace ID (W3C / Activity)."
+    },
+    "filters": {
+      "actorUserId": "ID người thực hiện",
+      "method": "Phương thức",
+      "pathContains": "Đường dẫn chứa",
+      "pageSize": "Kích thước trang",
+      "user": "Người dùng",
+      "userPlaceholder": "Chọn hoặc nhập User ID…",
+      "feature": "Cụm tính năng / API",
+      "correlationId": "Correlation ID",
+      "correlationPlaceholder": "Dán X-Correlation-Id…",
+      "correlationHint": "Không bắt buộc user. Tải cả chuỗi (tăng kích thước trang nếu thiếu dòng).",
+      "traceId": "Trace ID",
+      "tracePlaceholder": "Trace / Activity id…",
+      "outcome": "Kết quả HTTP",
+      "outcomeAll": "Mọi mã",
+      "outcomeSuccess": "Thành công (2xx–3xx)",
+      "outcomeClientError": "Lỗi client (4xx)",
+      "outcomeServerError": "Lỗi server (5xx)"
+    },
+    "features": {
+      "all": "Mọi API",
+      "posts": "Diễn đàn · Bài viết",
+      "comments": "Diễn đàn · Bình luận",
+      "categories": "Diễn đàn · Danh mục",
+      "tags": "Diễn đàn · Thẻ",
+      "search": "Diễn đàn · Tìm kiếm",
+      "threadChannels": "Diễn đàn · Kênh chủ đề",
+      "mod": "Kiểm duyệt",
+      "adminAuth": "Quản trị · Phân quyền",
+      "adminObservability": "Quản trị · Giám sát",
+      "users": "Định danh · Người dùng",
+      "auth": "Định danh · Đăng nhập",
+      "roles": "Định danh · Vai trò",
+      "permissions": "Định danh · Quyền",
+      "jobs": "Việc làm · Tin tuyển",
+      "applications": "Việc làm · Hồ sơ ứng tuyển",
+      "companies": "Việc làm · Công ty",
+      "recruiters": "Việc làm · Nhà tuyển dụng",
+      "documents": "Học liệu · Tài liệu",
+      "courses": "Học liệu · Môn học",
+      "faculties": "Học liệu · Khoa",
+      "chat": "Chat",
+      "notifications": "Thông báo",
+      "ai": "AI",
+      "assistant": "Trợ lý / Assistant",
+      "integrations": "Tích hợp",
+      "other": "Khác"
+    },
+    "empty": {
+      "needScopeTitle": "Chọn cách tìm",
+      "needScopeBody": "Nhập User ID, dán Correlation ID, hoặc Trace ID. Chế độ Correlation phù hợp để theo một phiên trình duyệt/API qua nhiều endpoint."
+    },
+    "loading": "Đang tải nhật ký…",
+    "timeline": {
+      "prompt": "correlation-timeline --id=\"{{id}}\""
+    },
+    "row": {
+      "copy": "Sao chép",
+      "copyCorrelation": "Sao chép correlation"
+    },
+    "detail": {
+      "kicker": "Bản ghi HTTP",
+      "summary": "Tóm tắt",
+      "requestSection": "Yêu cầu (request)",
+      "responseSection": "Phản hồi (response)",
+      "headers": "Tiêu đề",
+      "body": "Nội dung",
+      "bodyTruncated": "Bản xem trước bị cắt theo giới hạn byte cấu hình.",
+      "endpoint": "Endpoint ASP.NET",
+      "fullUrl": "URL đầy đủ",
+      "copy": "Sao chép",
+      "correlation": "Correlation",
+      "followCorrelation": "Mở hành trình correlation",
+      "trace": "Trace",
+      "actor": "Người thực hiện",
+      "network": "Máy khách",
+      "timing": "Thời gian",
+      "started": "Bắt đầu (UTC)",
+      "completed": "Kết thúc (UTC)",
+      "exception": "Ngoại lệ",
+      "terminalLine": "Dòng nhật ký",
+      "httpPayloadHiddenTitle": "Payload request & response",
+      "httpPayloadHiddenBody": "Chế độ Quản trị (Administrator) cố ý không trả về tiêu đề và nội dung HTTP đã ghi lại. Chọn Developer ở thanh phía trên để xem tiêu đề (đã che phần nhạy cảm) và bản xem trước body (giới hạn dung lượng).",
+      "currentViewBadge": "Chế độ danh sách",
+      "noRequestBodyForMethod": "Phương thức này thường không có body (ví dụ GET).",
+      "noResponseBody204": "Không có nội dung phản hồi với mã 204."
+    },
+    "table": {
+      "method": "Phương thức",
+      "path": "Đường dẫn",
+      "status": "Trạng thái",
+      "durationMs": "Thời lượng (ms)"
+    },
+    "pagination": {
+      "previous": "Trước",
+      "next": "Sau",
+      "page": "Trang",
+      "summary": "{{total}} tổng · hiển thị {{from}}–{{to}}"
+    },
+    "messages": {
+      "loadError": "Không thể tải nhật ký hành động.",
+      "empty": "Không có nhật ký hành động."
+    }
+  },
+  "usersPage": {
+    "title": "Quản lý người dùng",
+    "subtitle": "Lọc theo vai trò và trạng thái; gán hoặc gỡ vai trò trực tiếp trên từng dòng.",
+    "filters": {
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tìm theo tên hoặc email",
+      "role": "Vai trò",
+      "status": "Trạng thái",
+      "allRoles": "Tất cả vai trò",
+      "allStatuses": "Tất cả trạng thái"
+    },
+    "table": {
+      "user": "Người dùng",
+      "status": "Trạng thái",
+      "roles": "Vai trò",
+      "actions": "Thao tác"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "banned": "Bị khóa"
+    },
+    "roles": {
+      "none": "Chưa có vai trò",
+      "assigned": "Vai trò đã gán",
+      "add": "Thêm vai trò",
+      "emptyAssigned": "Chưa gán vai trò nào.",
+      "emptyAvailable": "Đã gán hết vai trò có sẵn.",
+      "search": "Tìm vai trò…"
+    },
+    "actions": {
+      "manageRoles": "Quản lý vai trò",
+      "closeRoles": "Thu gọn"
+    },
+    "messages": {
+      "loadError": "Không thể tải dữ liệu người dùng.",
+      "noResults": "Không tìm thấy người dùng.",
+      "assignRoleFailed": "Không gán được vai trò (có thể đã tồn tại).",
+      "removeRoleFailed": "Không gỡ được vai trò.",
+      "cannotRemoveLastRole": "Không thể gỡ vai trò cuối cùng của người dùng."
+    }
+  },
+  "layout": {
+    "title": "Khu vực quản trị"
+  }
+}

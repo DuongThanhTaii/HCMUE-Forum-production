@@ -1,0 +1,106 @@
+{
+  "title": "Việc làm",
+  "jobs": "Công việc",
+  "companies": "Công ty",
+  "applications": "Ứng tuyển",
+  "savedJobs": "Đã lưu",
+  "postJob": "Đăng tuyển",
+  "jobTypes": {
+    "fullTime": "Toàn thời gian",
+    "partTime": "Bán thời gian",
+    "contract": "Hợp đồng",
+    "internship": "Thực tập",
+    "freelance": "Freelance"
+  },
+  "experienceLevels": {
+    "intern": "Thực tập sinh",
+    "fresher": "Mới tốt nghiệp",
+    "junior": "Junior",
+    "middle": "Middle",
+    "senior": "Senior",
+    "lead": "Lead"
+  },
+  "applicationStatus": {
+    "pending": "Chờ xử lý",
+    "reviewing": "Đang xem xét",
+    "interviewed": "Đã phỏng vấn",
+    "offered": "Được chấp nhận",
+    "rejected": "Bị từ chối",
+    "withdrawn": "Đã rút"
+  },
+  "filters": {
+    "location": "Địa điểm",
+    "jobType": "Loại công việc",
+    "experienceLevel": "Cấp độ",
+    "salaryMin": "Lương tối thiểu",
+    "salaryMax": "Lương tối đa",
+    "clearFilters": "Xóa bộ lọc"
+  },
+  "jobDetail": {
+    "description": "Mô tả công việc",
+    "requirements": "Yêu cầu",
+    "benefits": "Quyền lợi",
+    "deadline": "Hạn nộp",
+    "applyNow": "Nộp đơn ứng tuyển",
+    "saveJob": "Lưu việc làm",
+    "unsaveJob": "Bỏ lưu"
+  },
+  "apply": {
+    "title": "Nộp đơn ứng tuyển",
+    "coverLetter": "Thư xin việc",
+    "coverLetterPlaceholder": "Viết vài dòng giới thiệu bản thân...",
+    "cv": "CV (PDF)",
+    "submit": "Nộp đơn",
+    "submitting": "Đang nộp...",
+    "success": "Nộp đơn thành công!",
+    "error": "Không thể nộp đơn ứng tuyển",
+    "fillRequired": "Vui lòng điền đầy đủ thông tin"
+  },
+  "myApplications": {
+    "title": "Đơn ứng tuyển của tôi",
+    "noApplications": "Chưa có đơn ứng tuyển nào",
+    "appliedAt": "Nộp đơn",
+    "viewDetail": "Xem chi tiết",
+    "withdraw": "Rút đơn",
+    "withdrawSuccess": "Đã rút đơn ứng tuyển",
+    "notes": "Ghi chú từ nhà tuyển dụng"
+  },
+  "savedJobsPage": {
+    "title": "Việc làm đã lưu",
+    "noSavedJobs": "Chưa có việc làm đã lưu",
+    "saveHint": "Lưu các việc làm quan tâm để xem sau"
+  },
+  "company": {
+    "about": "Giới thiệu",
+    "jobsCount": "việc làm đang tuyển",
+    "website": "Website",
+    "visitWebsite": "Truy cập website",
+    "noJobs": "Hiện tại công ty chưa có tin tuyển dụng nào",
+    "industry": "Ngành nghề",
+    "size": "Quy mô",
+    "location": "Địa điểm"
+  },
+  "common": {
+    "salary": "Lương",
+    "negotiable": "Thỏa thuận",
+    "from": "Từ",
+    "upTo": "Tối đa",
+    "to": "đến",
+    "vnd": "VNĐ",
+    "viewDetail": "Xem chi tiết",
+    "notFound": "Không tìm thấy",
+    "loading": "Đang tải...",
+    "previousPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "page": "Trang",
+    "unknownCompany": "Công ty chưa xác định",
+    "unknownCity": "Chưa rõ địa điểm",
+    "remote": "Làm việc từ xa",
+    "onSite": "Làm việc tại văn phòng",
+    "postedAt": "Đăng lúc"
+  },
+  "messages": {
+    "loadError": "Không thể tải danh sách việc làm",
+    "noJobs": "Chưa có tin tuyển dụng"
+  }
+}

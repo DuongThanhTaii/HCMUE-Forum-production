@@ -1,0 +1,228 @@
+{
+  "title": "Messages",
+  "conversations": "Conversations",
+  "channels": "Channels",
+  "aiBot": "UniBot AI",
+  "typeMessage": "Type a message...",
+  "send": "Send",
+  "online": "Online",
+  "offline": "Offline",
+  "typing": "typing...",
+  "welcome": "Welcome to Chat",
+  "selectConversation": "Select a conversation to start",
+  "noConversations": "No conversations yet",
+  "loadError": "Cannot load conversations",
+  "cannotLoadMessages": "Cannot load messages",
+  "sendError": "Cannot send message",
+  "uploadError": "Cannot upload file",
+  "maxFileSize": "Maximum file size 10MB",
+  "attachFile": "Attach file",
+  "attachment": "Attachment",
+  "loadMore": "Load more messages",
+  "edited": "edited",
+  "channelsPage": {
+    "title": "Channels",
+    "subtitle": "Join public channels and chat with everyone",
+    "publicChannels": "Public channels",
+    "myChannels": "My channels",
+    "noPublicChannels": "No public channels",
+    "notJoinedAny": "You haven't joined any channels",
+    "joinChannel": "Join channel",
+    "openChannel": "Open channel",
+    "createdBy": "Created by:",
+    "members": "members",
+    "noDescription": "No description",
+    "joinSuccess": "Joined channel",
+    "joinError": "Cannot join channel"
+  },
+  "aiPage": {
+    "title": "UniBot AI",
+    "assistant": "Your intelligent AI assistant",
+    "newConversation": "New conversation",
+    "noConversations": "No conversations yet",
+    "messageCount": "{count} messages",
+    "greeting": "Hello! I'm UniBot AI",
+    "description": "I can help you answer questions, find information, and support your learning tasks. Ask me anything!",
+    "askUniBot": "Ask UniBot...",
+    "sendError": "Cannot send message to AI",
+    "toolCalling": "Calling: {tool}"
+  },
+  "typingIndicator": {
+    "single": "{user} is typing...",
+    "double": "{user1} and {user2} are typing...",
+    "multiple": "{user} and {count} others are typing..."
+  },
+  "connectionStatus": {
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "reconnecting": "Reconnecting...",
+    "disconnected": "Disconnected",
+    "connectionFailed": "Failed to connect to chat server"
+  },
+  "presence": {
+    "activeNow": "Active now"
+  },
+  "channelHistoryNotice": "REST history for channels is not wired yet. Messages here are live-only until the backend links channels to conversations.",
+  "channelEmptyLive": "No messages yet. Say hello!",
+  "mobile": {
+    "back": "Back"
+  },
+  "dm": {
+    "search": "Start a direct message",
+    "searchPlaceholder": "Search by name or email…",
+    "createError": "Could not start conversation",
+    "newChat": "New message",
+    "closePicker": "Close dialog",
+    "searchHint": "Type at least 2 characters to search people.",
+    "typeToSearch": "Type at least 2 letters to search.",
+    "noResults": "No one matches that search.",
+    "directChat": "Direct message"
+  },
+  "thread": {
+    "noMessagesYet": "No messages yet. Send the first one below.",
+    "pickConversation": "Select a chat on the left, or use “New message” to find someone."
+  },
+  "scroll": {
+    "toBottom": "Scroll to latest messages",
+    "newMessages": "{{count}} new messages",
+    "loadingOlder": "Loading older messages…",
+    "pullOlderHint": "Scroll up for older messages"
+  },
+  "search": {
+    "title": "Search in conversation",
+    "open": "Search messages",
+    "placeholder": "Search message text…",
+    "minChars": "Type at least 2 characters",
+    "noResults": "No results",
+    "error": "Search failed"
+  },
+  "safety": {
+    "menu": "Conversation options",
+    "mute": "Mute notifications",
+    "unmute": "Unmute",
+    "mutedBadge": "Muted",
+    "block": "Block this user",
+    "blockConfirm": "Block {{name}}? You will not be able to message each other.",
+    "blockedBanner": "You blocked this user or were blocked — messaging is disabled.",
+    "composerDisabled": "Cannot send messages in this conversation",
+    "report": "Report message",
+    "reportTitle": "Report message",
+    "reportPlaceholder": "Additional details (optional)",
+    "reportSubmitted": "Report submitted. Thank you.",
+    "reportError": "Could not submit report",
+    "reasonSpam": "Spam",
+    "reasonHarassment": "Harassment",
+    "reasonInappropriate": "Inappropriate",
+    "reasonOther": "Other"
+  },
+  "info": {
+    "title": "Conversation info",
+    "open": "Media & files",
+    "peer": "Chat with",
+    "mutedOn": "Notifications muted",
+    "mutedOff": "Notifications on",
+    "shortcutsHint": "Use the ⋮ menu to mute or block; tabs below show media and links.",
+    "media": "Photos",
+    "files": "Files",
+    "links": "Links",
+    "emptyMedia": "No photos in this conversation yet.",
+    "emptyFiles": "No files or voice messages yet.",
+    "emptyLinks": "No links shared yet.",
+    "loadError": "Could not load media list. Try refreshing the page."
+  },
+  "notifications": {
+    "enable": "Enable browser notifications"
+  },
+  "dock": {
+    "open": "Open chat dock",
+    "backToList": "Back to conversation list",
+    "emptyConversations": "No conversations yet.",
+    "minimize": "Minimize dock",
+    "expandFull": "Open full chat page",
+    "hint": "Use the full chat page for threads, attachments, and voice notes.",
+    "hintShort": "Open the full page to read threads, send files, and record voice messages.",
+    "openFullCta": "Open full messages"
+  },
+  "message": {
+    "actions": "Message actions",
+    "edit": "Edit",
+    "copy": "Copy",
+    "unsend": "Unsend",
+    "saveEdit": "Save",
+    "confirmUnsend": "Remove this message for everyone?",
+    "removedSelf": "You unsent a message",
+    "removedOther": "This message was removed",
+    "editedLabel": "Edited"
+  },
+  "reactions": {
+    "add": "Add reaction"
+  },
+  "read": {
+    "seen": "Seen",
+    "seenByMany": "Seen by others"
+  },
+  "reply": {
+    "action": "Reply",
+    "replyingTo": "Replying to {{name}}",
+    "cancel": "Cancel reply",
+    "attachmentPreview": "Attachment",
+    "emptyPreview": "Message"
+  },
+  "delivery": {
+    "sending": "Sending…",
+    "failed": "Failed to send",
+    "retry": "Retry",
+    "dismiss": "Dismiss"
+  },
+  "outbox": {
+    "full": "Too many messages queued offline. Try again when online."
+  },
+  "voice": {
+    "start": "Voice note",
+    "stop": "Stop",
+    "discard": "Discard",
+    "recording": "Recording",
+    "preview": "Voice note ready",
+    "send": "Send",
+    "empty": "Recording was empty. Please try again.",
+    "play": "Play voice message",
+    "pause": "Pause",
+    "messageBubble": "Voice message",
+    "loadError": "Could not load audio (check server static files / URL)"
+  },
+  "uploadNeedLogin": "Sign in to upload files and voice notes (API requires a token).",
+  "calls": {
+    "voice": "Voice call",
+    "video": "Video call",
+    "screen": "Screen only",
+    "comingSoon": "Coming soon",
+    "comingSoonDetail": "1:1 calls use WebRTC; media may need TURN on strict networks. Set VITE_WEBRTC_ICE_SERVERS for custom ICE servers.",
+    "directOnly": "Calls work for 1:1 conversations only (two participants).",
+    "incomingTitle": "Incoming call from {{name}}",
+    "accept": "Accept",
+    "decline": "Decline",
+    "connecting": "Connecting…",
+    "voiceInProgress": "Voice call in progress",
+    "mute": "Mute microphone",
+    "unmute": "Unmute",
+    "shareScreen": "Share screen",
+    "hangUp": "End call",
+    "peerP2pHint": "Media is peer-to-peer. Some networks require a TURN server.",
+    "peerOffline": "The other person is not connected to chat (offline or another server instance). They must open the app and stay online.",
+    "hubNotConnected": "Chat is not connected. Wait until the bar shows “Connected” or refresh the page.",
+    "stopSharing": "Stop sharing",
+    "statusRinging": "Calling…",
+    "statusLive": "Connected",
+    "statusSharing": "You’re sharing your screen",
+    "incomingSubtitle": "Incoming call",
+    "badgeLive": "Live",
+    "dialogLabel": "Call",
+    "previewYou": "You",
+    "cancelCall": "Cancel call",
+    "youAreSharing": "You are presenting",
+    "missedCallSent": "You called — no answer",
+    "missedCallReceived": "Missed call from {{name}}",
+    "callEnded": "Call ended",
+    "callEndedWithDuration": "Call ended ({{minutes}} min)"
+  }
+}
