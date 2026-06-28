@@ -24,7 +24,8 @@ export class AuthService {
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
+      refreshToken: crypto.randomBytes(40).toString('hex'),
     };
   }
 
@@ -40,20 +41,27 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(dto.password, salt);
 
+    const nameParts = dto.fullName.trim().split(' ');
+    const lastName = nameParts.length > 1 ? nameParts.pop() || '' : '';
+    const firstName = nameParts.join(' ') || dto.fullName;
+
     const user = await this.prisma.users.create({
       data: {
         id: crypto.randomUUID(),
         email: dto.email,
         password_hash: passwordHash,
-        first_name: dto.firstName,
-        last_name: dto.lastName,
-        phone: dto.phone,
+        first_name: firstName,
+        last_name: lastName,
+        bio: dto.bio,
         status: 1, // 1 = Active
         created_at: new Date(),
       },
     });
 
-    const { password_hash, ...result } = user;
-    return result;
+    return {
+      userId: user.id,
+      email: user.email,
+      fullName: `${user.first_name} ${user.last_name}`.trim(),
+    };
   }
 }

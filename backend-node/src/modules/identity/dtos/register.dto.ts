@@ -16,13 +16,9 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty()
-  firstName!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  lastName!: string;
+  fullName!: string;
 
   @IsOptional()
   @IsString()
-  phone?: string;
+  bio?: string;
 }

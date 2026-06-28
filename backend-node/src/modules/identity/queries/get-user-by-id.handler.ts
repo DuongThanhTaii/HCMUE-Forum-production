@@ -26,6 +26,10 @@ export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    const { first_name, last_name, ...rest } = user;
+    return {
+      ...rest,
+      fullName: `${first_name} ${last_name}`.trim(),
+    };
   }
 }
