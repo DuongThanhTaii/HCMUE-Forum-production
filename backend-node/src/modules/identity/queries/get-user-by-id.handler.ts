@@ -48,6 +48,7 @@ export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
       status: user.status,
       createdAt: user.created_at,
       roles: userRoleNames,
+      roleIds: roleIds,
     };
   }
 }
