@@ -3,6 +3,7 @@ import {
   Post,
   Get,
   Put,
+  Delete,
   Body,
   Param,
   UseGuards,
@@ -17,6 +18,10 @@ import { VotePostCommand } from '../commands/vote-post.handler';
 import { GetPostsQuery } from '../queries/get-posts.handler';
 import { GetPostByIdQuery } from '../queries/get-post-by-id.handler';
 import { PublishPostCommand } from '../commands/publish-post.handler';
+import { GetBookmarkedPostsQuery } from '../queries/get-bookmarked-posts.handler';
+import { BookmarkPostCommand } from '../commands/bookmark-post.handler';
+import { UnbookmarkPostCommand } from '../commands/unbookmark-post.handler';
+import { ReportPostCommand } from '../commands/report-post.handler';
 
 @Controller('posts')
 export class PostsController {
@@ -73,6 +78,55 @@ export class PostsController {
   async updatePost(@Param('id') id: string, @Body() dto: any, @Req() req: any) {
     return this.commandBus.execute(
       new UpdatePostCommand(id, req.user.userId, dto.title, dto.content),
+    );
+  }
+
+  @Get('bookmarks')
+  @UseGuards(JwtAuthGuard)
+  async getBookmarkedPosts(
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+    @Req() req?: any,
+  ) {
+    return this.queryBus.execute(
+      new GetBookmarkedPostsQuery(
+        skip ? parseInt(skip) : 0,
+        take ? parseInt(take) : 20,
+        req.user.userId,
+      ),
+    );
+  }
+
+  @Post(':id/bookmark')
+  @UseGuards(JwtAuthGuard)
+  async bookmarkPost(@Param('id') id: string, @Req() req: any) {
+    return this.commandBus.execute(
+      new BookmarkPostCommand(id, req.user.userId),
+    );
+  }
+
+  @Delete(':id/bookmark')
+  @UseGuards(JwtAuthGuard)
+  async unbookmarkPost(@Param('id') id: string, @Req() req: any) {
+    return this.commandBus.execute(
+      new UnbookmarkPostCommand(id, req.user.userId),
+    );
+  }
+
+  @Post(':id/report')
+  @UseGuards(JwtAuthGuard)
+  async reportPost(
+    @Param('id') id: string,
+    @Body() dto: any,
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new ReportPostCommand(
+        id,
+        req.user.userId,
+        dto.reason,
+        dto.description,
+      ),
     );
   }
 

@@ -26,6 +26,14 @@ import { ResolveReportHandler } from './commands/resolve-report.handler';
 import { GetPostByIdHandler } from './queries/get-post-by-id.handler';
 import { PublishPostHandler } from './commands/publish-post.handler';
 
+import { BookmarkPostHandler } from './commands/bookmark-post.handler';
+import { UnbookmarkPostHandler } from './commands/unbookmark-post.handler';
+import { ReportPostHandler } from './commands/report-post.handler';
+import { VoteCommentHandler } from './commands/vote-comment.handler';
+import { AcceptAnswerHandler } from './commands/accept-answer.handler';
+import { PinCommentHandler } from './commands/pin-comment.handler';
+import { GetBookmarkedPostsHandler } from './queries/get-bookmarked-posts.handler';
+
 const CommandHandlers = [
   CreatePostHandler,
   UpdatePostHandler,
@@ -33,6 +41,12 @@ const CommandHandlers = [
   CreateCommentHandler,
   ResolveReportHandler,
   PublishPostHandler,
+  BookmarkPostHandler,
+  UnbookmarkPostHandler,
+  ReportPostHandler,
+  VoteCommentHandler,
+  AcceptAnswerHandler,
+  PinCommentHandler,
 ];
 
 const QueryHandlers = [
@@ -44,6 +58,7 @@ const QueryHandlers = [
   GetReportsHandler,
   GetPendingPostsHandler,
   GetPostByIdHandler,
+  GetBookmarkedPostsHandler,
 ];
 
 @Module({

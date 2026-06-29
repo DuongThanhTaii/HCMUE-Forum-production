@@ -11,6 +11,9 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { CreateCommentCommand } from '../commands/create-comment.handler';
 import { GetPostCommentsQuery } from '../queries/get-post-comments.handler';
+import { VoteCommentCommand } from '../commands/vote-comment.handler';
+import { AcceptAnswerCommand } from '../commands/accept-answer.handler';
+import { PinCommentCommand } from '../commands/pin-comment.handler';
 
 @Controller('comments')
 export class CommentsController {
@@ -24,16 +27,54 @@ export class CommentsController {
     return this.queryBus.execute(new GetPostCommentsQuery(postId));
   }
 
-  @Post()
+  @Post('posts/:postId')
   @UseGuards(JwtAuthGuard)
-  async createComment(@Body() dto: any, @Req() req: any) {
+  async createComment(
+    @Param('postId') postId: string,
+    @Body() dto: any,
+    @Req() req: any,
+  ) {
     return this.commandBus.execute(
       new CreateCommentCommand(
-        dto.postId,
+        postId,
         req.user.userId,
         dto.content,
         dto.parentCommentId,
       ),
+    );
+  }
+
+  @Post(':id/vote')
+  @UseGuards(JwtAuthGuard)
+  async voteComment(
+    @Param('id') id: string,
+    @Body('voteType') voteType: number,
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new VoteCommentCommand(id, req.user.userId, voteType),
+    );
+  }
+
+  @Post(':id/accept')
+  @UseGuards(JwtAuthGuard)
+  async acceptAnswer(
+    @Param('id') id: string,
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new AcceptAnswerCommand(id, req.user.userId),
+    );
+  }
+
+  @Post(':id/pin')
+  @UseGuards(JwtAuthGuard)
+  async pinComment(
+    @Param('id') id: string,
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new PinCommentCommand(id, req.user.userId),
     );
   }
 }
