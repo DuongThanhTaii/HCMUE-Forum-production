@@ -62,7 +62,7 @@ export class AuthorizationController {
     return { success: true };
   }
 
-  private static maintenanceMode = {
+  public static maintenanceMode = {
     isEnabled: false,
     reason: null,
     updatedBy: 'Admin',
