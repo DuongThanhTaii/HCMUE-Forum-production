@@ -18,11 +18,18 @@ import { GetCategoriesHandler } from './queries/get-categories.handler';
 import { GetPopularTagsHandler } from './queries/get-popular-tags.handler';
 import { GetThreadChannelsHandler } from './queries/get-thread-channels.handler';
 
+import { ModController } from './controllers/mod.controller';
+
+import { GetReportsHandler } from './queries/get-reports.handler';
+import { GetPendingPostsHandler } from './queries/get-pending-posts.handler';
+import { ResolveReportHandler } from './commands/resolve-report.handler';
+
 const CommandHandlers = [
   CreatePostHandler,
   UpdatePostHandler,
   VotePostHandler,
   CreateCommentHandler,
+  ResolveReportHandler,
 ];
 
 const QueryHandlers = [
@@ -31,6 +38,8 @@ const QueryHandlers = [
   GetCategoriesHandler,
   GetPopularTagsHandler,
   GetThreadChannelsHandler,
+  GetReportsHandler,
+  GetPendingPostsHandler,
 ];
 
 @Module({
@@ -41,6 +50,7 @@ const QueryHandlers = [
     CategoriesController,
     TagsController,
     ThreadChannelsController,
+    ModController,
   ],
   providers: [...CommandHandlers, ...QueryHandlers],
 })
