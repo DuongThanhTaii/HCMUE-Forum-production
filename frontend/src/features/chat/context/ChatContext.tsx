@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { HubConnectionState, type HubConnection } from '@microsoft/signalr'
+import { Socket } from 'socket.io-client'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { chatApi } from '../api/chat.api'
@@ -75,7 +75,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const accessToken = useAppSelector((s) => s.auth.accessToken)
   const currentUserId = useAppSelector((s) => s.auth.user?.id ?? null)
 
-  const connectionRef = useRef<HubConnection | null>(null)
+  const connectionRef = useRef<Socket | null>(null)
   const lastJoinedRef = useRef<ChatThreadRef | null>(null)
   const activeThreadKeyRef = useRef<string | null>(null)
   const currentUserIdRef = useRef<string | null>(null)
@@ -111,19 +111,19 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const relayWebRtcSignal = useCallback(
     async (conversationId: string, targetUserId: string, kind: string, payload: string) => {
       const conn = connectionRef.current
-      if (!conn || conn.state !== HubConnectionState.Connected) {
+      if (!conn || !conn.connected) {
         throw new Error('chat_hub_not_connected')
       }
-      await conn.invoke('RelayWebRtcSignal', conversationId, targetUserId, kind, payload)
+      conn.emit('RelayWebRtcSignal', conversationId, targetUserId, kind, payload)
     },
     []
   )
 
   const reportMissedCall = useCallback(async (conversationId: string) => {
     const conn = connectionRef.current
-    if (!conn || conn.state !== HubConnectionState.Connected) return
+    if (!conn || !conn.connected) return
     try {
-      await conn.invoke('ReportMissedCall', conversationId)
+      conn.emit('ReportMissedCall', conversationId)
     } catch {
       /* best-effort */
     }
@@ -131,9 +131,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const reportCallEnded = useCallback(async (conversationId: string, durationSeconds?: number) => {
     const conn = connectionRef.current
-    if (!conn || conn.state !== HubConnectionState.Connected) return
+    if (!conn || !conn.connected) return
     try {
-      await conn.invoke('ReportCallEnded', conversationId, durationSeconds)
+      conn.emit('ReportCallEnded', conversationId, durationSeconds)
     } catch {
       /* best-effort */
     }
@@ -209,7 +209,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!accessToken) {
-      void connectionRef.current?.stop().catch(() => undefined)
+      connectionRef.current?.disconnect()
       connectionRef.current = null
       startTransition(() => {
         setHubStatus('idle')
@@ -255,29 +255,22 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         setHubStatus('disconnected')
       })
 
-    conn.onreconnecting(onReconnecting)
-    conn.onreconnected(onReconnected)
-    conn.onclose(onClose)
+    conn.on('connect_error', onReconnecting)
+    conn.io.on('reconnect', onReconnected)
+    conn.on('disconnect', onClose)
 
     startTransition(() => {
       setHubStatus('connecting')
     })
-    conn
-      .start()
-      .then(() => {
-        startTransition(() => {
-          setHubStatus('connected')
-        })
-        void drainChatOutbox().catch(() => undefined)
+    
+    conn.on('connect', () => {
+      startTransition(() => {
+        setHubStatus('connected')
       })
-      .catch((err: unknown) => {
-        if (import.meta.env.DEV) {
-          console.warn('[chat-hub] SignalR start failed:', err)
-        }
-        startTransition(() => {
-          setHubStatus('disconnected')
-        })
-      })
+      void drainChatOutbox().catch(() => undefined)
+    })
+
+    conn.connect()
 
     const onFocus = () => {
       void drainChatOutbox().catch(() => undefined)
@@ -292,7 +285,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('focus', onFocus)
       window.removeEventListener('online', onOnline)
       detachChatHubHandlers(conn)
-      void conn.stop().catch(() => undefined)
+      conn.disconnect()
       connectionRef.current = null
       lastJoinedRef.current = null
       startTransition(() => {
@@ -303,16 +296,16 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const joinThread = useCallback(async (ref: ChatThreadRef | null) => {
     const conn = connectionRef.current
-    if (!conn || conn.state !== HubConnectionState.Connected) return
+    if (!conn || !conn.connected) return
 
     const prev = lastJoinedRef.current
 
     if (!ref) {
       try {
         if (prev?.kind === 'conversation') {
-          await conn.invoke('LeaveConversation', prev.conversationId)
+          conn.emit('leave_conversation', { conversationId: prev.conversationId })
         } else if (prev?.kind === 'channel') {
-          await conn.invoke('LeaveChannel', prev.channelId)
+          conn.emit('leave_channel', { channelId: prev.channelId })
         }
       } catch {
         // ignore
@@ -331,15 +324,15 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
     try {
       if (prev?.kind === 'conversation') {
-        await conn.invoke('LeaveConversation', prev.conversationId)
+        conn.emit('leave_conversation', { conversationId: prev.conversationId })
       } else if (prev?.kind === 'channel') {
-        await conn.invoke('LeaveChannel', prev.channelId)
+        conn.emit('leave_channel', { channelId: prev.channelId })
       }
 
       if (ref.kind === 'conversation') {
-        await conn.invoke('JoinConversation', ref.conversationId)
+        conn.emit('join_conversation', { conversationId: ref.conversationId })
       } else {
-        await conn.invoke('JoinChannel', ref.channelId)
+        conn.emit('join_channel', { channelId: ref.channelId })
       }
       lastJoinedRef.current = ref
     } catch {
@@ -349,9 +342,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const sendTyping = useCallback(async (conversationId: string, isTyping: boolean) => {
     const conn = connectionRef.current
-    if (!conn || conn.state !== HubConnectionState.Connected) return
+    if (!conn || !conn.connected) return
     try {
-      await conn.invoke('SendTypingIndicator', conversationId, isTyping)
+      conn.emit('SendTypingIndicator', conversationId, isTyping)
     } catch {
       // ignore
     }
@@ -359,8 +352,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const sendChannelMessage = useCallback(async (channelId: string, content: string) => {
     const conn = connectionRef.current
-    if (!conn || conn.state !== HubConnectionState.Connected) return
-    await conn.invoke('SendChannelMessage', channelId, content, 'Text')
+    if (!conn || !conn.connected) return
+    conn.emit('SendChannelMessage', channelId, content, 'Text')
   }, [])
 
   const totalUnread = useMemo(

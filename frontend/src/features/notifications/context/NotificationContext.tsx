@@ -7,12 +7,12 @@ import {
   useRef,
   useState,
 } from 'react'
-import * as signalR from '@microsoft/signalr'
+import { io, Socket } from 'socket.io-client'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { baseApi } from '@shared/lib/api/baseApi'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 
-const NOTIFICATION_HUB_URL = `${(import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? 'http://localhost:5034'}/hubs/notifications`
+const NOTIFICATION_HUB_URL = `${(import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? 'http://localhost:3000'}/notifications`
 
 export type LiveNotification = {
   id: string
@@ -56,20 +56,12 @@ function parseHubPayload(payload: unknown): LiveNotification | null {
   }
 }
 
-function hubOn(
-  conn: signalR.HubConnection,
-  event: string,
-  handler: (...args: unknown[]) => void,
-) {
-  conn.on(event, handler)
-}
-
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const accessToken = useAppSelector((s) => s.auth.accessToken)
   const dispatch = useAppDispatch()
   const [unreadCount, setUnreadCount] = useState(0)
   const [liveItems, setLiveItems] = useState<LiveNotification[]>([])
-  const connRef = useRef<signalR.HubConnection | null>(null)
+  const connRef = useRef<Socket | null>(null)
 
   const invalidateNotifications = useCallback(() => {
     dispatch(
@@ -103,42 +95,42 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     if (!accessToken) {
-      void connRef.current?.stop().catch(() => undefined)
+      connRef.current?.disconnect()
       connRef.current = null
       setUnreadCount(0)
       setLiveItems([])
       return
     }
 
-    const conn = new signalR.HubConnectionBuilder()
-      .withUrl(NOTIFICATION_HUB_URL, {
-        accessTokenFactory: async () => accessToken,
-        transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
-      })
-      .withAutomaticReconnect([0, 2000, 5000, 10_000])
-      .build()
+    const conn = io(NOTIFICATION_HUB_URL, {
+      auth: { token: `Bearer ${accessToken}` },
+      transports: ['websocket', 'polling'],
+      reconnectionDelay: 2000,
+      reconnectionDelayMax: 10000,
+    })
 
     connRef.current = conn
 
-    for (const evt of ['receiveNotification', 'ReceiveNotification'] as const) {
-      hubOn(conn, evt, onReceive)
-    }
-    for (const evt of ['unreadCountUpdated', 'UnreadCountUpdated'] as const) {
-      hubOn(conn, evt, (count: unknown) => {
-        if (typeof count === 'number') onUnreadCount(count)
-      })
-    }
+    conn.on('notification_received', onReceive)
+    conn.on('receiveNotification', onReceive)
+    conn.on('ReceiveNotification', onReceive)
+    
+    conn.on('unreadCountUpdated', (count: unknown) => {
+      if (typeof count === 'number') onUnreadCount(count)
+    })
+    conn.on('UnreadCountUpdated', (count: unknown) => {
+      if (typeof count === 'number') onUnreadCount(count)
+    })
 
-    void conn.start().catch(() => undefined)
+    conn.connect()
 
     return () => {
-      for (const evt of ['receiveNotification', 'ReceiveNotification'] as const) {
-        conn.off(evt)
-      }
-      for (const evt of ['unreadCountUpdated', 'UnreadCountUpdated'] as const) {
-        conn.off(evt)
-      }
-      void conn.stop().catch(() => undefined)
+      conn.off('notification_received')
+      conn.off('receiveNotification')
+      conn.off('ReceiveNotification')
+      conn.off('unreadCountUpdated')
+      conn.off('UnreadCountUpdated')
+      conn.disconnect()
       connRef.current = null
     }
   }, [accessToken, onReceive, onUnreadCount])

@@ -12,7 +12,7 @@ import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { CreateJobPostingCommand } from '../commands/create-job-posting.handler';
 import { GetJobPostingsQuery } from '../queries/get-job-postings.handler';
 
-@Controller('job-postings')
+@Controller('jobs')
 export class JobPostingsController {
   constructor(
     private readonly commandBus: CommandBus,

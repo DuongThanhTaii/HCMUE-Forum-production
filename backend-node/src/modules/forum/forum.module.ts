@@ -3,25 +3,45 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { IdentityModule } from '../identity/identity.module';
 import { PostsController } from './controllers/posts.controller';
 import { CommentsController } from './controllers/comments.controller';
+import { CategoriesController } from './controllers/categories.controller';
+import { TagsController } from './controllers/tags.controller';
+import { ThreadChannelsController } from './controllers/thread-channels.controller';
+
 import { CreatePostHandler } from './commands/create-post.handler';
 import { UpdatePostHandler } from './commands/update-post.handler';
 import { VotePostHandler } from './commands/vote-post.handler';
 import { CreateCommentHandler } from './commands/create-comment.handler';
+
 import { GetPostsHandler } from './queries/get-posts.handler';
 import { GetPostCommentsHandler } from './queries/get-post-comments.handler';
+import { GetCategoriesHandler } from './queries/get-categories.handler';
+import { GetPopularTagsHandler } from './queries/get-popular-tags.handler';
+import { GetThreadChannelsHandler } from './queries/get-thread-channels.handler';
 
-const Handlers = [
+const CommandHandlers = [
   CreatePostHandler,
   UpdatePostHandler,
   VotePostHandler,
   CreateCommentHandler,
+];
+
+const QueryHandlers = [
   GetPostsHandler,
   GetPostCommentsHandler,
+  GetCategoriesHandler,
+  GetPopularTagsHandler,
+  GetThreadChannelsHandler,
 ];
 
 @Module({
   imports: [IdentityModule, CqrsModule],
-  controllers: [PostsController, CommentsController],
-  providers: [...Handlers],
+  controllers: [
+    PostsController,
+    CommentsController,
+    CategoriesController,
+    TagsController,
+    ThreadChannelsController,
+  ],
+  providers: [...CommandHandlers, ...QueryHandlers],
 })
 export class ForumModule {}

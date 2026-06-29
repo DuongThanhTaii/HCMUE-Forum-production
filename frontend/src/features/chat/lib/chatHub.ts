@@ -1,8 +1,6 @@
-import * as signalR from '@microsoft/signalr'
-import type { HubConnection } from '@microsoft/signalr'
+import { io, Socket } from 'socket.io-client'
 import type { AppDispatch } from '../../../app/store'
 import { chatApi } from '../api/chat.api'
-import { getChatHubUrl } from './hubUrl'
 import {
   getInvalidateTagsForHubMessage,
   invalidateTagsChannelDiscovery,
@@ -15,50 +13,14 @@ import {
 } from './mapHubMessage'
 import type { HubMessageNotification, WebRtcSignalPayload } from '../types/chat.types'
 
-export function createChatConnection(getAccessToken: () => string | null): HubConnection {
-  return new signalR.HubConnectionBuilder()
-    .withUrl(getChatHubUrl(), {
-      accessTokenFactory: async () => getAccessToken() ?? '',
-      // Prefer WebSocket; fall back to LongPolling if WS unavailable (e.g. some proxies).
-      transport:
-        signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
-    })
-    .withAutomaticReconnect([0, 2000, 5000, 10_000])
-    .build()
-}
-
-/** C# hub method names (PascalCase). Wire protocol uses camelCase — see `hubClientMethodNames`. */
-export const CHAT_HUB_CLIENT_METHODS = [
-  'ReceiveMessage',
-  'MessageEdited',
-  'MessageDeleted',
-  'UserJoined',
-  'UserLeft',
-  'UserTyping',
-  'ReactionAdded',
-  'ReactionRemoved',
-  'MessageRead',
-  'ChannelUpdated',
-  'UserStatusChanged',
-  'ReceiveWebRtcSignal',
-] as const
-
-function hubMethodAliases(pascal: string): string[] {
-  const camel = pascal.charAt(0).toLowerCase() + pascal.slice(1)
-  return camel === pascal ? [pascal] : [camel, pascal]
-}
-
-/** All listener names to register/off (camelCase first — ASP.NET Core JSON hub protocol default). */
-export const CHAT_HUB_CLIENT_LISTENER_NAMES = CHAT_HUB_CLIENT_METHODS.flatMap(hubMethodAliases)
-
-function hubOn(
-  connection: HubConnection,
-  pascalMethod: (typeof CHAT_HUB_CLIENT_METHODS)[number],
-  handler: (...args: unknown[]) => void,
-): void {
-  for (const name of hubMethodAliases(pascalMethod)) {
-    connection.on(name, handler)
-  }
+export function createChatConnection(getAccessToken: () => string | null): Socket {
+  const baseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? 'http://localhost:3000'
+  return io(`${baseUrl}/chat`, {
+    auth: { token: `Bearer ${getAccessToken() ?? ''}` },
+    transports: ['websocket', 'polling'],
+    reconnectionDelay: 2000,
+    reconnectionDelayMax: 10000,
+  })
 }
 
 export function parseWebRtcSignalPayload(raw: unknown): WebRtcSignalPayload | null {
@@ -96,7 +58,7 @@ export type ChatHubHandlers = {
 }
 
 export function attachChatHubHandlers(
-  connection: HubConnection,
+  socket: Socket,
   dispatch: AppDispatch,
   handlers: ChatHubHandlers
 ): void {
@@ -114,8 +76,6 @@ export function attachChatHubHandlers(
     }
   }
 
-  const onMessageDeleted = onMessageEdited
-
   const onUserJoined = (payload: unknown) => {
     const conv = readConversationIdFromPayload(payload)
     const ch = readChannelIdFromPayload(payload)
@@ -126,8 +86,6 @@ export function attachChatHubHandlers(
       dispatch(chatApi.util.invalidateTags(invalidateTagsChannelDiscovery()))
     }
   }
-
-  const onUserLeft = onUserJoined
 
   const onUserTyping = (payload: unknown) => {
     const t = parseHubUserTyping(payload)
@@ -163,22 +121,35 @@ export function attachChatHubHandlers(
     if (p) handlers.onWebRtcSignal?.(p)
   }
 
-  hubOn(connection, 'ReceiveMessage', onReceive)
-  hubOn(connection, 'MessageEdited', onMessageEdited)
-  hubOn(connection, 'MessageDeleted', onMessageDeleted)
-  hubOn(connection, 'UserJoined', onUserJoined)
-  hubOn(connection, 'UserLeft', onUserLeft)
-  hubOn(connection, 'UserTyping', onUserTyping)
-  hubOn(connection, 'ReactionAdded', onReaction)
-  hubOn(connection, 'ReactionRemoved', onReaction)
-  hubOn(connection, 'MessageRead', onMessageRead)
-  hubOn(connection, 'ChannelUpdated', onChannelUpdated)
-  hubOn(connection, 'UserStatusChanged', onUserStatusChanged)
-  hubOn(connection, 'ReceiveWebRtcSignal', onWebRtcSignal)
+  socket.on('new_message', onReceive)
+  socket.on('ReceiveMessage', onReceive) // Fallback for old mapping if added to backend
+  socket.on('MessageEdited', onMessageEdited)
+  socket.on('MessageDeleted', onMessageEdited)
+  socket.on('UserJoined', onUserJoined)
+  socket.on('UserLeft', onUserJoined)
+  socket.on('UserTyping', onUserTyping)
+  socket.on('message_reaction_added', onReaction)
+  socket.on('ReactionAdded', onReaction)
+  socket.on('ReactionRemoved', onReaction)
+  socket.on('MessageRead', onMessageRead)
+  socket.on('ChannelUpdated', onChannelUpdated)
+  socket.on('UserStatusChanged', onUserStatusChanged)
+  socket.on('ReceiveWebRtcSignal', onWebRtcSignal)
 }
 
-export function detachChatHubHandlers(connection: HubConnection): void {
-  for (const method of CHAT_HUB_CLIENT_LISTENER_NAMES) {
-    connection.off(method)
-  }
+export function detachChatHubHandlers(socket: Socket): void {
+  socket.off('new_message')
+  socket.off('ReceiveMessage')
+  socket.off('MessageEdited')
+  socket.off('MessageDeleted')
+  socket.off('UserJoined')
+  socket.off('UserLeft')
+  socket.off('UserTyping')
+  socket.off('message_reaction_added')
+  socket.off('ReactionAdded')
+  socket.off('ReactionRemoved')
+  socket.off('MessageRead')
+  socket.off('ChannelUpdated')
+  socket.off('UserStatusChanged')
+  socket.off('ReceiveWebRtcSignal')
 }

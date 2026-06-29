@@ -2,18 +2,27 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { IdentityModule } from '../identity/identity.module';
 import { NotificationGateway } from './gateways/notification.gateway';
+import { NotificationsController } from './controllers/notifications.controller';
 import { CreateNotificationHandler } from './commands/create-notification.handler';
 import { MarkNotificationReadHandler } from './commands/mark-notification-read.handler';
+import { MarkAllReadHandler } from './commands/mark-all-read.handler';
 import { GetUserNotificationsHandler } from './queries/get-user-notifications.handler';
+import { GetUnreadCountHandler } from './queries/get-unread-count.handler';
 
-const Handlers = [
+const CommandHandlers = [
   CreateNotificationHandler,
   MarkNotificationReadHandler,
+  MarkAllReadHandler,
+];
+
+const QueryHandlers = [
   GetUserNotificationsHandler,
+  GetUnreadCountHandler,
 ];
 
 @Module({
   imports: [IdentityModule, CqrsModule],
-  providers: [NotificationGateway, ...Handlers],
+  controllers: [NotificationsController],
+  providers: [NotificationGateway, ...CommandHandlers, ...QueryHandlers],
 })
 export class NotificationModule {}

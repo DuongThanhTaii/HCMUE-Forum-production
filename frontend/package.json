@@ -15,7 +15,6 @@
   "dependencies": {
     "@azure/msal-browser": "^5.10.0",
     "@hookform/resolvers": "^5.2.2",
-    "@microsoft/signalr": "^10.0.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.2.4",
     "class-variance-authority": "^0.7.1",
@@ -28,6 +27,7 @@
     "react-i18next": "^17.0.6",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.14.2",
+    "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4",
     "zod": "^4.3.6",
