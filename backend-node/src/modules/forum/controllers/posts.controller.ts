@@ -15,6 +15,8 @@ import { CreatePostCommand } from '../commands/create-post.handler';
 import { UpdatePostCommand } from '../commands/update-post.handler';
 import { VotePostCommand } from '../commands/vote-post.handler';
 import { GetPostsQuery } from '../queries/get-posts.handler';
+import { GetPostByIdQuery } from '../queries/get-post-by-id.handler';
+import { PublishPostCommand } from '../commands/publish-post.handler';
 
 @Controller('posts')
 export class PostsController {
@@ -36,6 +38,17 @@ export class PostsController {
         categoryId,
       ),
     );
+  }
+
+  @Get(':id')
+  async getPostById(@Param('id') id: string) {
+    return this.queryBus.execute(new GetPostByIdQuery(id));
+  }
+
+  @Post(':id/publish')
+  @UseGuards(JwtAuthGuard)
+  async publishPost(@Param('id') id: string) {
+    return this.commandBus.execute(new PublishPostCommand(id));
   }
 
   @Post()

@@ -23,6 +23,8 @@ import { ModController } from './controllers/mod.controller';
 import { GetReportsHandler } from './queries/get-reports.handler';
 import { GetPendingPostsHandler } from './queries/get-pending-posts.handler';
 import { ResolveReportHandler } from './commands/resolve-report.handler';
+import { GetPostByIdHandler } from './queries/get-post-by-id.handler';
+import { PublishPostHandler } from './commands/publish-post.handler';
 
 const CommandHandlers = [
   CreatePostHandler,
@@ -30,6 +32,7 @@ const CommandHandlers = [
   VotePostHandler,
   CreateCommentHandler,
   ResolveReportHandler,
+  PublishPostHandler,
 ];
 
 const QueryHandlers = [
@@ -40,6 +43,7 @@ const QueryHandlers = [
   GetThreadChannelsHandler,
   GetReportsHandler,
   GetPendingPostsHandler,
+  GetPostByIdHandler,
 ];
 
 @Module({
