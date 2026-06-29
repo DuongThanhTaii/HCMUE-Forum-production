@@ -48,14 +48,17 @@ export class PostsController {
   @Get('bookmarks')
   @UseGuards(JwtAuthGuard)
   async getBookmarkedPosts(
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
+    @Query('pageNumber') pageNumber?: string,
+    @Query('pageSize') pageSize?: string,
     @Req() req?: any,
   ) {
+    const page = pageNumber ? parseInt(pageNumber) : 1;
+    const size = pageSize ? parseInt(pageSize) : 20;
+    const skip = (page - 1) * size;
     return this.queryBus.execute(
       new GetBookmarkedPostsQuery(
-        skip ? parseInt(skip) : 0,
-        take ? parseInt(take) : 20,
+        skip,
+        size,
         req.user.userId,
       ),
     );
@@ -95,8 +98,6 @@ export class PostsController {
     return this.commandBus.execute(
       new UpdatePostCommand(id, req.user.userId, dto.title, dto.content),
     );
-  }
-
   }
 
   @Post(':id/bookmark')
