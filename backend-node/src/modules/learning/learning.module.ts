@@ -13,6 +13,7 @@ import { RecordDocumentDownloadHandler } from './commands/record-document-downlo
 import { GetFacultiesHandler } from './queries/get-faculties.handler';
 import { GetCoursesHandler } from './queries/get-courses.handler';
 import { GetCourseDocumentsHandler } from './queries/get-course-documents.handler';
+import { GetDocumentsHandler } from './queries/get-documents.handler';
 
 const Handlers = [
   CreateFacultyHandler,
@@ -23,6 +24,7 @@ const Handlers = [
   GetFacultiesHandler,
   GetCoursesHandler,
   GetCourseDocumentsHandler,
+  GetDocumentsHandler,
 ];
 
 @Module({

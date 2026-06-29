@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Query,
   Body,
   Param,
   UseGuards,
@@ -17,6 +18,7 @@ import { UploadDocumentCommand } from '../commands/upload-document.handler';
 import { RateDocumentCommand } from '../commands/rate-document.handler';
 import { RecordDocumentDownloadCommand } from '../commands/record-document-download.handler';
 import { GetCourseDocumentsQuery } from '../queries/get-course-documents.handler';
+import { GetDocumentsQuery } from '../queries/get-documents.handler';
 import { RateDocumentDto } from '../dtos/rate-document.dto';
 
 @Controller('documents')
@@ -25,6 +27,16 @@ export class DocumentsController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+
+  @Get()
+  async getDocuments(
+    @Query('pageNumber') pageNumber?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    const page = parseInt(pageNumber || '') || 1;
+    const size = parseInt(pageSize || '') || 5;
+    return this.queryBus.execute(new GetDocumentsQuery(page, size));
+  }
 
   @Get('course/:courseId')
   async getCourseDocuments(@Param('courseId') courseId: string) {
