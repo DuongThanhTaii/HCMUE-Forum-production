@@ -10,6 +10,9 @@ export class GetRolesHandler implements IQueryHandler<GetRolesQuery> {
   async execute(query: GetRolesQuery) {
     const roles = await this.prisma.roles.findMany({
       orderBy: { name: 'asc' },
+      include: {
+        role_permissions: true,
+      }
     });
     
     return roles.map(r => ({
@@ -18,6 +21,7 @@ export class GetRolesHandler implements IQueryHandler<GetRolesQuery> {
       description: r.description,
       isDefault: r.is_default,
       isSystemRole: r.is_system_role,
+      permissionCount: r.role_permissions.length,
       createdAt: r.created_at,
     }));
   }

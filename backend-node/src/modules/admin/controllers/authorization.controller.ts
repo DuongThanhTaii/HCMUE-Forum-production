@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Delete,
   UseGuards,
   Param,
@@ -59,5 +60,52 @@ export class AuthorizationController {
     @Query('permissionId') permissionId: string,
   ) {
     return { success: true };
+  }
+
+  // Toggles Stubs
+  @Get('toggles')
+  async getToggles() {
+    return [];
+  }
+
+  @Put('toggles/:endpointKey')
+  async setToggle(@Param('endpointKey') endpointKey: string, @Body() body: any) {
+    return {
+      endpointKey,
+      isEnabled: body.isEnabled,
+      reason: body.reason,
+      updatedBy: 'Admin',
+      updatedAtUtc: new Date().toISOString(),
+      version: 1
+    };
+  }
+
+  // Maintenance Mode Stubs
+  @Get('maintenance-mode')
+  async getMaintenanceMode() {
+    return {
+      isEnabled: false,
+      reason: null,
+      updatedBy: 'Admin',
+      updatedAtUtc: new Date().toISOString(),
+      version: 1
+    };
+  }
+
+  @Put('maintenance-mode')
+  async setMaintenanceMode(@Body() body: any) {
+    return {
+      isEnabled: body.isEnabled,
+      reason: body.reason,
+      updatedBy: 'Admin',
+      updatedAtUtc: new Date().toISOString(),
+      version: 2
+    };
+  }
+
+  // Audit Logs
+  @Get('audit-logs')
+  async getAuditLogs() {
+    return [];
   }
 }
