@@ -12,6 +12,8 @@ import { ForumModule } from './modules/forum/forum.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { CareerModule } from './modules/career/career.module';
 
+import { AdminModule } from './modules/admin/admin.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +31,7 @@ import { CareerModule } from './modules/career/career.module';
     }),
     PrismaModule,
     IdentityModule,
+    AdminModule,
     NotificationModule,
     ChatModule,
     MediaModule,

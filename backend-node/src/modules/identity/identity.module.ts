@@ -12,9 +12,47 @@ import { GetUserByIdHandler } from './queries/get-user-by-id.handler';
 import { GetUsersHandler } from './queries/get-users.handler';
 import { UpdateUserProfileHandler } from './commands/update-user-profile.handler';
 import { BlockUserHandler } from './commands/block-user.handler';
+import { AssignRoleToUserHandler } from './commands/assign-role-to-user.handler';
+import { RemoveRoleFromUserHandler } from './commands/remove-role-from-user.handler';
+import { AssignBadgeHandler } from './commands/assign-badge.handler';
+import { RemoveBadgeHandler } from './commands/remove-badge.handler';
 
-const CommandHandlers = [UpdateUserProfileHandler, BlockUserHandler];
-const QueryHandlers = [GetUserByIdHandler, GetUsersHandler];
+import { GetRolesHandler } from './queries/get-roles.handler';
+import { GetRoleByIdHandler } from './queries/get-role-by-id.handler';
+import { CreateRoleHandler } from './commands/create-role.handler';
+import { UpdateRoleHandler } from './commands/update-role.handler';
+import { DeleteRoleHandler } from './commands/delete-role.handler';
+import { AssignPermissionToRoleHandler } from './commands/assign-permission-to-role.handler';
+import { RemovePermissionFromRoleHandler } from './commands/remove-permission-from-role.handler';
+
+import { GetPermissionsHandler } from './queries/get-permissions.handler';
+import { GetPermissionByIdHandler } from './queries/get-permission-by-id.handler';
+
+import { RolesController } from './controllers/roles/roles.controller';
+import { PermissionsController } from './controllers/permissions/permissions.controller';
+
+const CommandHandlers = [
+  UpdateUserProfileHandler,
+  BlockUserHandler,
+  AssignRoleToUserHandler,
+  RemoveRoleFromUserHandler,
+  AssignBadgeHandler,
+  RemoveBadgeHandler,
+  CreateRoleHandler,
+  UpdateRoleHandler,
+  DeleteRoleHandler,
+  AssignPermissionToRoleHandler,
+  RemovePermissionFromRoleHandler,
+];
+
+const QueryHandlers = [
+  GetUserByIdHandler,
+  GetUsersHandler,
+  GetRolesHandler,
+  GetRoleByIdHandler,
+  GetPermissionsHandler,
+  GetPermissionByIdHandler,
+];
 
 @Module({
   imports: [
@@ -25,7 +63,12 @@ const QueryHandlers = [GetUserByIdHandler, GetUsersHandler];
       signOptions: { expiresIn: '15m' },
     }),
   ],
-  controllers: [AuthController, UsersController],
+  controllers: [
+    AuthController,
+    UsersController,
+    RolesController,
+    PermissionsController,
+  ],
   providers: [
     AuthService,
     LocalStrategy,

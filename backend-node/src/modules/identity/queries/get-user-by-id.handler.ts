@@ -27,9 +27,27 @@ export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
     }
 
     const { first_name, last_name, ...rest } = user;
+    
+    const userRoles = await this.prisma.user_roles.findMany({
+      where: { user_id: user.id }
+    });
+    const roleIds = userRoles.map(ur => ur.role_id);
+    const roles = await this.prisma.roles.findMany({
+      where: { id: { in: roleIds } }
+    });
+    const userRoleNames = roles.map(r => r.name);
+
     return {
-      ...rest,
+      id: user.id,
+      email: user.email,
+      firstName: first_name,
+      lastName: last_name,
       fullName: `${first_name} ${last_name}`.trim(),
+      avatar: user.avatar,
+      bio: user.bio,
+      status: user.status,
+      createdAt: user.created_at,
+      roles: userRoleNames,
     };
   }
 }
