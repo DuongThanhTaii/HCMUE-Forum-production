@@ -129,11 +129,12 @@ export function ForumCreatePostPage() {
               </option>
             ))}
           </select>
+          <p className="text-[11px] text-slate-500">Bắt buộc: Hãy chọn danh mục phù hợp nhất với nội dung bài viết.</p>
         </label>
 
         <label className="flex flex-col gap-1.5">
           <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Thread channel
+            Kênh thảo luận (Thread Channel)
           </span>
           <select
             value={threadChannelId}
@@ -141,13 +142,14 @@ export function ForumCreatePostPage() {
             disabled={loadingThreadChannels}
             className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-primary focus:ring-2 disabled:opacity-60"
           >
-            <option value="">No channel (regular post)</option>
+            <option value="">Không thuộc kênh nào (Bài viết thường)</option>
             {threadChannels.map((channel) => (
               <option key={channel.id} value={channel.id}>
                 {channel.name}
               </option>
             ))}
           </select>
+          <p className="text-[11px] text-slate-500">Chọn một kênh nếu bài viết thuộc chủ đề chuyên sâu, hoặc để trống.</p>
         </label>
 
         <label className="flex flex-col gap-1.5">
@@ -176,7 +178,7 @@ export function ForumCreatePostPage() {
           ) : null}
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Attachments</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Tệp đính kèm (Attachments)</span>
           <input
             type="file"
             multiple

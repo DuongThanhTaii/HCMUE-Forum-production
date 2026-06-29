@@ -45,8 +45,8 @@ export class PostsController {
       new CreatePostCommand(
         dto.title,
         dto.content,
-        dto.type,
-        dto.status,
+        dto.type || 1, // Default type
+        dto.status || 1, // Default status (e.g., 1 = Published/Pending)
         req.user.userId,
         dto.tags || {},
         dto.categoryId,
