@@ -119,7 +119,7 @@ export function AdminUsersPage() {
                       <p className="text-sm text-slate-500">{user.email}</p>
                     </td>
                     <td className="px-4 py-3 text-sm text-slate-700">
-                      {t(`admin.usersPage.status.${user.status.toLowerCase()}`)}
+                      {t(`admin.usersPage.status.${String(user.status).toLowerCase()}`)}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1.5">
