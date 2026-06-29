@@ -18,7 +18,7 @@ export function AuthLayout() {
           to="/home"
           className="mb-6 flex items-center gap-3 rounded-md text-slate-900 no-underline outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
-          <img src="/logohcmue.png" alt="" className="h-10 w-auto" />
+          <img src="/logohcmue-forum.png" alt="" className="h-10 w-auto" />
           <h1 className="text-xl font-semibold">{t('auth.layout.brand')}</h1>
         </Link>
         <Outlet />

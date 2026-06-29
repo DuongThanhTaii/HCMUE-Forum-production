@@ -31,7 +31,7 @@ function BrandLink({ className = '' }: { className?: string }) {
       to="/home"
       className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-primary no-underline hover:bg-slate-100 ${className}`.trim()}
     >
-      <img src="/logohcmue.png" alt="" className="h-7 w-auto shrink-0" />
+      <img src="/logohcmue-forum.png" alt="" className="h-7 w-auto shrink-0" />
       <span className="truncate text-xs font-semibold leading-none">{t('forum.topbar.brand')}</span>
     </Link>
   );
@@ -65,7 +65,7 @@ export function ForumTopbar() {
           to="/home"
           className="flex h-full shrink-0 items-center gap-2 px-4 text-primary no-underline hover:bg-slate-50 lg:hidden"
         >
-          <img src="/logohcmue.png" alt="" className="h-7 w-auto shrink-0" />
+          <img src="/logohcmue-forum.png" alt="" className="h-7 w-auto shrink-0" />
           <span className="max-w-[9rem] truncate text-xs font-semibold leading-none sm:max-w-none">
             {t('forum.topbar.brand')}
           </span>
