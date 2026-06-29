@@ -22,7 +22,18 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const userRoles = await this.prisma.user_roles.findMany({
+      where: { user_id: user.id },
+      include: { roles: true },
+    });
+    const roles = userRoles.map((ur) => ur.roles.name);
+
+    const payload = { 
+      email: user.email, 
+      sub: user.id,
+      role: roles.length === 1 ? roles[0] : roles,
+      roles: roles
+    };
     return {
       accessToken: this.jwtService.sign(payload),
       refreshToken: crypto.randomBytes(40).toString('hex'),
