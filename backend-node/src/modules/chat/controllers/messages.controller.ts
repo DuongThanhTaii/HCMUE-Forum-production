@@ -22,10 +22,11 @@ export class MessagesController {
   async sendMessage(@Request() req: any, @Body() body: any) {
     return this.commandBus.execute(
       new SendMessageCommand(
-        req.user.userId,
         body.conversationId,
+        req.user.userId,
         body.content,
-        null // parentMessageId
+        1, // type Text
+        body.replyToMessageId,
       ),
     );
   }
@@ -35,9 +36,10 @@ export class MessagesController {
     @Request() req: any,
     @Param('id') messageId: string,
     @Param('emoji') emoji: string,
+    @Body('conversationId') conversationId: string,
   ) {
     return this.commandBus.execute(
-      new AddReactionCommand(req.user.userId, messageId, emoji),
+      new AddReactionCommand(messageId, req.user.userId, emoji, conversationId),
     );
   }
 

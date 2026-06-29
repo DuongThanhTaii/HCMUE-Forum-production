@@ -9,12 +9,12 @@ export class GetPopularTagsHandler implements IQueryHandler<GetPopularTagsQuery>
 
   async execute(query: GetPopularTagsQuery) {
     return this.prisma.tags.findMany({
-      orderBy: { post_count: 'desc' },
+      orderBy: { usage_count: 'desc' },
       take: 10,
       select: {
         id: true,
         name: true,
-        post_count: true,
+        usage_count: true,
       },
     });
   }

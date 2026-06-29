@@ -12,8 +12,8 @@ export class GetUnreadCountHandler implements IQueryHandler<GetUnreadCountQuery>
   async execute(query: GetUnreadCountQuery) {
     const count = await this.prisma.notifications.count({
       where: {
-        user_id: query.userId,
-        is_read: false,
+        recipient_id: query.userId,
+        read_at: null,
       },
     });
     return count; // returns a number, will be wrapped by TransformInterceptor to { data: count }

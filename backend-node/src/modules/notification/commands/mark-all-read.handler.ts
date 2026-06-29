@@ -12,11 +12,10 @@ export class MarkAllReadHandler implements ICommandHandler<MarkAllReadCommand> {
   async execute(command: MarkAllReadCommand) {
     await this.prisma.notifications.updateMany({
       where: {
-        user_id: command.userId,
-        is_read: false,
+        recipient_id: command.userId,
+        read_at: null,
       },
       data: {
-        is_read: true,
         read_at: new Date(),
       },
     });

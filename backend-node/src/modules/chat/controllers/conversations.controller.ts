@@ -19,13 +19,12 @@ export class ConversationsController {
 
   @Post('direct')
   async createDirectConversation(@Request() req: any, @Body() body: any) {
-    // Basic mapping, exact params may vary
     return this.commandBus.execute(
       new CreateConversationCommand(
-        req.user.userId,
-        body.title || 'Direct Message',
         1, // direct type
-        body.participantIds
+        req.user.userId,
+        body.participantIds || [],
+        body.title || 'Direct Message',
       ),
     );
   }
@@ -34,10 +33,10 @@ export class ConversationsController {
   async createGroupConversation(@Request() req: any, @Body() body: any) {
     return this.commandBus.execute(
       new CreateConversationCommand(
-        req.user.userId,
-        body.title,
         2, // group type
-        body.participantIds
+        req.user.userId,
+        body.participantIds || [],
+        body.title,
       ),
     );
   }
