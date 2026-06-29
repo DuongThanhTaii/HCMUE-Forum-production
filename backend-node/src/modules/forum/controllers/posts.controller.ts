@@ -45,6 +45,22 @@ export class PostsController {
     );
   }
 
+  @Get('bookmarks')
+  @UseGuards(JwtAuthGuard)
+  async getBookmarkedPosts(
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+    @Req() req?: any,
+  ) {
+    return this.queryBus.execute(
+      new GetBookmarkedPostsQuery(
+        skip ? parseInt(skip) : 0,
+        take ? parseInt(take) : 20,
+        req.user.userId,
+      ),
+    );
+  }
+
   @Get(':id')
   async getPostById(@Param('id') id: string) {
     return this.queryBus.execute(new GetPostByIdQuery(id));
@@ -81,20 +97,6 @@ export class PostsController {
     );
   }
 
-  @Get('bookmarks')
-  @UseGuards(JwtAuthGuard)
-  async getBookmarkedPosts(
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-    @Req() req?: any,
-  ) {
-    return this.queryBus.execute(
-      new GetBookmarkedPostsQuery(
-        skip ? parseInt(skip) : 0,
-        take ? parseInt(take) : 20,
-        req.user.userId,
-      ),
-    );
   }
 
   @Post(':id/bookmark')
