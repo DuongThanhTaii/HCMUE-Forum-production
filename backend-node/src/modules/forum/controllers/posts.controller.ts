@@ -46,7 +46,7 @@ export class PostsController {
         dto.title,
         dto.content,
         dto.type || 1, // Default type
-        dto.status || 1, // Default status (e.g., 1 = Published/Pending)
+        dto.status || 2, // Default status (2 = Published)
         req.user.userId,
         dto.tags || {},
         dto.categoryId,

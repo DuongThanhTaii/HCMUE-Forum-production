@@ -12,21 +12,29 @@ type RawForumPost = {
   title?: string
   type?: number | null
   authorId?: string | null
+  author_id?: string | null
   tags?: string[] | null
   categoryName?: string | null
   category?: { name?: string | null } | null
   categoryId?: string | null
+  category_id?: string | null
   threadChannelId?: string | null
+  thread_channel_id?: string | null
   threadChannelCode?: string | null
   threadChannelName?: string | null
   authorName?: string | null
   commentCount?: number | null
+  comment_count?: number | null
   replyCount?: number | null
   voteScore?: number | null
+  vote_score?: number | null
   isBookmarked?: boolean | null
   updatedAt?: string | null
+  updated_at?: string | null
   publishedAt?: string | null
+  published_at?: string | null
   createdAt?: string | null
+  created_at?: string | null
   content?: string | null
   body?: string | null
 }
@@ -175,17 +183,17 @@ function toSafeForumListItem(post: RawForumPost, index: number): ForumListItem {
   const category =
     post.categoryName?.trim() ||
     post.category?.name?.trim() ||
-    (post.categoryId ? `Category ${post.categoryId.slice(0, 8)}` : 'General')
+    (post.categoryId ?? post.category_id ? `Category ${(post.categoryId ?? post.category_id!).slice(0, 8)}` : 'General')
   const tags = Array.isArray(post.tags) ? post.tags.filter((tag): tag is string => Boolean(tag?.trim())) : []
-  const replyCount = Math.max(0, post.replyCount ?? post.commentCount ?? 0)
-  const activityAt = post.updatedAt || post.publishedAt || post.createdAt || '1970-01-01T00:00:00.000Z'
+  const replyCount = Math.max(0, post.replyCount ?? post.commentCount ?? post.comment_count ?? 0)
+  const activityAt = post.updatedAt || post.updated_at || post.publishedAt || post.published_at || post.createdAt || post.created_at || '1970-01-01T00:00:00.000Z'
 
   return {
     id,
     title,
     category,
-    categoryId: post.categoryId?.trim() || undefined,
-    threadChannelId: post.threadChannelId?.trim() || undefined,
+    categoryId: post.categoryId?.trim() || post.category_id?.trim() || undefined,
+    threadChannelId: post.threadChannelId?.trim() || post.thread_channel_id?.trim() || undefined,
     threadChannelCode: post.threadChannelCode?.trim() || undefined,
     threadChannelName: post.threadChannelName?.trim() || undefined,
     tags,
@@ -210,12 +218,12 @@ function toSafeForumDetailItem(post: RawForumPost, idFallback: string): ForumDet
   const content = post.content?.trim() || undefined
   const body = post.body?.trim() || undefined
   const authorName = post.authorName?.trim() || undefined
-  const authorId = post.authorId?.trim() || undefined
+  const authorId = post.authorId?.trim() || post.author_id?.trim() || undefined
   const type = typeof post.type === 'number' ? post.type : undefined
-  const threadChannelId = post.threadChannelId?.trim() || undefined
+  const threadChannelId = post.threadChannelId?.trim() || post.thread_channel_id?.trim() || undefined
   const threadChannelCode = post.threadChannelCode?.trim() || undefined
   const threadChannelName = post.threadChannelName?.trim() || undefined
-  const voteScore = typeof post.voteScore === 'number' ? post.voteScore : undefined
+  const voteScore = typeof post.voteScore === 'number' ? post.voteScore : typeof post.vote_score === 'number' ? post.vote_score : undefined
   const isBookmarked = post.isBookmarked === true
 
   return {

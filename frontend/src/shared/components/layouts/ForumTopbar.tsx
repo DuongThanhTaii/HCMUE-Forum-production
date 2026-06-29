@@ -107,7 +107,7 @@ export function ForumTopbar() {
 
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
             {isAuthenticated && (showModerationLink || showAdminLink) ? (
-              <div className="hidden items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 sm:inline-flex">
+              <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5">
                 {showModerationLink ? (
                   <Link
                     to="/mod/reports"
