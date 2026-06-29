@@ -24,9 +24,12 @@ export class AuthService {
   async login(user: any) {
     const userRoles = await this.prisma.user_roles.findMany({
       where: { user_id: user.id },
-      include: { roles: true },
     });
-    const roles = userRoles.map((ur) => ur.roles.name);
+    const roleIds = userRoles.map((ur) => ur.role_id);
+    const rolesData = await this.prisma.roles.findMany({
+      where: { id: { in: roleIds } }
+    });
+    const roles = rolesData.map((r) => r.name);
 
     const payload = { 
       email: user.email, 
