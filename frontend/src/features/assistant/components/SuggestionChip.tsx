@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
+import type { ReactNode } from 'react';
 
 interface SuggestionChipProps {
   title: string;
   description: string;
-  icon?: string;
+  icon?: ReactNode;
   iconBg?: string;
   iconColor?: string;
   onClick: (label: string) => void;

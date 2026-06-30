@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { SuggestionChip } from './SuggestionChip';
-import { Bot } from 'lucide-react';
+import { Bot, GraduationCap, Calculator, Wallet, Award, Building2, ClipboardList } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface EmptyStateProps {
@@ -14,42 +14,42 @@ export function EmptyState({ onSuggestClick }: EmptyStateProps) {
     { 
       title: t('suggestions.s1.title', 'Học vụ & Đào tạo'), 
       description: t('suggestions.s1.description', 'Điểm số, qua môn, học lại, bảo lưu...'),
-      icon: '🎓',
+      icon: <GraduationCap size={22} strokeWidth={2} />,
       iconBg: '#EDF4FF',
       iconColor: '#1E5EFF'
     },
     { 
       title: t('suggestions.s2.title', 'Tính điểm & Công cụ'), 
       description: t('suggestions.s2.description', 'Tính GPA, rèn luyện, học bổng...'),
-      icon: '🧮',
+      icon: <Calculator size={22} strokeWidth={2} />,
       iconBg: '#FDF4FF',
       iconColor: '#C026D3'
     },
     { 
       title: t('suggestions.s3.title', 'Học bổng & Học phí'), 
       description: t('suggestions.s3.description', 'Điều kiện xét, mức thưởng, miễn giảm...'),
-      icon: '🎁',
+      icon: <Wallet size={22} strokeWidth={2} />,
       iconBg: '#F5F3FF',
       iconColor: '#7C3AED'
     },
     { 
       title: t('suggestions.s4.title', 'Rèn luyện & Khen thưởng'), 
       description: t('suggestions.s4.description', 'Điểm rèn luyện, kỷ luật, danh hiệu...'),
-      icon: '🏅',
+      icon: <Award size={22} strokeWidth={2} />,
       iconBg: '#FEF2F2',
       iconColor: '#DC2626'
     },
     { 
       title: t('suggestions.s5.title', 'Phòng ban & Liên hệ'), 
       description: t('suggestions.s5.description', 'SĐT, email, địa chỉ, KTX...'),
-      icon: '🏢',
+      icon: <Building2 size={22} strokeWidth={2} />,
       iconBg: '#FFFBEB',
       iconColor: '#D97706'
     },
     { 
       title: t('suggestions.s6.title', 'Quy trình Hành chính'), 
       description: t('suggestions.s6.description', 'Thủ tục, nộp đơn, mẫu biểu...'),
-      icon: '📋',
+      icon: <ClipboardList size={22} strokeWidth={2} />,
       iconBg: '#ECFDF5',
       iconColor: '#059669'
     },
