@@ -26,14 +26,14 @@ export function MessageBubble({ message, isLast, isLoading }: MessageBubbleProps
       className={`flex items-start gap-3 sm:gap-4 w-full ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
     >
       <div 
-        className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
-          ${isUser ? 'bg-[#EFF6FF] text-[#1E5EFF]' : 'bg-transparent border border-[#E5E7EB] shadow-sm'}
+        className={`flex-shrink-0 flex items-center justify-center
+          ${isUser ? 'w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EFF6FF] text-[#1E5EFF]' : 'w-10 h-10 sm:w-12 sm:h-12'}
         `}
       >
         {isUser ? (
           <User size={18} strokeWidth={2.5} />
         ) : (
-          <img src="/logochatbot.png" alt="Bot Avatar" className="w-6 h-6 object-contain" />
+          <img src="/logochatbot.png" alt="Bot Avatar" className="w-full h-full object-contain drop-shadow-sm" />
         )}
       </div>
       
