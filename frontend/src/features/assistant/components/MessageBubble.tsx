@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { User, Bot } from 'lucide-react';
+import { User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { TypingIndicator } from './TypingIndicator';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -17,48 +16,51 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message, isLast, isLoading }: MessageBubbleProps) {
   const isUser = message.role === 'user';
-  const showTyping = !isUser && isLast && isLoading && !message.content;
+  const showTypingIndicator = isLast && !isUser && isLoading && !message.content;
 
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'}`}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className={`flex items-start gap-3 sm:gap-4 w-full ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
     >
-      <div className={`flex max-w-[85%] md:max-w-[75%] ${isUser ? 'flex-row-reverse' : 'flex-row'} gap-3`}>
-        
-        {/* Avatar */}
-        <div className={`flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full mt-1 
-          ${isUser ? 'bg-[#EDF4FF] text-[#1E5EFF]' : 'bg-gradient-to-tr from-[#1E5EFF] to-[#EDF4FF] text-white shadow-sm'}
-        `}>
-          {isUser ? <User size={16} strokeWidth={2.5} /> : <Bot size={18} strokeWidth={2} />}
-        </div>
-
-        {/* Bubble */}
-        <div className={`px-5 py-3.5 text-[15px] leading-relaxed shadow-sm
-          ${isUser
-            ? 'bg-[#1E5EFF] text-white rounded-[20px] rounded-tr-[4px]'
-            : 'bg-white text-[#111827] rounded-[20px] rounded-tl-[4px] border border-[#E5E7EB]'
+      <div 
+        className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
+          ${isUser ? 'bg-[#EFF6FF] text-[#1E5EFF]' : 'bg-transparent border border-[#E5E7EB] shadow-sm'}
+        `}
+      >
+        {isUser ? (
+          <User size={18} strokeWidth={2.5} />
+        ) : (
+          <img src="/logochatbot.png" alt="Bot Avatar" className="w-6 h-6 object-contain" />
+        )}
+      </div>
+      
+      <div 
+        className={`relative max-w-[85%] sm:max-w-[75%] px-5 py-3.5 
+          ${isUser 
+            ? 'bg-[#1E5EFF] text-white rounded-2xl rounded-tr-sm shadow-sm' 
+            : 'bg-white text-[#111827] border border-[#E5E7EB] rounded-2xl rounded-tl-sm shadow-[0_2px_4px_rgba(0,0,0,0.02)]'
           }
-        `}>
-          {showTyping ? (
-            <TypingIndicator />
-          ) : isUser ? (
-            <div className="whitespace-pre-wrap">{message.content}</div>
-          ) : (
-            <div className="prose prose-sm md:prose-base prose-blue max-w-none 
-              prose-p:leading-relaxed prose-pre:bg-[#F7F9FC] prose-pre:border prose-pre:border-[#E5E7EB] prose-pre:text-[#111827] 
-              prose-code:text-[#1E5EFF] prose-code:bg-[#EDF4FF] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
-              prose-a:text-[#1E5EFF] hover:prose-a:text-blue-700
-              prose-headings:text-[#111827] prose-strong:text-[#111827] prose-strong:font-semibold
-              prose-li:marker:text-[#1E5EFF]">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {message.content}
-              </ReactMarkdown>
-            </div>
-          )}
-        </div>
+        `}
+      >
+        {showTypingIndicator ? (
+          <div className="flex gap-1.5 h-6 items-center px-1">
+            <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} className="w-1.5 h-1.5 bg-[#9CA3AF] rounded-full" />
+            <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} className="w-1.5 h-1.5 bg-[#9CA3AF] rounded-full" />
+            <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} className="w-1.5 h-1.5 bg-[#9CA3AF] rounded-full" />
+          </div>
+        ) : (
+          <div className={`prose prose-sm sm:prose-base max-w-none ${isUser ? 'prose-invert text-white' : 'prose-slate text-[#111827]'}
+            prose-p:leading-relaxed prose-pre:bg-[#F3F4F6] prose-pre:text-[#111827] prose-headings:font-semibold prose-a:text-[#1E5EFF] prose-a:no-underline hover:prose-a:underline
+            [&>*:first-child]:mt-0 [&>*:last-child]:mb-0
+          `}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {message.content}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
     </motion.div>
   );

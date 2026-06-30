@@ -6,7 +6,7 @@ interface ChatLayoutProps {
 
 export function ChatLayout({ children }: ChatLayoutProps) {
   return (
-    <div className="w-full h-full flex flex-col bg-transparent overflow-hidden font-sans relative">
+    <div className="w-full h-full flex flex-col bg-[#F9FAFB] overflow-hidden font-sans relative">
       {children}
     </div>
   );

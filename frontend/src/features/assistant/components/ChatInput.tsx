@@ -19,7 +19,7 @@ export function ChatInput({ input, setInput, onSubmit, isLoading, isCentered = f
   }, []);
 
   return (
-    <div className={`w-full ${isCentered ? '' : 'p-4 sm:p-6 bg-transparent border-t border-[#E5E7EB] z-10'}`}>
+    <div className={`w-full ${isCentered ? '' : 'p-4 pb-6 sm:p-6 sm:pb-8 bg-transparent z-10 flex-shrink-0'}`}>
       <form onSubmit={onSubmit} className="relative flex items-center max-w-3xl mx-auto w-full">
         <div className="absolute left-4 flex gap-2">
           <button
@@ -47,7 +47,11 @@ export function ChatInput({ input, setInput, onSubmit, isLoading, isCentered = f
           onChange={(e) => setInput(e.target.value)}
           placeholder={t('input.placeholder', 'Hỏi bất cứ điều gì về học vụ, điểm số, học bổng...')}
           disabled={isLoading}
-          className="w-full pl-24 pr-16 py-4 rounded-2xl border border-[#E5E7EB] bg-white hover:border-[#D1D5DB] focus:border-[#CF373D] focus:ring-1 focus:ring-[#CF373D] transition-all outline-none shadow-sm text-[15px] text-[#111827] placeholder:text-[#9CA3AF]"
+          className={`w-full pl-24 pr-16 py-4 rounded-2xl border bg-white outline-none shadow-[0_2px_12px_rgba(0,0,0,0.04)] text-[15px] text-[#111827] placeholder:text-[#9CA3AF] transition-all
+            ${isCentered 
+              ? 'border-[#CF373D] focus:ring-1 focus:ring-[#CF373D]' 
+              : 'border-[#E5E7EB] hover:border-[#D1D5DB] focus:border-[#CF373D] focus:ring-1 focus:ring-[#CF373D]'
+            }`}
         />
         
         <button
