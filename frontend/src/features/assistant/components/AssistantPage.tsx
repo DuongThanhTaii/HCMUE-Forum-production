@@ -18,6 +18,20 @@ export function AssistantPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (messages.length > 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: -1000, y: -1000 });
+  };
 
   const sendMessage = async (userMessage: string) => {
     if (!userMessage.trim() || isLoading) return;
@@ -116,28 +130,47 @@ export function AssistantPage() {
 
   return (
     <ChatLayout>
-      <ChatHeader />
-      <div className="flex-1 overflow-hidden flex flex-col relative">
-        {messages.length === 0 ? (
-          <EmptyState 
-            input={input}
-            setInput={setInput}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-            onSuggestClick={handleSuggestClick} 
+      <div 
+        className="w-full h-full flex flex-col relative"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {messages.length === 0 && (
+          <div 
+            className="pointer-events-none absolute w-[400px] h-[400px] rounded-full blur-[80px] transition-opacity duration-500 ease-out z-0"
+            style={{
+              background: 'radial-gradient(circle, rgba(207,55,61,0.15) 0%, rgba(207,55,61,0) 70%)',
+              left: mousePos.x - 200,
+              top: mousePos.y - 200,
+              opacity: mousePos.x === -1000 ? 0 : 1
+            }}
           />
-        ) : (
-          <ChatMessages messages={messages} isLoading={isLoading} />
+        )}
+        <ChatHeader />
+        <div className="flex-1 overflow-hidden flex flex-col relative z-10">
+          {messages.length === 0 ? (
+            <EmptyState 
+              input={input}
+              setInput={setInput}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              onSuggestClick={handleSuggestClick} 
+            />
+          ) : (
+            <ChatMessages messages={messages} isLoading={isLoading} />
+          )}
+        </div>
+        {messages.length > 0 && (
+          <div className="relative z-10">
+            <ChatInput
+              input={input}
+              setInput={setInput}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+            />
+          </div>
         )}
       </div>
-      {messages.length > 0 && (
-        <ChatInput
-          input={input}
-          setInput={setInput}
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
-        />
-      )}
     </ChatLayout>
   );
 }

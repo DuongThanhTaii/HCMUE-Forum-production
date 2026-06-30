@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { SuggestionChip } from './SuggestionChip';
 import { ChatInput } from './ChatInput';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface EmptyStateProps {
   input: string;
@@ -14,15 +14,6 @@ interface EmptyStateProps {
 
 export function EmptyState({ input, setInput, onSubmit, isLoading, onSuggestClick }: EmptyStateProps) {
   const { t } = useTranslation('assistant');
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
 
   const questions = [
     t('questions.q1', 'Cách tính điểm GPA học kỳ này?'),
@@ -38,21 +29,7 @@ export function EmptyState({ input, setInput, onSubmit, isLoading, onSuggestClic
   ];
 
   return (
-    <div 
-      className="relative flex flex-col items-center justify-center h-full px-4 text-center w-full mx-auto overflow-hidden bg-transparent"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Mouse Glow Effect */}
-      <div 
-        className="pointer-events-none absolute w-[400px] h-[400px] rounded-full blur-[80px] transition-opacity duration-500 ease-out z-0"
-        style={{
-          background: 'radial-gradient(circle, rgba(207,55,61,0.15) 0%, rgba(207,55,61,0) 70%)',
-          left: mousePos.x - 200,
-          top: mousePos.y - 200,
-          opacity: mousePos.x === -1000 ? 0 : 1
-        }}
-      />
-
+    <div className="relative flex flex-col items-center justify-center h-full px-4 text-center w-full mx-auto bg-transparent z-10">
       <div className="z-10 w-full max-w-3xl flex flex-col items-center">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
