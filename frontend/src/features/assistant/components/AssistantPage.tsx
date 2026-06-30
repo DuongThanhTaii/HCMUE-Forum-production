@@ -3,6 +3,7 @@ import { ChatLayout } from './ChatLayout';
 import { ChatHeader } from './ChatHeader';
 import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://anhfeee-hcmue-handbook-rag-api.hf.space";
 
@@ -12,6 +13,7 @@ interface Message {
 }
 
 export function AssistantPage() {
+  const { t } = useTranslation('assistant');
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +93,7 @@ export function AssistantPage() {
         const lastIdx = newMessages.length - 1;
         newMessages[lastIdx] = {
           ...newMessages[lastIdx],
-          content: 'Xin lỗi, đã có lỗi kết nối đến server. Vui lòng thử lại sau.'
+          content: t('messages.error', 'Xin lỗi, đã có lỗi kết nối đến server. Vui lòng thử lại sau.')
         };
         return newMessages;
       });

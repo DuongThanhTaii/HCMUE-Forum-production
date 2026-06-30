@@ -1,5 +1,6 @@
 import { Send, Paperclip } from 'lucide-react';
 import React, { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
   input: string;
@@ -9,6 +10,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputProps) {
+  const { t } = useTranslation('assistant');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask HCMUE AI anything..."
+          placeholder={t('input.placeholder', 'Ask HCMUE AI anything...')}
           disabled={isLoading}
           className="w-full pl-14 pr-16 py-4 rounded-full border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-white focus:bg-white focus:ring-2 focus:ring-[#1E5EFF]/30 focus:border-[#1E5EFF] transition-all outline-none shadow-sm text-[15px] text-[#111827] placeholder:text-[#9CA3AF]"
         />
@@ -51,7 +53,9 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
         </button>
       </form>
       <div className="text-center mt-3">
-        <span className="text-xs text-[#9CA3AF] font-medium">HCMUE AI can make mistakes. Verify important regulations.</span>
+        <span className="text-xs text-[#9CA3AF] font-medium">
+          {t('input.disclaimer', 'HCMUE AI can make mistakes. Verify important regulations.')}
+        </span>
       </div>
     </div>
   );

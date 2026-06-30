@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "Trợ lý Ảo HCMUE",
+    "subtitle": "Hỏi đáp về quy chế, học tập, phòng ban, lịch học và nhiều hơn nữa.",
+    "online": "TRỰC TUYẾN"
+  },
+  "input": {
+    "placeholder": "Hỏi Trợ lý Ảo HCMUE bất cứ điều gì...",
+    "disclaimer": "Trợ lý Ảo HCMUE có thể cung cấp thông tin chưa chính xác. Vui lòng xác minh lại các quy chế quan trọng."
+  },
+  "emptyState": {
+    "welcomeTitle": "Chào mừng đến với Trợ lý Ảo HCMUE",
+    "welcomeSubtitle": "Tôi có thể giúp bạn giải đáp các câu hỏi về quy chế đại học, lộ trình học tập, v.v. Hãy thử chọn một trong các gợi ý dưới đây."
+  },
+  "suggestions": {
+    "s1": {
+      "title": "Học vụ & Đào tạo",
+      "description": "Điểm số, qua môn, học lại, bảo lưu..."
+    },
+    "s2": {
+      "title": "Tính điểm & Công cụ",
+      "description": "Tính GPA, rèn luyện, học bổng..."
+    },
+    "s3": {
+      "title": "Học bổng & Học phí",
+      "description": "Điều kiện xét, mức thưởng, miễn giảm..."
+    },
+    "s4": {
+      "title": "Rèn luyện & Khen thưởng",
+      "description": "Điểm rèn luyện, kỷ luật, danh hiệu..."
+    },
+    "s5": {
+      "title": "Phòng ban & Liên hệ",
+      "description": "SĐT, email, địa chỉ, KTX..."
+    },
+    "s6": {
+      "title": "Quy trình Hành chính",
+      "description": "Thủ tục, nộp đơn, mẫu biểu..."
+    }
+  },
+  "messages": {
+    "initial": "Xin chào! Tôi là Trợ lý Ảo của diễn đàn. Bạn muốn hỏi gì về thông tin học vụ?",
+    "error": "Xin lỗi, đã có lỗi kết nối đến máy chủ. Vui lòng thử lại sau."
+  }
+}

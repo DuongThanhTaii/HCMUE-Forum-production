@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "HCMUE AI Assistant",
+    "subtitle": "Ask anything about university regulations, study, departments, schedules and more.",
+    "online": "ONLINE"
+  },
+  "input": {
+    "placeholder": "Ask HCMUE AI anything...",
+    "disclaimer": "HCMUE AI can make mistakes. Verify important regulations."
+  },
+  "emptyState": {
+    "welcomeTitle": "Welcome to HCMUE AI Assistant",
+    "welcomeSubtitle": "I can help you answer questions about your university regulations, study paths, and more. Try asking one of the suggestions below."
+  },
+  "suggestions": {
+    "s1": {
+      "title": "Academic Affairs",
+      "description": "Grades, passing, retaking, reserving..."
+    },
+    "s2": {
+      "title": "Grading & Tools",
+      "description": "Calculate GPA, conduct points..."
+    },
+    "s3": {
+      "title": "Scholarships & Tuition",
+      "description": "Criteria, reward levels, waivers..."
+    },
+    "s4": {
+      "title": "Conduct & Rewards",
+      "description": "Conduct points, discipline, titles..."
+    },
+    "s5": {
+      "title": "Departments & Contact",
+      "description": "Phone, email, address, Dormitory..."
+    },
+    "s6": {
+      "title": "Admin Procedures",
+      "description": "Procedures, applications, forms..."
+    }
+  },
+  "messages": {
+    "initial": "Hello! I am the forum's AI Assistant. What would you like to ask about academic information?",
+    "error": "Sorry, there was a connection error to the server. Please try again later."
+  }
+}
