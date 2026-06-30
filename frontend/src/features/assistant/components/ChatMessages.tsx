@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import { MessageBubble } from './MessageBubble';
-import { EmptyState } from './EmptyState';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -10,10 +9,9 @@ interface Message {
 interface ChatMessagesProps {
   messages: Message[];
   isLoading: boolean;
-  onSuggestClick: (query: string) => void;
 }
 
-export function ChatMessages({ messages, isLoading, onSuggestClick }: ChatMessagesProps) {
+export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -23,14 +21,6 @@ export function ChatMessages({ messages, isLoading, onSuggestClick }: ChatMessag
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
-
-  if (messages.length === 0) {
-    return (
-      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-transparent to-[#F7F9FC]/50">
-        <EmptyState onSuggestClick={onSuggestClick} />
-      </div>
-    );
-  }
 
   return (
     <div className="flex-1 overflow-y-auto px-4 py-8 sm:px-8 space-y-6 scroll-smooth bg-gradient-to-b from-transparent to-[#F7F9FC]/30">

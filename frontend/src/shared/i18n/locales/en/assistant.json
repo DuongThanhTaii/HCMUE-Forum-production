@@ -1,42 +1,27 @@
 {
   "header": {
     "title": "HCMUE AI Assistant",
-    "subtitle": "Ask anything about university regulations, study, departments, schedules and more.",
+    "subtitle": "Answer academic regulations, study paths, scholarships and more.",
     "online": "ONLINE"
   },
   "input": {
-    "placeholder": "Ask HCMUE AI anything...",
-    "disclaimer": "HCMUE AI can make mistakes. Verify important regulations."
+    "placeholder": "Ask anything about academics, grades, scholarships...",
+    "disclaimer": "HCMUE AI can make mistakes."
   },
   "emptyState": {
     "welcomeTitle": "Welcome to HCMUE AI Assistant",
-    "welcomeSubtitle": "I can help you answer questions about your university regulations, study paths, and more. Try asking one of the suggestions below."
+    "welcomeSubtitle": "Answer academic regulations, study paths, scholarships and more."
   },
-  "suggestions": {
-    "s1": {
-      "title": "Academic Affairs",
-      "description": "Grades, passing, retaking, reserving..."
-    },
-    "s2": {
-      "title": "Grading & Tools",
-      "description": "Calculate GPA, conduct points..."
-    },
-    "s3": {
-      "title": "Scholarships & Tuition",
-      "description": "Criteria, reward levels, waivers..."
-    },
-    "s4": {
-      "title": "Conduct & Rewards",
-      "description": "Conduct points, discipline, titles..."
-    },
-    "s5": {
-      "title": "Departments & Contact",
-      "description": "Phone, email, address, Dormitory..."
-    },
-    "s6": {
-      "title": "Admin Procedures",
-      "description": "Procedures, applications, forms..."
-    }
+  "questions": {
+    "q1": "How to calculate GPA this semester?",
+    "q2": "Criteria for merit scholarships",
+    "q3": "Retake schedule for Calculus 1",
+    "q4": "Regulations on reserving academic results"
+  },
+  "categories": {
+    "c1": "Academic Affairs",
+    "c2": "Grading & Tools",
+    "c3": "Scholarships & Tuition"
   },
   "messages": {
     "initial": "Hello! I am the forum's AI Assistant. What would you like to ask about academic information?",

@@ -1,42 +1,27 @@
 {
   "header": {
-    "title": "Trợ lý Ảo HCMUE",
-    "subtitle": "Hỏi đáp về quy chế, học tập, phòng ban, lịch học và nhiều hơn nữa.",
+    "title": "HCMUE AI Assistant",
+    "subtitle": "Giải đáp quy chế đào tạo, lộ trình học tập, học bổng và nhiều hơn nữa.",
     "online": "TRỰC TUYẾN"
   },
   "input": {
-    "placeholder": "Hỏi Trợ lý Ảo HCMUE bất cứ điều gì...",
-    "disclaimer": "Trợ lý Ảo HCMUE có thể cung cấp thông tin chưa chính xác. Vui lòng xác minh lại các quy chế quan trọng."
+    "placeholder": "Hỏi bất cứ điều gì về học vụ, điểm số, học bổng...",
+    "disclaimer": "Trợ lý Ảo HCMUE có thể cung cấp thông tin chưa chính xác."
   },
   "emptyState": {
-    "welcomeTitle": "Chào mừng đến với Trợ lý Ảo HCMUE",
-    "welcomeSubtitle": "Tôi có thể giúp bạn giải đáp các câu hỏi về quy chế đại học, lộ trình học tập, v.v. Hãy thử chọn một trong các gợi ý dưới đây."
+    "welcomeTitle": "Chào mừng đến với Trợ lý ảo HCMUE",
+    "welcomeSubtitle": "Giải đáp quy chế đào tạo, lộ trình học tập, học bổng và nhiều hơn nữa."
   },
-  "suggestions": {
-    "s1": {
-      "title": "Học vụ & Đào tạo",
-      "description": "Điểm số, qua môn, học lại, bảo lưu..."
-    },
-    "s2": {
-      "title": "Tính điểm & Công cụ",
-      "description": "Tính GPA, rèn luyện, học bổng..."
-    },
-    "s3": {
-      "title": "Học bổng & Học phí",
-      "description": "Điều kiện xét, mức thưởng, miễn giảm..."
-    },
-    "s4": {
-      "title": "Rèn luyện & Khen thưởng",
-      "description": "Điểm rèn luyện, kỷ luật, danh hiệu..."
-    },
-    "s5": {
-      "title": "Phòng ban & Liên hệ",
-      "description": "SĐT, email, địa chỉ, KTX..."
-    },
-    "s6": {
-      "title": "Quy trình Hành chính",
-      "description": "Thủ tục, nộp đơn, mẫu biểu..."
-    }
+  "questions": {
+    "q1": "Cách tính điểm GPA học kỳ này?",
+    "q2": "Điều kiện xét học bổng khuyến khích",
+    "q3": "Lịch học lại môn Giải tích 1",
+    "q4": "Quy định bảo lưu kết quả học tập"
+  },
+  "categories": {
+    "c1": "Học vụ & Đào tạo",
+    "c2": "Tính điểm & Công cụ",
+    "c3": "Học bổng & Học phí"
   },
   "messages": {
     "initial": "Xin chào! Tôi là Trợ lý Ảo của diễn đàn. Bạn muốn hỏi gì về thông tin học vụ?",

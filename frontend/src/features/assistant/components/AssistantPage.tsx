@@ -3,6 +3,7 @@ import { ChatLayout } from './ChatLayout';
 import { ChatHeader } from './ChatHeader';
 import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
+import { EmptyState } from './EmptyState';
 import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://anhfeee-hcmue-handbook-rag-api.hf.space";
@@ -116,17 +117,27 @@ export function AssistantPage() {
   return (
     <ChatLayout>
       <ChatHeader />
-      <ChatMessages 
-        messages={messages} 
-        isLoading={isLoading} 
-        onSuggestClick={handleSuggestClick} 
-      />
-      <ChatInput 
-        input={input} 
-        setInput={setInput} 
-        onSubmit={handleSubmit} 
-        isLoading={isLoading} 
-      />
+      <div className="flex-1 overflow-hidden flex flex-col relative">
+        {messages.length === 0 ? (
+          <EmptyState 
+            input={input}
+            setInput={setInput}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            onSuggestClick={handleSuggestClick} 
+          />
+        ) : (
+          <ChatMessages messages={messages} isLoading={isLoading} />
+        )}
+      </div>
+      {messages.length > 0 && (
+        <ChatInput
+          input={input}
+          setInput={setInput}
+          onSubmit={handleSubmit}
+          isLoading={isLoading}
+        />
+      )}
     </ChatLayout>
   );
 }
