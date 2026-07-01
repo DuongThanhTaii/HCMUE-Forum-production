@@ -590,10 +590,13 @@ export const forumListApi = baseApi.injectEndpoints({
       async onQueryStarted({ postId, voteType }, { dispatch, queryFulfilled }) {
         const pid = normalizeForumPostId(postId)
         if (!pid) return
-        const delta = voteType === 1 ? 1 : -1
         const patch = dispatch(
           forumListApi.util.updateQueryData('getForumPostById', pid, (draft) => {
-            draft.voteScore = (draft.voteScore ?? 0) + delta
+            if (voteType === 1) {
+              const delta = draft.isUpvoted ? -1 : 1
+              draft.voteScore = (draft.voteScore ?? 0) + delta
+              draft.isUpvoted = !draft.isUpvoted
+            }
           }),
         )
         try {

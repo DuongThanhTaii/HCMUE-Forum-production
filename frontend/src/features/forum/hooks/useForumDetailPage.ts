@@ -275,13 +275,10 @@ export function useForumDetailPage() {
       return
     }
     try {
-      if (isUpvoted) {
-        // Technically this might need an unvote endpoint, but for now we just toggle optimistic state
-        // if the API only supports toggle or if it doesn't do anything
-      }
-      setIsUpvoted(true)
+      const nextUpvoted = !isUpvoted
+      setIsUpvoted(nextUpvoted)
       await votePost({ postId: id, voteType: 1 }).unwrap()
-      setFeedback('forum.feedback.voteSuccess', null)
+      setFeedback(nextUpvoted ? 'forum.feedback.voteSuccess' : 'forum.feedback.unvoteSuccess', null)
     } catch (error) {
       setIsUpvoted((prev) => !prev)
       setFeedback(null, getMutationErrorKey(error, 'forum.feedback.voteFailed'))
