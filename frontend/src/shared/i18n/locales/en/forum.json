@@ -250,6 +250,8 @@
     "commentFailed": "Unable to submit comment. Please try again.",
     "voteSuccess": "Your upvote has been recorded.",
     "voteFailed": "Unable to record your upvote.",
+    "unvoteSuccess": "Your upvote has been removed.",
+    "unvoteFailed": "Unable to remove your upvote.",
     "bookmarkSuccess": "Post saved.",
     "bookmarkFailed": "Unable to save this post.",
     "unbookmarkSuccess": "Post removed from saved items.",

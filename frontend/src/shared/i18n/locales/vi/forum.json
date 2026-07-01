@@ -250,6 +250,8 @@
     "commentFailed": "Không thể gửi bình luận, vui lòng thử lại.",
     "voteSuccess": "Đã ghi nhận lượt thích.",
     "voteFailed": "Không thể ghi nhận lượt thích.",
+    "unvoteSuccess": "Đã hủy bỏ lượt thích.",
+    "unvoteFailed": "Không thể hủy bỏ lượt thích.",
     "bookmarkSuccess": "Đã lưu bài viết.",
     "bookmarkFailed": "Không thể lưu bài viết.",
     "unbookmarkSuccess": "Đã bỏ lưu bài viết.",
