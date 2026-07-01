@@ -352,5 +352,16 @@
     "sampleComment2": "Could you add more details about expected timeline and impact?",
     "sampleTime1": "2 hours ago",
     "sampleTime2": "1 hour ago"
+  },
+  "explore": {
+    "title": "Explore Discussions",
+    "subtitle": "Discover new ideas, ask questions, and collaborate with the community.",
+    "searchPlaceholder": "Search communities, topics, or discussions...",
+    "browseAreas": "Browse Areas",
+    "topicsCount": "{{count}} topics",
+    "trending": "Trending Now",
+    "popularTags": "Popular Tags",
+    "mockThread1": "How to ace the upcoming computer architecture exam?",
+    "mockThread2": "Looking for a study group for Advanced Calculus"
   }
 }

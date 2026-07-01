@@ -352,5 +352,16 @@
     "sampleComment2": "Bạn có thể bổ sung thêm mốc thời gian dự kiến và mức độ ảnh hưởng không?",
     "sampleTime1": "2 giờ trước",
     "sampleTime2": "1 giờ trước"
+  },
+  "explore": {
+    "title": "Khám phá Thảo luận",
+    "subtitle": "Khám phá các ý tưởng mới, đặt câu hỏi và cộng tác cùng cộng đồng.",
+    "searchPlaceholder": "Tìm kiếm cộng đồng, chủ đề hoặc thảo luận...",
+    "browseAreas": "Duyệt theo lĩnh vực",
+    "topicsCount": "{{count}} chủ đề",
+    "trending": "Đang thịnh hành",
+    "popularTags": "Thẻ phổ biến",
+    "mockThread1": "Cách đạt điểm cao trong kỳ thi Kiến trúc máy tính sắp tới?",
+    "mockThread2": "Tìm nhóm học chung môn Giải tích nâng cao"
   }
 }
