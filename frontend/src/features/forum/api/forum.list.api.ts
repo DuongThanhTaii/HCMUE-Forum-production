@@ -284,35 +284,38 @@ function toSafeForumDetailItem(post: RawForumPost, idFallback: string): ForumDet
 
 function toSafeForumCommentItem(comment: RawForumComment, postIdFallback: string, index: number): ForumCommentItem {
   const id = comment.id?.trim() || `comment-${index}`
-  const postId = comment.postId?.trim()
-    ? normalizeForumPostId(comment.postId)
+  const postId = comment.postId?.trim() || comment.post_id?.trim()
+    ? normalizeForumPostId(comment.postId || comment.post_id!)
     : normalizeForumPostId(postIdFallback)
-  const authorId = comment.authorId?.trim() || 'unknown-author'
+  const authorId = comment.authorId?.trim() || comment.author_id?.trim() || 'unknown-author'
   const content = comment.content?.trim() || ''
-  const createdAt = comment.createdAt || '1970-01-01T00:00:00.000Z'
-  const parentRaw = comment.parentCommentId?.trim()
+  const createdAt = comment.createdAt || comment.created_at || '1970-01-01T00:00:00.000Z'
+  const parentRaw = comment.parentCommentId?.trim() || comment.parent_comment_id?.trim()
   const parentCommentId = parentRaw && parentRaw.length > 0 ? parentRaw : null
-  const named = comment.authorName?.trim()
+  const named = comment.authorName?.trim() || comment.author_name?.trim()
   const authorName =
     named && named.length > 0 ? named : `User ${authorId.slice(0, 8)}`
+  const authorAvatar = comment.authorAvatar?.trim() || comment.author_avatar?.trim() || undefined
   const rawCurrentVote = comment.currentUserVote ?? comment.userVote ?? comment.myVote ?? null
   const currentUserVote: 0 | 1 | 2 = rawCurrentVote === 1 ? 1 : rawCurrentVote === -1 || rawCurrentVote === 2 ? 2 : 0
-  const isAcceptedAnswer = comment.isAcceptedAnswer === true
-  const isPinned = comment.isPinned === true
+  const isAcceptedAnswer = comment.isAcceptedAnswer === true || comment.is_accepted_answer === true
+  const isPinned = comment.isPinned === true || comment.is_pinned === true
+  const voteScore = comment.voteScore ?? comment.vote_score ?? 0
 
   return {
     id,
     postId,
     authorId,
     authorName,
+    authorAvatar,
     content,
     parentCommentId,
-    voteScore: comment.voteScore ?? 0,
+    voteScore,
     currentUserVote,
     isAcceptedAnswer,
     isPinned,
     createdAt,
-    updatedAt: comment.updatedAt ?? undefined,
+    updatedAt: comment.updatedAt ?? comment.updated_at ?? undefined,
   }
 }
 
