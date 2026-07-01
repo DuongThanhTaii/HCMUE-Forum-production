@@ -44,10 +44,25 @@ export class GetBookmarkedPostsHandler
       where: { id: { in: categoryIds } }
     });
 
-    // We must sort the posts to match the order of `postIds`
     const sortedPosts = postIds
       .map((id) => posts.find((p) => p.id === id))
       .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+    // Fetch user votes and total bookmarks for these posts
+    const votes = await this.prisma.post_votes.findMany({
+      where: {
+        user_id: userId,
+        post_id: { in: postIds }
+      }
+    });
+    const userVotes = new Map(votes.map(v => [v.post_id, v.vote_type]));
+
+    const bookmarkCountsRaw = await this.prisma.bookmarks.groupBy({
+      by: ['post_id'],
+      where: { post_id: { in: postIds } },
+      _count: { post_id: true }
+    });
+    const bookmarkCounts = new Map(bookmarkCountsRaw.map(b => [b.post_id, b._count.post_id]));
 
     const total = await this.prisma.bookmarks.count({
       where: { user_id: userId },
@@ -67,16 +82,17 @@ export class GetBookmarkedPostsHandler
           categoryName: category?.name,
           threadChannelId: post.thread_channel_id,
           threadChannelCode: post.thread_channels?.code,
-          threadChannelName: post.thread_channels?.name,
           commentCount: post.comment_count,
           voteScore: post.vote_score,
           viewCount: post.view_count,
+          bookmarkCount: bookmarkCounts.get(post.id) || 0,
           isPinned: post.is_pinned,
           isLocked: post.is_locked,
           createdAt: post.created_at,
           updatedAt: post.updated_at,
           publishedAt: post.published_at,
           isBookmarked: true,
+          currentUserVote: userVotes.get(post.id) ?? null,
         };
       }),
       total,

@@ -3,9 +3,16 @@ import { PrismaService } from '../../../common/prisma/prisma.service';
 
 export class GetPostsQuery {
   constructor(
-    public readonly skip: number = 0,
-    public readonly take: number = 20,
+    public readonly pageNumber: number = 1,
+    public readonly pageSize: number = 20,
     public readonly categoryId?: string,
+    public readonly threadChannelId?: string,
+    public readonly searchTerm?: string,
+    public readonly sortBy?: number,
+    public readonly isSolved?: boolean,
+    public readonly isUnanswered?: boolean,
+    public readonly isPinned?: boolean,
+    public readonly userId?: string,
   ) {}
 }
 
@@ -18,13 +25,52 @@ export class GetPostsHandler implements IQueryHandler<GetPostsQuery> {
     if (query.categoryId) {
       whereClause.category_id = query.categoryId;
     }
+    if (query.threadChannelId) {
+      whereClause.thread_channel_id = query.threadChannelId;
+    }
+    if (query.searchTerm) {
+      // Tags search: if starts with #
+      if (query.searchTerm.startsWith('#')) {
+        const tag = query.searchTerm.slice(1).trim();
+        // Since tags is JSONB, this is a bit tricky in Prisma without raw query, 
+        // but for now let's just search title and content if Prisma schema doesn't have an easy array contains.
+        // Actually Prisma supports array_contains for scalar lists. Assuming tags is string[]
+        whereClause.tags = { has: tag };
+      } else {
+        whereClause.OR = [
+          { title: { contains: query.searchTerm, mode: 'insensitive' } },
+          { content: { contains: query.searchTerm, mode: 'insensitive' } },
+        ];
+      }
+    }
+    if (query.isPinned !== undefined) {
+      whereClause.is_pinned = query.isPinned;
+    }
+    if (query.isSolved !== undefined) {
+      whereClause.is_solved = query.isSolved;
+    }
+    // if (query.isUnanswered) { whereClause.comment_count = 0; } // Assuming you want 0 replies
+    
+    let orderByClause: any = { created_at: 'desc' };
+    if (query.sortBy === 1) { // Trending
+      orderByClause = { vote_score: 'desc' };
+    } else if (query.sortBy === 2) { // Recently Active (updated_at)
+      orderByClause = { updated_at: 'desc' };
+    } else if (query.sortBy === 3) { // Most Viewed
+      orderByClause = { view_count: 'desc' };
+    } else if (query.sortBy === 4) { // Most Liked
+      orderByClause = { vote_score: 'desc' };
+    }
+
+    const skip = (query.pageNumber - 1) * query.pageSize;
+    const take = query.pageSize;
 
     const totalCount = await this.prisma.posts.count({ where: whereClause });
     const postsData = await this.prisma.posts.findMany({
       where: whereClause,
-      orderBy: { created_at: 'desc' },
-      skip: query.skip,
-      take: query.take,
+      orderBy: orderByClause,
+      skip: skip,
+      take: take,
     });
 
     const authorIds = postsData.map(p => p.author_id);
@@ -43,6 +89,39 @@ export class GetPostsHandler implements IQueryHandler<GetPostsQuery> {
     const userMap = new Map(users.map(u => [u.id, `${u.last_name} ${u.first_name}`.trim()]));
     const categoryMap = new Map(categories.map(c => [c.id, c.name]));
 
+    let userBookmarks = new Set<string>();
+    let userVotes = new Map<string, number>();
+    let bookmarkCounts = new Map<string, number>();
+
+    if (postsData.length > 0) {
+      const postIds = postsData.map(p => p.id);
+
+      const countsRaw = await this.prisma.bookmarks.groupBy({
+        by: ['post_id'],
+        where: { post_id: { in: postIds } },
+        _count: { post_id: true }
+      });
+      bookmarkCounts = new Map(countsRaw.map(b => [b.post_id, b._count.post_id]));
+
+      if (query.userId) {
+        const bookmarks = await this.prisma.bookmarks.findMany({
+          where: {
+            user_id: query.userId,
+            post_id: { in: postIds }
+          }
+        });
+        userBookmarks = new Set(bookmarks.map(b => b.post_id));
+
+        const votes = await this.prisma.post_votes.findMany({
+          where: {
+            user_id: query.userId,
+            post_id: { in: postIds }
+          }
+        });
+        userVotes = new Map(votes.map(v => [v.post_id, v.vote_type]));
+      }
+    }
+
     const posts = postsData.map(p => ({
       id: p.id,
       title: p.title,
@@ -56,19 +135,22 @@ export class GetPostsHandler implements IQueryHandler<GetPostsQuery> {
       commentCount: p.comment_count,
       viewCount: p.view_count,
       voteScore: p.vote_score,
+      bookmarkCount: bookmarkCounts.get(p.id) || 0,
       threadChannelId: p.thread_channel_id,
+      isBookmarked: userBookmarks.has(p.id),
+      currentUserVote: userVotes.get(p.id) ?? null,
     }));
 
-    const page = Math.floor(query.skip / query.take) + 1;
+    const page = query.pageNumber;
 
     return {
       posts,
       totalCount,
       pageNumber: page,
-      pageSize: query.take,
-      totalPages: Math.ceil(totalCount / query.take),
+      pageSize: query.pageSize,
+      totalPages: Math.ceil(totalCount / query.pageSize),
       hasPreviousPage: page > 1,
-      hasNextPage: query.skip + query.take < totalCount,
+      hasNextPage: skip + take < totalCount,
     };
   }
 }

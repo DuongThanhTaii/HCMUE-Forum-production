@@ -20,4 +20,5 @@ public sealed record GetPostsQuery(
     bool? IsUnanswered = null,
     bool? IsPinned = null,
     bool? IsFollowing = null,
-    bool? IsMyThreads = null) : IQuery<GetPostsResult>;
+    bool? IsMyThreads = null,
+    Guid? CurrentUserId = null) : IQuery<GetPostsResult>;

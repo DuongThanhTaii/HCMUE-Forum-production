@@ -3,7 +3,10 @@ import { PrismaService } from '../../../common/prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 
 export class GetPostByIdQuery {
-  constructor(public readonly id: string) {}
+  constructor(
+    public readonly id: string,
+    public readonly userId?: string,
+  ) {}
 }
 
 @QueryHandler(GetPostByIdQuery)
@@ -11,9 +14,14 @@ export class GetPostByIdHandler implements IQueryHandler<GetPostByIdQuery> {
   constructor(private readonly prisma: PrismaService) {}
 
   async execute(query: GetPostByIdQuery) {
-    const post = await this.prisma.posts.findUnique({
+    const post = await this.prisma.posts.update({
       where: { id: query.id },
-    });
+      data: { view_count: { increment: 1 } },
+    }).catch(() => null); // Fallback if not found
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
     
     if (!post) {
       throw new NotFoundException('Post not found');
@@ -32,10 +40,42 @@ export class GetPostByIdHandler implements IQueryHandler<GetPostByIdQuery> {
       categoryName = cat ? cat.name : undefined;
     }
 
+    let isBookmarked = false;
+    let currentUserVote: number | undefined;
+
+    const bookmarkCount = await this.prisma.bookmarks.count({
+      where: { post_id: query.id }
+    });
+
+    if (query.userId) {
+      const bookmark = await this.prisma.bookmarks.findUnique({
+        where: {
+          post_id_user_id: {
+            post_id: query.id,
+            user_id: query.userId,
+          },
+        },
+      });
+      isBookmarked = !!bookmark;
+
+      const vote = await this.prisma.post_votes.findUnique({
+        where: {
+          post_id_user_id: {
+            post_id: query.id,
+            user_id: query.userId,
+          },
+        },
+      });
+      currentUserVote = vote?.vote_type;
+    }
+
     return {
       ...post,
       authorName,
       categoryName,
+      isBookmarked,
+      currentUserVote,
+      bookmarkCount,
     };
   }
 }

@@ -286,6 +286,9 @@ public sealed class PostRepository : IPostRepository
         // Raw SQL with PostgreSQL ANY(@array) is the reliable alternative.
         var postIdGuids = items.Select(p => p.Id).ToList();
         var commentCounts = new Dictionary<Guid, int>();
+        var bookmarkCounts = new Dictionary<Guid, int>();
+        var currentUserVotes = new Dictionary<Guid, int>();
+
         if (postIdGuids.Count > 0)
         {
             var guidArray = postIdGuids.ToArray();
@@ -298,13 +301,38 @@ public sealed class PostRepository : IPostRepository
                     """)
                 .ToListAsync(cancellationToken);
             commentCounts = rows.ToDictionary(r => r.PostId, r => r.Count);
+
+            var bmRows = await _context.Database
+                .SqlQuery<CommentCountRow>($"""
+                    SELECT post_id AS "PostId", COUNT(*)::int AS "Count"
+                    FROM forum.bookmarks
+                    WHERE post_id = ANY({guidArray})
+                    GROUP BY post_id
+                    """)
+                .ToListAsync(cancellationToken);
+            bookmarkCounts = bmRows.ToDictionary(r => r.PostId, r => r.Count);
+
+            if (q.CurrentUserId.HasValue)
+            {
+                var userId = q.CurrentUserId.Value;
+                var voteRows = await _context.Database
+                    .SqlQuery<VoteTypeRow>($"""
+                        SELECT post_id AS "PostId", type AS "VoteType"
+                        FROM forum.post_votes
+                        WHERE post_id = ANY({guidArray}) AND user_id = {userId}
+                        """)
+                    .ToListAsync(cancellationToken);
+                currentUserVotes = voteRows.ToDictionary(r => r.PostId, r => r.VoteType);
+            }
         }
 
         items = items
             .Select(p => p with 
             { 
                 CommentCount = commentCounts.GetValueOrDefault(p.Id, 0),
-                ReplyCount = commentCounts.GetValueOrDefault(p.Id, 0)
+                ReplyCount = commentCounts.GetValueOrDefault(p.Id, 0),
+                BookmarkCount = bookmarkCounts.GetValueOrDefault(p.Id, 0),
+                CurrentUserVote = currentUserVotes.TryGetValue(p.Id, out var vote) ? vote : null
             })
             .ToList();
 
@@ -321,6 +349,7 @@ public sealed class PostRepository : IPostRepository
 
     public async Task<PostDetailResult?> GetPostDetailsAsync(
         PostId postId,
+        Guid? currentUserId = null,
         CancellationToken cancellationToken = default)
     {
         var post = await _context.Posts
@@ -335,6 +364,19 @@ public sealed class PostRepository : IPostRepository
         var commentCount = await _context.Comments
             .AsNoTracking()
             .CountAsync(c => c.PostId == postId, cancellationToken);
+
+        var bookmarkCount = await _context.Database
+            .SqlQuery<int>($"SELECT COUNT(*)::int FROM forum.bookmarks WHERE post_id = {postId.Value}")
+            .FirstOrDefaultAsync(cancellationToken);
+
+        int? currentUserVote = null;
+        if (currentUserId.HasValue)
+        {
+            var userId = currentUserId.Value;
+            currentUserVote = await _context.Database
+                .SqlQuery<int?>($"SELECT type FROM forum.post_votes WHERE post_id = {postId.Value} AND user_id = {userId}")
+                .FirstOrDefaultAsync(cancellationToken);
+        }
 
         string? categoryName = null;
         string? threadChannelName = null;
@@ -383,6 +425,17 @@ public sealed class PostRepository : IPostRepository
             Tags = post.Tags.ToList(),
             VoteScore = post.VoteScore,
             CommentCount = commentCount,
+            ViewCount = post.ViewCount,
+            LikeCount = post.VoteScore,
+            BookmarkCount = bookmarkCount,
+            ReplyCount = commentCount,
+            CategorySlug = null, // Or try to map if available
+            AuthorAvatar = null,
+            LastActivity = post.UpdatedAt ?? post.CreatedAt,
+            Preview = post.Content.Value.Length > 200 ? post.Content.Value.Substring(0, 200) : post.Content.Value,
+            IsLocked = post.IsLocked,
+            IsSolved = false, // You might want to check this from Comments
+            CurrentUserVote = currentUserVote,
             IsPinned = post.IsPinned,
             CreatedAt = post.CreatedAt,
             UpdatedAt = post.UpdatedAt
@@ -445,4 +498,5 @@ public sealed class PostRepository : IPostRepository
     }
 
     private sealed record CommentCountRow(Guid PostId, int Count);
+    private sealed record VoteTypeRow(Guid PostId, int VoteType);
 }

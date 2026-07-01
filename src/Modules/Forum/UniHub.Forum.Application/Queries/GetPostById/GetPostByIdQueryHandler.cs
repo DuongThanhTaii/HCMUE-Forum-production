@@ -34,6 +34,7 @@ public sealed class GetPostByIdQueryHandler : IQueryHandler<GetPostByIdQuery, Po
         var postIdVo = new PostId(request.PostId);
         var result = await _postRepository.GetPostDetailsAsync(
             postIdVo,
+            request.CurrentUserId,
             cancellationToken);
 
         if (result is null)

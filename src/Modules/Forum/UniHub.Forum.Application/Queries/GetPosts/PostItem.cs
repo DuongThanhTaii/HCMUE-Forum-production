@@ -39,4 +39,5 @@ public sealed record PostItem
     public int ReplyCount { get; init; }
     public int LikeCount { get; init; }
     public int BookmarkCount { get; init; }
+    public int? CurrentUserVote { get; init; }
 }

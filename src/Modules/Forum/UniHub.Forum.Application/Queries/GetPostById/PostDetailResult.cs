@@ -26,4 +26,16 @@ public sealed record PostDetailResult
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }
     public DateTime? PublishedAt { get; init; }
+
+    public int ViewCount { get; init; }
+    public int LikeCount { get; init; }
+    public int BookmarkCount { get; init; }
+    public int ReplyCount { get; init; }
+    public string? CategorySlug { get; init; }
+    public string? AuthorAvatar { get; init; }
+    public DateTime LastActivity { get; init; }
+    public string Preview { get; init; } = string.Empty;
+    public bool IsLocked { get; init; }
+    public bool IsSolved { get; init; }
+    public int? CurrentUserVote { get; init; }
 }

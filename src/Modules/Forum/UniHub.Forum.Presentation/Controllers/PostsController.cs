@@ -59,7 +59,7 @@ public class PostsController : BaseApiController
         CancellationToken cancellationToken = default)
     {
         var effectiveStatus = status ?? (int)PostStatus.Published;
-        var query = new GetPostsQuery(pageNumber, pageSize, categoryId, threadChannelId, type, effectiveStatus, sortBy);
+        var query = new GetPostsQuery(pageNumber, pageSize, categoryId, threadChannelId, type, effectiveStatus, sortBy, CurrentUserId: TryGetCurrentUserId());
         var result = await _sender.Send(query, cancellationToken);
 
         if (result.IsFailure)
@@ -87,6 +87,17 @@ public class PostsController : BaseApiController
                 Tags = p.Tags,
                 VoteScore = p.VoteScore,
                 CommentCount = p.CommentCount,
+                ViewCount = p.ViewCount,
+                LikeCount = p.LikeCount,
+                BookmarkCount = p.BookmarkCount,
+                ReplyCount = p.ReplyCount,
+                CategorySlug = p.CategorySlug,
+                AuthorAvatar = p.AuthorAvatar,
+                LastActivity = p.LastActivity,
+                Preview = p.Preview,
+                IsLocked = p.IsLocked,
+                IsSolved = p.IsSolved,
+                CurrentUserVote = p.CurrentUserVote,
                 IsPinned = p.IsPinned,
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt,
@@ -137,6 +148,17 @@ public class PostsController : BaseApiController
                 CategoryId = p.CategoryId,
                 VoteScore = p.VoteScore,
                 CommentCount = p.CommentCount,
+                ViewCount = p.ViewCount,
+                LikeCount = p.LikeCount,
+                BookmarkCount = p.BookmarkCount,
+                ReplyCount = p.ReplyCount,
+                CategorySlug = p.CategorySlug,
+                AuthorAvatar = p.AuthorAvatar,
+                LastActivity = p.LastActivity,
+                Preview = p.Preview,
+                IsLocked = p.IsLocked,
+                IsSolved = p.IsSolved,
+                CurrentUserVote = p.CurrentUserVote,
                 IsBookmarked = true,
                 IsPinned = p.IsPinned,
                 CreatedAt = p.CreatedAt,
@@ -190,6 +212,17 @@ public class PostsController : BaseApiController
             Tags = result.Value.Tags,
             VoteScore = result.Value.VoteScore,
             CommentCount = result.Value.CommentCount,
+            ViewCount = result.Value.ViewCount,
+            LikeCount = result.Value.LikeCount,
+            BookmarkCount = result.Value.BookmarkCount,
+            ReplyCount = result.Value.ReplyCount,
+            CategorySlug = result.Value.CategorySlug,
+            AuthorAvatar = result.Value.AuthorAvatar,
+            LastActivity = result.Value.LastActivity,
+            Preview = result.Value.Preview,
+            IsLocked = result.Value.IsLocked,
+            IsSolved = result.Value.IsSolved,
+            CurrentUserVote = result.Value.CurrentUserVote,
             IsBookmarked = result.Value.IsBookmarkedByCurrentUser,
             IsPinned = result.Value.IsPinned,
             CreatedAt = result.Value.CreatedAt,

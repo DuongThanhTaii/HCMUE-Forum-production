@@ -69,5 +69,6 @@ public interface IPostRepository
     /// </summary>
     Task<Queries.GetPostById.PostDetailResult?> GetPostDetailsAsync(
         PostId postId,
+        Guid? currentUserId = null,
         CancellationToken cancellationToken = default);
 }

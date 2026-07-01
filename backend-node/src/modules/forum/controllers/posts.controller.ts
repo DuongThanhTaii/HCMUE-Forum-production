@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../identity/guards/optional-jwt-auth.guard';
 import { CreatePostCommand } from '../commands/create-post.handler';
 import { UpdatePostCommand } from '../commands/update-post.handler';
 import { VotePostCommand } from '../commands/vote-post.handler';
@@ -31,16 +32,31 @@ export class PostsController {
   ) {}
 
   @Get()
+  @UseGuards(OptionalJwtAuthGuard)
   async getPosts(
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-    @Query('category') categoryId?: string,
+    @Query('pageNumber') pageNumber?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('threadChannelId') threadChannelId?: string,
+    @Query('searchTerm') searchTerm?: string,
+    @Query('sortBy') sortBy?: string,
+    @Query('isSolved') isSolved?: string,
+    @Query('isUnanswered') isUnanswered?: string,
+    @Query('isPinned') isPinned?: string,
+    @Req() req?: any,
   ) {
     return this.queryBus.execute(
       new GetPostsQuery(
-        skip ? parseInt(skip) : 0,
-        take ? parseInt(take) : 20,
+        pageNumber ? parseInt(pageNumber) : 1,
+        pageSize ? parseInt(pageSize) : 20,
         categoryId,
+        threadChannelId,
+        searchTerm,
+        sortBy ? parseInt(sortBy) : undefined,
+        isSolved === 'true' ? true : isSolved === 'false' ? false : undefined,
+        isUnanswered === 'true' ? true : isUnanswered === 'false' ? false : undefined,
+        isPinned === 'true' ? true : isPinned === 'false' ? false : undefined,
+        req?.user?.userId,
       ),
     );
   }
@@ -65,8 +81,9 @@ export class PostsController {
   }
 
   @Get(':id')
-  async getPostById(@Param('id') id: string) {
-    return this.queryBus.execute(new GetPostByIdQuery(id));
+  @UseGuards(OptionalJwtAuthGuard)
+  async getPostById(@Param('id') id: string, @Req() req?: any) {
+    return this.queryBus.execute(new GetPostByIdQuery(id, req?.user?.userId));
   }
 
   @Post(':id/publish')
