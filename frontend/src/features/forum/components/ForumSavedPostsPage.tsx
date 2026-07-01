@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useGetBookmarkedForumListQuery } from '../api/forum.list.api'
-import { ForumListTable } from './ForumListTable'
+import { ThreadCard } from './ThreadCard'
 
 export function ForumSavedPostsPage() {
   const { t } = useTranslation()
@@ -39,12 +39,16 @@ export function ForumSavedPostsPage() {
       <div className="forum-compact-card px-4 py-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-[16px] font-semibold text-slate-900">{t('forum.saved.title')}</h1>
-          <Link to="/forum" className="text-[13px] font-medium text-primary hover:underline">
+          <Link to="/explore" className="text-[13px] font-medium text-primary hover:underline">
             {t('forum.saved.backToForum')}
           </Link>
         </div>
       </div>
-      <ForumListTable items={items} />
+      <div className="space-y-3">
+        {items.map((thread) => (
+          <ThreadCard key={thread.id} thread={thread} />
+        ))}
+      </div>
     </div>
   )
 }

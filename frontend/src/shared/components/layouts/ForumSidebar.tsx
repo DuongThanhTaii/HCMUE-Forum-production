@@ -4,7 +4,6 @@ import {
   BookOpen,
   Bot,
   Building2,
-  Hash,
   Home,
   Layers3,
   LayoutGrid,
@@ -25,15 +24,12 @@ type SidebarItem = {
 
 const MAIN_ITEMS: SidebarItem[] = [
   { to: '/home', labelKey: 'nav.home', icon: Home },
-  { to: '/forum', labelKey: 'forum.sidebar.main.forumIndex', icon: LayoutGrid },
-  { to: '/forum/posts', labelKey: 'forum.sidebar.main.allPosts', icon: MessageSquare },
-  { to: '/forum/saved', labelKey: 'forum.sidebar.main.saved', icon: BookMarked },
+  { to: '/explore', labelKey: 'nav.explore', icon: LayoutGrid },
+  { to: '/forum/saved', labelKey: 'forum.sidebar.main.saved', icon: BookMarked }, // Keep for now if Saved page exists
   { to: '/assistant', labelKey: 'forum.sidebar.main.assistant', icon: Bot },
 ];
 
-const TOPIC_ITEMS: SidebarItem[] = [
-  { to: '/forum/threads', labelKey: 'forum.sidebar.topics.threads', icon: Hash },
-];
+const TOPIC_ITEMS: SidebarItem[] = [];
 
 const LEARNING_ITEMS: SidebarItem[] = [
   { to: '/learning/documents', labelKey: 'forum.sidebar.categories.learningDocs', icon: Layers3 },
@@ -119,11 +115,14 @@ export function ForumSidebar() {
     <aside className="fixed left-0 top-14 z-30 hidden h-[calc(100dvh-3.5rem)] w-64 border-r border-slate-200 bg-white lg:block">
       <div className="h-full space-y-4 overflow-y-auto p-3">
         <SidebarSection title={t('forum.sidebar.sections.main')} items={MAIN_ITEMS} pathname={pathname} search={search} />
-        <SidebarSection title={t('forum.sidebar.sections.topics')} items={TOPIC_ITEMS} pathname={pathname} search={search} />
+        {TOPIC_ITEMS.length > 0 && (
+          <SidebarSection title={t('forum.sidebar.sections.topics')} items={TOPIC_ITEMS} pathname={pathname} search={search} />
+        )}
+
 
         {groups.map(({ parent, children }) => {
           const items: SidebarItem[] = children.map((cat) => ({
-            to: `/forum/posts?category=${cat.id}`,
+            to: `/discussions/${cat.slug || cat.id}`,
             labelKey: '',
             label: cat.name,
             icon: MessageSquare,

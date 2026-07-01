@@ -106,7 +106,7 @@ export function HomePage() {
           {t('home.welcomeSubtitle')}
         </p>
         <Link
-          to="/forum"
+          to="/explore"
           className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-primary-hover"
         >
           <MessageSquare className="h-4 w-4" aria-hidden />

@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Home, MessageSquare, BookOpen, Briefcase, MessageCircle, Bot } from 'lucide-react';
+import { Home, BookOpen, Briefcase, MessageCircle, Bot, LayoutGrid } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 type NavItem = {
@@ -10,7 +10,8 @@ type NavItem = {
 };
 
 const MAIN_ITEMS: NavItem[] = [
-  { to: '/forum', key: 'nav.forum', icon: MessageSquare },
+  { to: '/home', key: 'nav.home', icon: Home },
+  { to: '/explore', key: 'nav.explore', icon: LayoutGrid },
   { to: '/learning/documents', key: 'nav.learning', icon: BookOpen },
   { to: '/career/jobs', key: 'nav.career', icon: Briefcase },
   { to: '/chat', key: 'nav.chat', icon: MessageCircle },

@@ -37,6 +37,17 @@ type RawForumPost = {
   created_at?: string | null
   content?: string | null
   body?: string | null
+  // New Thread Card fields
+  preview?: string | null
+  authorAvatar?: string | null
+  viewCount?: number | null
+  likeCount?: number | null
+  bookmarkCount?: number | null
+  categorySlug?: string | null
+  lastActivity?: string | null
+  isPinned?: boolean | null
+  isLocked?: boolean | null
+  isSolved?: boolean | null
 }
 
 type RawForumComment = {
@@ -71,6 +82,11 @@ type ForumListQueryParams = {
   pageSize?: number
   threadChannelId?: string
   categoryId?: string
+  searchTerm?: string
+  sortBy?: number
+  isSolved?: boolean
+  isUnanswered?: boolean
+  isPinned?: boolean
 }
 
 type VoteType = 1 | 2
@@ -192,13 +208,24 @@ function toSafeForumListItem(post: RawForumPost, index: number): ForumListItem {
     id,
     title,
     category,
+    categorySlug: post.categorySlug?.trim() || undefined,
     categoryId: post.categoryId?.trim() || post.category_id?.trim() || undefined,
     threadChannelId: post.threadChannelId?.trim() || post.thread_channel_id?.trim() || undefined,
     threadChannelCode: post.threadChannelCode?.trim() || undefined,
     threadChannelName: post.threadChannelName?.trim() || undefined,
     tags,
     replyCount,
-    activityAt,
+    likeCount: post.likeCount ?? post.voteScore ?? post.vote_score ?? 0,
+    viewCount: post.viewCount ?? 0,
+    bookmarkCount: post.bookmarkCount ?? 0,
+    authorId: post.authorId?.trim() || post.author_id?.trim() || undefined,
+    authorName: post.authorName?.trim() || undefined,
+    authorAvatar: post.authorAvatar?.trim() || undefined,
+    preview: post.preview?.trim() || post.content?.trim()?.substring(0, 200) || '',
+    isPinned: post.isPinned ?? false,
+    isLocked: post.isLocked ?? false,
+    isSolved: post.isSolved ?? false,
+    activityAt: post.lastActivity || activityAt,
   }
 }
 
@@ -447,6 +474,11 @@ export const forumListApi = baseApi.injectEndpoints({
           pageSize: params.pageSize ?? 20,
           threadChannelId: params.threadChannelId ?? undefined,
           categoryId: params.categoryId ?? undefined,
+          searchTerm: params.searchTerm ?? undefined,
+          sortBy: params.sortBy ?? undefined,
+          isSolved: params.isSolved ?? undefined,
+          isUnanswered: params.isUnanswered ?? undefined,
+          isPinned: params.isPinned ?? undefined,
         },
       }),
       transformResponse: (response: ApiSuccessEnvelope<PostsPayload>) => {

@@ -61,14 +61,7 @@ public interface IPostRepository
     /// sortBy: 0 = newest, 1 = top (VoteScore desc)
     /// </summary>
     Task<Queries.GetPosts.GetPostsResult> GetPostsAsync(
-        int pageNumber = 1,
-        int pageSize = 20,
-        Guid? categoryId = null,
-        Guid? threadChannelId = null,
-        int? type = null,
-        int? status = null,
-        int sortBy = 0,
-        IReadOnlyList<Guid>? categoryIds = null,
+        Queries.GetPosts.GetPostsQuery query,
         CancellationToken cancellationToken = default);
 
     /// <summary>

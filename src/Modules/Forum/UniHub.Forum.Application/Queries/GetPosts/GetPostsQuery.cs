@@ -14,4 +14,10 @@ public sealed record GetPostsQuery(
     int? Type = null,
     int? Status = null,
     int SortBy = 0,
-    IReadOnlyList<Guid>? CategoryIds = null) : IQuery<GetPostsResult>;
+    IReadOnlyList<Guid>? CategoryIds = null,
+    string? SearchTerm = null,
+    bool? IsSolved = null,
+    bool? IsUnanswered = null,
+    bool? IsPinned = null,
+    bool? IsFollowing = null,
+    bool? IsMyThreads = null) : IQuery<GetPostsResult>;

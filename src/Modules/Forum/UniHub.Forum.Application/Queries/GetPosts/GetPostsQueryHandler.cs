@@ -35,14 +35,7 @@ public sealed class GetPostsQueryHandler : IQueryHandler<GetPostsQuery, GetPosts
         }
 
         var result = await _postRepository.GetPostsAsync(
-            request.PageNumber,
-            request.PageSize,
-            request.CategoryId,
-            request.ThreadChannelId,
-            request.Type,
-            request.Status,
-            request.SortBy,
-            request.CategoryIds,
+            request,
             cancellationToken);
 
         return Result.Success(result);

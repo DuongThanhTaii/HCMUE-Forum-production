@@ -27,4 +27,16 @@ public sealed record PostItem
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }
     public DateTime? PublishedAt { get; init; }
+
+    // New required fields for modern Thread Card
+    public int ViewCount { get; init; }
+    public bool IsLocked { get; init; }
+    public bool IsSolved { get; init; }
+    public string? AuthorAvatar { get; init; }
+    public string Preview { get; init; } = string.Empty;
+    public string? CategorySlug { get; init; }
+    public DateTime LastActivity { get; init; }
+    public int ReplyCount { get; init; }
+    public int LikeCount { get; init; }
+    public int BookmarkCount { get; init; }
 }

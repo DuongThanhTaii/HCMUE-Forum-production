@@ -5,12 +5,11 @@ import { AuthLayout } from '@shared/components/layouts/AuthLayout';
 import { MainLayout } from '@shared/components/layouts/MainLayout';
 import { ModLayout } from '@shared/components/layouts/ModLayout';
 import { AdminLayout } from '@shared/components/layouts/AdminLayout';
-import { ForumListPage } from '@features/forum/components/ForumListPage';
-import { ForumIndexPage } from '@features/forum/components/ForumIndexPage';
 import { ForumDetailPage } from '@features/forum/components/ForumDetailPage';
 import { ForumSavedPostsPage } from '@features/forum/components/ForumSavedPostsPage';
-import { ForumThreadsPage } from '@features/forum/components/ForumThreadsPage';
 import { HomePage } from '@features/forum/components/HomePage';
+import { ExplorePage } from '@features/forum/components/ExplorePage';
+import { CategoryPage } from '@features/forum/components/CategoryPage';
 import { ModReportsPage } from '@features/forum/components/ModReportsPage';
 import { ModPostsPage } from '@features/forum/components/ModPostsPage';
 import { ModLearningApprovalsPage } from '@features/learning/components/ModLearningApprovalsPage';
@@ -81,9 +80,17 @@ export const appRoutes = [
           {
             element: <RequireAuth />,
             children: [
-              { path: 'forum', element: <ForumIndexPage /> },
-              { path: 'forum/posts', element: <ForumListPage /> },
-              { path: 'forum/threads', element: <ForumThreadsPage /> },
+              // Deprecated routes - Redirecting to Explore
+              { path: 'forum', element: <Navigate to="/explore" replace /> },
+              { path: 'forum/posts', element: <Navigate to="/explore" replace /> },
+              { path: 'forum/threads', element: <Navigate to="/explore" replace /> },
+              
+              // New routing
+              { path: 'explore', element: <ExplorePage /> },
+              { path: 'discussions/:categorySlug', element: <CategoryPage /> },
+              { path: 'threads/:threadId', element: <ForumDetailPage /> },
+              
+              // Backward compatible or unchanged routes
               { path: 'forum/saved', element: <ForumSavedPostsPage /> },
               { path: 'forum/new', element: <ForumCreatePostPage /> },
               { path: 'forum/:id', element: <ForumDetailPage /> },

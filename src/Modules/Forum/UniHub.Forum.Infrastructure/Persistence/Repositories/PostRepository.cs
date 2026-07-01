@@ -173,63 +173,84 @@ public sealed class PostRepository : IPostRepository
     }
 
     public async Task<GetPostsResult> GetPostsAsync(
-        int pageNumber = 1,
-        int pageSize = 20,
-        Guid? categoryId = null,
-        Guid? threadChannelId = null,
-        int? type = null,
-        int? status = null,
-        int sortBy = 0,
-        IReadOnlyList<Guid>? categoryIds = null,
+        GetPostsQuery q,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Posts.AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(q.SearchTerm))
+        {
+            var lowerSearchTerm = q.SearchTerm.ToLower();
+            query = query.Where(p =>
+                p.Title.Value.ToLower().Contains(lowerSearchTerm) ||
+                p.Content.Value.ToLower().Contains(lowerSearchTerm));
+        }
+
         // Filter by category
-        if (categoryId.HasValue)
+        if (q.CategoryId.HasValue)
         {
-            query = query.Where(p => p.CategoryId == categoryId);
+            query = query.Where(p => p.CategoryId == q.CategoryId);
         }
 
-        if (threadChannelId.HasValue)
+        if (q.ThreadChannelId.HasValue)
         {
-            query = query.Where(p => p.ThreadChannelId == threadChannelId);
+            query = query.Where(p => p.ThreadChannelId == q.ThreadChannelId);
         }
 
-        if (categoryIds is not null)
+        if (q.CategoryIds is not null)
         {
-            if (categoryIds.Count == 0)
+            if (q.CategoryIds.Count == 0)
             {
                 query = query.Where(p => false);
             }
             else
             {
-                query = query.Where(p => p.CategoryId != null && categoryIds.Contains(p.CategoryId.Value));
+                query = query.Where(p => p.CategoryId != null && q.CategoryIds.Contains(p.CategoryId.Value));
             }
         }
 
         // Filter by type
-        if (type.HasValue)
+        if (q.Type.HasValue)
         {
-            query = query.Where(p => (int)p.Type == type.Value);
+            query = query.Where(p => (int)p.Type == q.Type.Value);
         }
 
         // Filter by status
-        if (status.HasValue)
+        if (q.Status.HasValue)
         {
-            query = query.Where(p => (int)p.Status == status.Value);
+            query = query.Where(p => (int)p.Status == q.Status.Value);
+        }
+
+        if (q.IsPinned.HasValue)
+        {
+            query = query.Where(p => p.IsPinned == q.IsPinned.Value);
+        }
+
+        if (q.IsUnanswered.HasValue && q.IsUnanswered.Value)
+        {
+            query = query.Where(p => !_context.Comments.Any(c => c.PostId == p.Id && !c.IsDeleted));
+        }
+
+        if (q.IsSolved.HasValue && q.IsSolved.Value)
+        {
+            query = query.Where(p => _context.Comments.Any(c => c.PostId == p.Id && c.IsAcceptedAnswer && !c.IsDeleted));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);
 
         // Apply pagination and ordering
-        var orderedQuery = sortBy == 1
-            ? query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.VoteScore).ThenByDescending(p => p.CreatedAt)
-            : query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.CreatedAt);
+        var orderedQuery = q.SortBy switch
+        {
+            1 => query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.VoteScore).ThenByDescending(p => p.CreatedAt), // Trending
+            2 => query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.UpdatedAt ?? p.CreatedAt), // Recently Active
+            3 => query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.ViewCount).ThenByDescending(p => p.CreatedAt), // Most Viewed
+            4 => query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.VoteScore).ThenByDescending(p => p.CreatedAt), // Most Liked
+            _ => query.OrderByDescending(p => p.IsPinned).ThenByDescending(p => p.CreatedAt) // Newest (0)
+        };
 
         var items = await orderedQuery
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+            .Skip((q.PageNumber - 1) * q.PageSize)
+            .Take(q.PageSize)
             .AsNoTracking()
             .Select(p => new PostItem
             {
@@ -244,10 +265,18 @@ public sealed class PostRepository : IPostRepository
                 ThreadChannelId = p.ThreadChannelId,
                 Tags = p.Tags.ToList(),
                 VoteScore = p.VoteScore,
+                LikeCount = p.VoteScore,
                 CommentCount = 0,
+                ReplyCount = 0,
                 IsPinned = p.IsPinned,
+                IsLocked = p.IsLocked,
+                ViewCount = p.ViewCount,
                 CreatedAt = p.CreatedAt,
-                UpdatedAt = p.UpdatedAt
+                UpdatedAt = p.UpdatedAt,
+                LastActivity = p.UpdatedAt ?? p.CreatedAt,
+                IsSolved = _context.Comments.Any(c => c.PostId == p.Id && c.IsAcceptedAnswer && !c.IsDeleted),
+                BookmarkCount = 0, // Bookmarks not natively tracked on Post yet
+                Preview = p.Content.Value.Length > 200 ? p.Content.Value.Substring(0, 200) : p.Content.Value
             })
             .ToListAsync(cancellationToken);
 
@@ -272,7 +301,11 @@ public sealed class PostRepository : IPostRepository
         }
 
         items = items
-            .Select(p => p with { CommentCount = commentCounts.GetValueOrDefault(p.Id, 0) })
+            .Select(p => p with 
+            { 
+                CommentCount = commentCounts.GetValueOrDefault(p.Id, 0),
+                ReplyCount = commentCounts.GetValueOrDefault(p.Id, 0)
+            })
             .ToList();
 
         await EnrichPostItemsAsync(items, cancellationToken);
@@ -281,8 +314,8 @@ public sealed class PostRepository : IPostRepository
         {
             Posts = items,
             TotalCount = totalCount,
-            PageNumber = pageNumber,
-            PageSize = pageSize
+            PageNumber = q.PageNumber,
+            PageSize = q.PageSize
         };
     }
 
@@ -398,7 +431,16 @@ public sealed class PostRepository : IPostRepository
                 : ((string Code, string Name)?)null;
             var threadCode = threadInfo?.Code;
             var threadName = threadInfo?.Name;
-            items[i] = p with { CategoryName = cn, AuthorName = an, ThreadChannelCode = threadCode, ThreadChannelName = threadName };
+            var catSlug = catMap.TryGetValue(p.CategoryId ?? Guid.Empty, out _) ? null : null; // We might need to map category slug if needed, but for now we only have CategoryName in display lookup. 
+            // We'll leave CategorySlug null if DisplayNameLookup doesn't provide it, or we can fetch it if necessary.
+            var authorAvatar = (string?)null; // Can map if DisplayNameLookup provides it.
+            items[i] = p with { 
+                CategoryName = cn, 
+                AuthorName = an, 
+                ThreadChannelCode = threadCode, 
+                ThreadChannelName = threadName,
+                AuthorAvatar = authorAvatar
+            };
         }
     }
 
