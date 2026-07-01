@@ -20,4 +20,6 @@ export type ForumListItem = {
   isLocked: boolean
   isSolved: boolean
   activityAt: string
+  isBookmarked?: boolean
+  isUpvoted?: boolean
 }

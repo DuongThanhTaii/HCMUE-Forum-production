@@ -71,6 +71,7 @@ export class GetPostByIdHandler implements IQueryHandler<GetPostByIdQuery> {
 
     return {
       ...post,
+      viewCount: post.view_count, // Explicitly return camelCase for the frontend
       authorName,
       categoryName,
       isBookmarked,

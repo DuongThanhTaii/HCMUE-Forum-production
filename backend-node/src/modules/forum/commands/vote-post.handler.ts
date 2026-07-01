@@ -22,7 +22,20 @@ export class VotePostHandler implements ICommandHandler<VotePostCommand> {
 
     let voteDiff = command.voteType;
     if (existingVote) {
-      if (existingVote.vote_type === command.voteType) return null;
+      if (existingVote.vote_type === command.voteType) {
+        // User clicked the same vote type -> remove the vote
+        await this.prisma.post_votes.delete({
+          where: {
+            post_id_user_id: { post_id: command.postId, user_id: command.userId },
+          },
+        });
+        
+        return this.prisma.posts.update({
+          where: { id: command.postId },
+          data: { vote_score: { decrement: existingVote.vote_type } },
+        });
+      }
+      
       voteDiff = command.voteType - existingVote.vote_type;
       await this.prisma.post_votes.update({
         where: {

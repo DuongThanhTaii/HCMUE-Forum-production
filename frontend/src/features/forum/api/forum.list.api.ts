@@ -220,8 +220,8 @@ function toSafeForumListItem(post: RawForumPost, index: number): ForumListItem {
     tags,
     replyCount,
     likeCount: post.likeCount ?? post.voteScore ?? post.vote_score ?? 0,
-    viewCount: post.viewCount ?? 0,
-    bookmarkCount: post.bookmarkCount ?? 0,
+    viewCount: post.viewCount ?? post.view_count ?? 0,
+    bookmarkCount: post.bookmarkCount ?? post.bookmark_count ?? 0,
     authorId: post.authorId?.trim() || post.author_id?.trim() || undefined,
     authorName: post.authorName?.trim() || undefined,
     authorAvatar: post.authorAvatar?.trim() || undefined,
@@ -230,6 +230,8 @@ function toSafeForumListItem(post: RawForumPost, index: number): ForumListItem {
     isLocked: post.isLocked ?? false,
     isSolved: post.isSolved ?? false,
     activityAt: post.lastActivity || activityAt,
+    isBookmarked: post.isBookmarked === true,
+    isUpvoted: post.isUpvoted === true || post.currentUserVote === 1 || post.userVote === 1,
   }
 }
 
