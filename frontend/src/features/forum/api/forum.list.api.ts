@@ -561,13 +561,13 @@ export const forumListApi = baseApi.injectEndpoints({
       query: ({ postId, pageNumber = 1, pageSize = 20 }) => {
         const pid = normalizeForumPostId(postId)
         return {
-          url: `/api/v1/posts/${pid}/comments`,
+          url: `/api/v1/comments/post/${pid}`,
           params: { pageNumber, pageSize },
         }
       },
       transformResponse: (response: ApiSuccessEnvelope<CommentsPayload>, _meta, arg) => {
         const payload = response?.data
-        const comments = payload?.comments ?? payload?.items ?? []
+        const comments = Array.isArray(payload) ? payload : (payload?.comments ?? payload?.items ?? [])
         const pid = normalizeForumPostId(arg.postId)
         return comments.map((comment, index) => toSafeForumCommentItem(comment, pid, index))
       },
