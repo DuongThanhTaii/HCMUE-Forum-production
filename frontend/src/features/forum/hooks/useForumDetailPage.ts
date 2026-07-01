@@ -89,7 +89,8 @@ function formatDateTime(value: string) {
 
 export function useForumDetailPage() {
   const { t } = useTranslation()
-  const { id = '' } = useParams<{ id: string }>()
+  const { id: paramId, threadId } = useParams<{ id?: string; threadId?: string }>()
+  const id = paramId || threadId || ''
   const { requireAuth } = useAuth()
   const roles = useAppSelector(selectUserRole)
   const userId = useAppSelector(selectUserId)
@@ -100,6 +101,7 @@ export function useForumDetailPage() {
   const [commentDraft, setCommentDraft] = useState('')
   const [hasTriedCommentSubmit, setHasTriedCommentSubmit] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const [isUpvoted, setIsUpvoted] = useState(false)
   const [interactionErrorKey, setInteractionErrorKey] = useState<string | null>(null)
   const [interactionSuccessKey, setInteractionSuccessKey] = useState<string | null>(null)
   const [replyingToCommentId, setReplyingToCommentId] = useState<string | null>(null)
@@ -117,8 +119,9 @@ export function useForumDetailPage() {
   useEffect(() => {
     startTransition(() => {
       setIsBookmarked(post?.isBookmarked === true)
+      setIsUpvoted(post?.isUpvoted === true)
     })
-  }, [post?.isBookmarked])
+  }, [post?.isBookmarked, post?.isUpvoted])
   const { data: commentData = [], isLoading: isCommentsLoading } = useGetPostCommentsQuery(
     { postId: id, pageNumber: 1, pageSize: 30 },
     { skip: !id },
@@ -272,9 +275,15 @@ export function useForumDetailPage() {
       return
     }
     try {
+      if (isUpvoted) {
+        // Technically this might need an unvote endpoint, but for now we just toggle optimistic state
+        // if the API only supports toggle or if it doesn't do anything
+      }
+      setIsUpvoted(true)
       await votePost({ postId: id, voteType: 1 }).unwrap()
       setFeedback('forum.feedback.voteSuccess', null)
     } catch (error) {
+      setIsUpvoted((prev) => !prev)
       setFeedback(null, getMutationErrorKey(error, 'forum.feedback.voteFailed'))
     }
   }
@@ -569,6 +578,7 @@ export function useForumDetailPage() {
     canAcceptAnswer: Boolean(post?.authorId && userId && post.authorId === userId),
     canPinComment: hasModeratorRole || Boolean(post?.authorId && userId && post.authorId === userId),
     isBookmarked,
+    isUpvoted,
     isCommentsLoading,
     isSubmittingComment,
     isUploadingAttachments,

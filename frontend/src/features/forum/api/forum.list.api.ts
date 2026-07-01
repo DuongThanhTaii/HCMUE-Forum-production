@@ -48,6 +48,10 @@ type RawForumPost = {
   isPinned?: boolean | null
   isLocked?: boolean | null
   isSolved?: boolean | null
+  currentUserVote?: number | null
+  userVote?: number | null
+  myVote?: number | null
+  isUpvoted?: boolean | null
 }
 
 type RawForumComment = {
@@ -237,6 +241,7 @@ export type ForumDetailItem = ForumListItem & {
   type?: number
   voteScore?: number
   isBookmarked?: boolean
+  isUpvoted?: boolean
 }
 
 function toSafeForumDetailItem(post: RawForumPost, idFallback: string): ForumDetailItem {
@@ -252,6 +257,9 @@ function toSafeForumDetailItem(post: RawForumPost, idFallback: string): ForumDet
   const threadChannelName = post.threadChannelName?.trim() || undefined
   const voteScore = typeof post.voteScore === 'number' ? post.voteScore : typeof post.vote_score === 'number' ? post.vote_score : undefined
   const isBookmarked = post.isBookmarked === true
+  
+  const rawVote = post.currentUserVote ?? post.userVote ?? post.myVote
+  const isUpvoted = post.isUpvoted === true || rawVote === 1
 
   return {
     ...base,
@@ -266,6 +274,7 @@ function toSafeForumDetailItem(post: RawForumPost, idFallback: string): ForumDet
     threadChannelName,
     voteScore,
     isBookmarked,
+    isUpvoted,
   }
 }
 

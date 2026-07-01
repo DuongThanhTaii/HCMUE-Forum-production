@@ -313,6 +313,7 @@ export function ForumDetailPage() {
     canAcceptAnswer,
     canPinComment,
     isBookmarked,
+    isUpvoted,
     isCommentsLoading,
     isSubmittingComment,
     isUploadingAttachments,
@@ -484,11 +485,15 @@ export function ForumDetailPage() {
             type="button"
             onClick={() => void onUpvotePost()}
             disabled={isVoting}
-            className="inline-flex items-center gap-2 rounded-md border border-primary px-3 py-1.5 text-[13px] font-medium text-primary hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className={`inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-[13px] font-medium disabled:cursor-not-allowed disabled:opacity-60 ${
+              isUpvoted
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100'
+                : 'border-slate-200 text-slate-600 hover:border-primary hover:text-primary'
+            }`}
           >
             <ArrowBigUp className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
             <span className="tabular-nums font-semibold">{voteScore}</span>
-            <span className="text-slate-600">{t('forum.actions.upvote')}</span>
+            <span className={isUpvoted ? 'text-emerald-700' : 'text-slate-600'}>{t('forum.actions.upvote')}</span>
           </button>
           <button
             type="button"
@@ -502,7 +507,11 @@ export function ForumDetailPage() {
             type="button"
             onClick={() => void onToggleBookmark()}
             disabled={isBookmarking || isUnbookmarking}
-            className="rounded-md border border-slate-200 px-3 py-1.5 text-[13px] font-medium text-slate-600 hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+            className={`rounded-md border px-3 py-1.5 text-[13px] font-medium disabled:cursor-not-allowed disabled:opacity-60 ${
+              isBookmarked
+                ? 'bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100 hover:border-amber-300'
+                : 'border-slate-200 text-slate-600 hover:border-primary hover:text-primary'
+            }`}
           >
             {isBookmarked ? t('forum.actions.unbookmark') : t('forum.actions.bookmark')}
           </button>
