@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, TrendingUp, Hash, BookOpen, ArrowRight, Clock, ChevronRight, MessageSquarePlus } from 'lucide-react';
+import { MessageCircle, TrendingUp, Hash, ArrowRight, Clock, ChevronRight, MessageSquarePlus } from 'lucide-react';
 import { useGetForumCategoriesQuery, useGetPopularForumTagsQuery, useGetForumListQuery } from '../api/forum.list.api';
 import { useTranslation } from 'react-i18next';
 
