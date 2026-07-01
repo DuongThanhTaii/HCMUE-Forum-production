@@ -41,8 +41,10 @@ type RawForumPost = {
   preview?: string | null
   authorAvatar?: string | null
   viewCount?: number | null
+  view_count?: number | null
   likeCount?: number | null
   bookmarkCount?: number | null
+  bookmark_count?: number | null
   categorySlug?: string | null
   lastActivity?: string | null
   isPinned?: boolean | null
