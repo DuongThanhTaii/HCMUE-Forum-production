@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, TrendingUp, Hash, BookOpen, ArrowRight, Clock, ChevronRight } from 'lucide-react';
+import { MessageCircle, TrendingUp, Hash, BookOpen, ArrowRight, Clock, ChevronRight, MessageSquarePlus } from 'lucide-react';
 import { useGetForumCategoriesQuery, useGetPopularForumTagsQuery, useGetForumListQuery } from '../api/forum.list.api';
 import { useTranslation } from 'react-i18next';
 
@@ -16,6 +16,16 @@ export function ExplorePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
       
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-extrabold text-slate-900">{t('explore.title')}</h1>
+        <Link 
+          to="/forum/new" 
+          className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
+        >
+          <MessageSquarePlus className="h-5 w-5" />
+          {t('forum.createPost.title', 'Đăng bài mới')}
+        </Link>
+      </div>
 
       {/* MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

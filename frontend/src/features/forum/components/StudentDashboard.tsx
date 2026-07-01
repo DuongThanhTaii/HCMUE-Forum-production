@@ -6,9 +6,13 @@ import {
   LayoutGrid,
   MessageSquarePlus,
   Sparkles,
+  Clock,
+  MessageCircle,
+  TrendingUp,
 } from 'lucide-react'
 import { useGetDocumentsQuery } from '@features/learning/api/learning.api'
 import { useGetJobsQuery } from '@features/career/api/career.api'
+import { useGetForumListQuery } from '@features/forum/api/forum.list.api'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { selectIsAuthenticated } from '@features/auth/model/auth.slice'
 
@@ -24,6 +28,8 @@ export function StudentDashboard() {
     { page: 1, pageSize: 5 },
     { skip: !isAuthenticated },
   )
+  const { data: recentPosts = [], isLoading: loadingRecent } = useGetForumListQuery({ pageNumber: 1, pageSize: 5 })
+  const { data: hotPosts = [], isLoading: loadingHot } = useGetForumListQuery({ pageNumber: 1, pageSize: 5 })
 
   const documents = docsResult?.documents ?? []
 
@@ -79,6 +85,71 @@ export function StudentDashboard() {
         ) : null}
       </section>
 
+      {/* Threads Dashboard - Hot & Recent */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section className="forum-compact-card p-4 md:p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="h-4 w-4 text-orange-500" />
+            <h3 className="text-sm font-semibold text-slate-900">{t('home.studentDashboard.hot.title')}</h3>
+          </div>
+          <ul className="space-y-3">
+            {loadingHot ? (
+              <li className="text-sm text-slate-500">{t('common.loading')}</li>
+            ) : hotPosts.length === 0 ? (
+              <li className="text-sm text-slate-500">{t('home.studentDashboard.hot.empty')}</li>
+            ) : (
+              hotPosts.slice(0, 5).map((post) => (
+                <li key={post.id}>
+                  <Link to={`/threads/${post.id}`} className="group block">
+                    <h4 className="text-sm font-medium text-slate-800 line-clamp-1 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h4>
+                    <div className="mt-1 flex items-center gap-3 text-[11px] text-slate-500">
+                      <span className="flex items-center gap-1"><MessageCircle className="h-3 w-3" /> {post.replyCount}</span>
+                      <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{post.category || '-'}</span>
+                    </div>
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+
+        <section className="forum-compact-card p-4 md:p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-sky-500" />
+              <h3 className="text-sm font-semibold text-slate-900">{t('home.studentDashboard.week.title')}</h3>
+            </div>
+            <Link to="/explore" className="text-xs font-medium text-primary hover:underline">
+              {t('home.studentDashboard.docs.viewAll')}
+            </Link>
+          </div>
+          <ul className="space-y-3">
+            {loadingRecent ? (
+              <li className="text-sm text-slate-500">{t('common.loading')}</li>
+            ) : recentPosts.length === 0 ? (
+              <li className="text-sm text-slate-500">{t('home.studentDashboard.week.empty')}</li>
+            ) : (
+              recentPosts.slice(0, 5).map((post) => (
+                <li key={post.id}>
+                  <Link to={`/threads/${post.id}`} className="group block">
+                    <h4 className="text-sm font-medium text-slate-800 line-clamp-1 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h4>
+                    <div className="mt-1 flex items-center gap-3 text-[11px] text-slate-500">
+                      <span className="flex items-center gap-1">{post.authorName || '-'}</span>
+                      <span>·</span>
+                      <span>{new Date(post.activityAt || '').toLocaleDateString()}</span>
+                    </div>
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+      </div>
+
       {/* Tài liệu + việc làm */}
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="forum-compact-card p-4 md:p-5">
@@ -133,7 +204,7 @@ export function StudentDashboard() {
                   >
                     <span className="line-clamp-1">{job.title}</span>
                     <span className="mt-0.5 block text-[11px] font-normal text-slate-500">
-                      {job.companyName ?? '—'} · {job.city ?? '—'}
+                      {job.companyName || '-'} · {job.city || '-'}
                     </span>
                   </Link>
                 </li>
