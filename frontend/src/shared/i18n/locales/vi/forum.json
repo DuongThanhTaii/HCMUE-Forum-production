@@ -361,6 +361,11 @@
     "topicsCount": "{{count}} chủ đề",
     "trending": "Đang thịnh hành",
     "popularTags": "Thẻ phổ biến",
+    "featuredCategories": "Danh mục nổi bật",
+    "recentlyActive": "Hoạt động gần đây",
+    "quickFilters": "Lọc nhanh",
+    "seeAll": "Xem tất cả",
+    "discussionsCount": "{{count}} thảo luận",
     "mockThread1": "Cách đạt điểm cao trong kỳ thi Kiến trúc máy tính sắp tới?",
     "mockThread2": "Tìm nhóm học chung môn Giải tích nâng cao"
   }

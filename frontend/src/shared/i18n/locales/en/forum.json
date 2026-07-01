@@ -361,6 +361,11 @@
     "topicsCount": "{{count}} topics",
     "trending": "Trending Now",
     "popularTags": "Popular Tags",
+    "featuredCategories": "Featured Categories",
+    "recentlyActive": "Recently Active",
+    "quickFilters": "Quick Filters",
+    "seeAll": "See all",
+    "discussionsCount": "{{count}} discussions",
     "mockThread1": "How to ace the upcoming computer architecture exam?",
     "mockThread2": "Looking for a study group for Advanced Calculus"
   }
