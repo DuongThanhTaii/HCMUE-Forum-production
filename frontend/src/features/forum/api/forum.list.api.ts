@@ -59,18 +59,29 @@ type RawForumPost = {
 type RawForumComment = {
   id?: string
   postId?: string
+  post_id?: string
   authorId?: string
+  author_id?: string
   authorName?: string | null
+  author_name?: string | null
+  authorAvatar?: string
+  author_avatar?: string
   content?: string
   parentCommentId?: string | null
+  parent_comment_id?: string | null
   voteScore?: number
+  vote_score?: number
   currentUserVote?: number | null
   userVote?: number | null
   myVote?: number | null
   isAcceptedAnswer?: boolean
+  is_accepted_answer?: boolean
   isPinned?: boolean
+  is_pinned?: boolean
   createdAt?: string
+  created_at?: string
   updatedAt?: string | null
+  updated_at?: string | null
 }
 
 type PostsPayload = {
@@ -102,12 +113,13 @@ export type ForumCommentItem = {
   postId: string
   authorId: string
   authorName: string
+  authorAvatar?: string
   content: string
   parentCommentId: string | null
   voteScore: number
   currentUserVote: 0 | 1 | 2
-  isAcceptedAnswer?: boolean
-  isPinned?: boolean
+  isAcceptedAnswer: boolean
+  isPinned: boolean
   createdAt: string
   updatedAt?: string
 }
