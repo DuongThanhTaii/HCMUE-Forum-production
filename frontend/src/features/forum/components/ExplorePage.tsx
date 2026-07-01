@@ -16,16 +16,7 @@ export function ExplorePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
       
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-slate-900">{t('forum.explore.title')}</h1>
-        <Link 
-          to="/forum/new" 
-          className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
-        >
-          <MessageSquarePlus className="h-5 w-5" />
-          {t('forum.createPost.title', 'Đăng bài mới')}
-        </Link>
-      </div>
+
 
       {/* MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -37,6 +28,13 @@ export function ExplorePage() {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-900">{t('forum.explore.featuredCategories')}</h2>
+              <Link 
+                to="/forum/new" 
+                className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
+              >
+                <MessageSquarePlus className="h-5 w-5" />
+                {t('forum.createPost.title', 'Đăng bài mới')}
+              </Link>
             </div>
             {isLoadingCategories ? (
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -47,10 +45,7 @@ export function ExplorePage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {featuredCategories.map(cat => (
-                  <Link to={`/discussions/${cat.slug}`} key={cat.id} className="group block bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 ease-out hover:-translate-y-1 flex flex-col h-full">
-                    <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                      <BookOpen className="h-6 w-6" />
-                    </div>
+                  <Link to={`/discussions/${cat.slug}`} key={cat.id} className="group block bg-white p-6 rounded-2xl border border-slate-200 hover:border-primary/40 transition-colors duration-300 flex flex-col h-full">
                     <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">{cat.name}</h3>
                     <p className="text-slate-500 mb-6 line-clamp-2 text-sm flex-1">{cat.description || 'Discuss and share with the community'}</p>
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
