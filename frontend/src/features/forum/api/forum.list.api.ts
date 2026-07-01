@@ -320,9 +320,9 @@ export const forumListApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getForumCategories: builder.query<ForumCategoryOption[], void>({
       query: () => '/api/v1/categories',
-      transformResponse: (response: ApiSuccessEnvelope<{ categories?: unknown }>) => {
-        const raw = response?.data as { categories?: unknown[] } | undefined
-        const list = raw?.categories
+      transformResponse: (response: ApiSuccessEnvelope<any>) => {
+        const rawData = response?.data
+        const list = Array.isArray(rawData) ? rawData : rawData?.categories
         if (!Array.isArray(list)) return []
         const categories: ForumCategoryOption[] = []
         for (const c of list) {

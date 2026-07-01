@@ -37,7 +37,6 @@ export function StudentDashboard() {
     <div className="space-y-8">
       <header className="space-y-1">
         <h2 className="text-lg font-semibold text-slate-900">{t('home.studentDashboard.title')}</h2>
-        <p className="text-sm text-slate-600">{t('home.studentDashboard.subtitle')}</p>
       </header>
 
       {/* Only displaying shortcuts and other non-thread elements */}

@@ -17,7 +17,7 @@ export function ExplorePage() {
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
       
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold text-slate-900">{t('explore.title')}</h1>
+        <h1 className="text-3xl font-extrabold text-slate-900">{t('forum.explore.title')}</h1>
         <Link 
           to="/forum/new" 
           className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
