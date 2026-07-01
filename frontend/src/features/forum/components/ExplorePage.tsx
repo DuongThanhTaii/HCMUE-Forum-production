@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, TrendingUp, Hash, BookOpen, Search, ArrowRight, Clock, ChevronRight } from 'lucide-react';
+import { MessageCircle, TrendingUp, Hash, BookOpen, ArrowRight, Clock, ChevronRight } from 'lucide-react';
 import { useGetForumCategoriesQuery, useGetPopularForumTagsQuery, useGetForumListQuery } from '../api/forum.list.api';
 import { useTranslation } from 'react-i18next';
 
@@ -16,37 +16,6 @@ export function ExplorePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
       
-      {/* HERO SECTION */}
-      <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-slate-200 bg-gradient-to-br from-white to-slate-50/50">
-        <div className="max-w-3xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-            {t('forum.explore.title')}
-          </h1>
-          <p className="text-xl text-slate-600 mb-8">
-            {t('forum.explore.subtitle')}
-          </p>
-          
-          <div className="relative max-w-2xl group mb-6">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
-              <Search className="h-6 w-6" />
-            </div>
-            <input
-              type="text"
-              className="block w-full pl-12 pr-4 py-4 bg-slate-100 rounded-xl text-slate-900 placeholder-slate-500 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg outline-none transition-all border border-transparent hover:bg-slate-200/50 shadow-inner"
-              placeholder={t('forum.explore.searchPlaceholder')}
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm font-semibold text-slate-500">{t('forum.explore.quickFilters')}:</span>
-            {['Learning', 'Technology', 'Career', 'Research'].map(qf => (
-              <button key={qf} className="px-4 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200 transition-colors border border-slate-200 hover:border-slate-300">
-                {qf}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -176,7 +145,7 @@ export function ExplorePage() {
                 <div className="animate-pulse bg-slate-100 h-10 rounded-lg w-full"></div>
               ) : (
                 popularTags.slice(0, 10).map(tag => (
-                  <Link to={`/explore?tag=${tag.name}`} key={tag.name} className="flex items-center justify-between p-3 rounded-xl hover:bg-indigo-50 group transition-all">
+                  <Link to={`/discussions/all?search=%23${tag.name}`} key={tag.name} className="flex items-center justify-between p-3 rounded-xl hover:bg-indigo-50 group transition-all">
                     <span className="font-semibold text-slate-700 group-hover:text-indigo-700 transition-colors">#{tag.name}</span>
                     <span className="text-[11px] text-slate-500 font-medium bg-slate-100 group-hover:bg-indigo-100/80 px-2.5 py-1 rounded-md transition-colors">
                       {t('forum.explore.discussionsCount', { count: tag.postCount })}

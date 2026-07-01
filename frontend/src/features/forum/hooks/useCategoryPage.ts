@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import {
   useGetForumCategoriesQuery,
   useGetForumListQuery,
@@ -7,8 +7,9 @@ import {
 
 export function useCategoryPage() {
   const { categorySlug } = useParams<{ categorySlug: string }>()
+  const [searchParams] = useSearchParams()
   
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || searchParams.get('search') || '')
   const [sortBy, setSortBy] = useState<number>(0) // 0 = Newest, 1 = Trending, 2 = Recently Active, 3 = Most Viewed, 4 = Most Liked
   
   // Filters
@@ -19,10 +20,11 @@ export function useCategoryPage() {
   // Find category ID from slug
   const { data: categories = [], isLoading: isLoadingCategories } = useGetForumCategoriesQuery()
   const activeCategory = useMemo(() => {
+    if (categorySlug === 'all') return { id: '', name: 'All Discussions', slug: 'all', description: 'Browse all discussions across all categories.' } as any
     return categories.find(c => c.slug === categorySlug || c.id === categorySlug)
   }, [categories, categorySlug])
 
-  const categoryId = activeCategory?.id
+  const categoryId = categorySlug === 'all' ? undefined : activeCategory?.id
 
   // Fetch threads for the active category
   const { data = [], isLoading: isLoadingThreads, isError } = useGetForumListQuery({
@@ -35,7 +37,7 @@ export function useCategoryPage() {
     isSolved,
     isUnanswered,
   }, {
-    skip: !categoryId && !isLoadingCategories, // Skip if category not found after loading
+    skip: categorySlug !== 'all' && !categoryId && !isLoadingCategories, // Skip if specific category not found
   })
 
   const isLoading = isLoadingCategories || isLoadingThreads
