@@ -1,4 +1,4 @@
-import { ArrowBigDown, ArrowBigUp, CornerDownRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
@@ -274,7 +274,7 @@ function CommentBranch({
                   className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  {actions.t('forum.commentSection.hideReplies', 'Ẩn phản hồi')}
+                  {actions.t('forum.commentSection.hideReplies') || 'Ẩn phản hồi'}
                 </button>
               </div>
             </div>
