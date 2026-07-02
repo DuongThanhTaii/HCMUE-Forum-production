@@ -1,4 +1,4 @@
-import { ArrowBigDown, ArrowBigUp, CornerDownRight } from 'lucide-react'
+import { ArrowBigDown, ArrowBigUp, CornerDownRight, ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
@@ -23,7 +23,7 @@ type CommentActions = {
   replyingToId: string | null
   replyDraft: string
   hasTriedReplySubmit: boolean
-  collapsedIds: Set<string>
+  expandedIds: Set<string>
   onReplyDraftChange: (v: string) => void
   onStartReply: (id: string, authorName?: string, sourceContent?: string) => void
   onCancelReply: () => void
@@ -70,191 +70,223 @@ function CommentBranch({
   const isReplying = actions.replyingToId === node.id
   const isUpvoted = node.currentUserVote === 1
   const isDownvoted = node.currentUserVote === 2
-  const isCollapsed = actions.collapsedIds.has(node.id)
+  const isExpanded = actions.expandedIds.has(node.id)
   const parsed = parseForumRichContent(node.content)
+  const hasChildren = node.children.length > 0
+
+  const avatarLetter = node.authorName.charAt(0).toUpperCase()
+
   return (
-    <div className={depth > 0 ? 'mt-3 border-l-2 border-slate-200 pl-4' : ''}>
-      <div className="flex flex-wrap items-center justify-between gap-2 text-[13px]">
-        <div className="flex items-center gap-2">
-          {node.children.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => actions.onToggleCollapse(node.id)}
-              className="rounded border border-slate-200 px-1.5 py-0.5 text-[11px] text-slate-600 hover:bg-slate-100"
-            >
-              {isCollapsed ? actions.t('forum.commentSection.expandThread') : actions.t('forum.commentSection.collapseThread')}
-            </button>
-          ) : null}
-          <span className="font-medium text-slate-700">{node.authorName}</span>
-        </div>
-        <span className="text-slate-400 tabular-nums">{time}</span>
-      </div>
-      {parsed.body ? (
-        <p className="mt-1.5 whitespace-pre-line text-[14px] leading-6 text-slate-700">
-          {renderWithMentions(parsed.body)}
-        </p>
-      ) : null}
-      {parsed.imageUrls.length > 0 ? (
-        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {parsed.imageUrls.map((url) => (
-            <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block">
-              <img
-                src={url}
-                alt={actions.t('forum.detail.attachmentImageAlt')}
-                loading="lazy"
-                className="max-h-56 w-full rounded-md border border-slate-200 object-contain"
-              />
-            </a>
-          ))}
-        </div>
-      ) : null}
-      {parsed.fileUrls.length > 0 ? (
-        <div className="mt-2 space-y-1">
-          {parsed.fileUrls.map((url) => (
-            <a
-              key={url}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block break-all text-[13px] text-primary hover:underline"
-            >
-              {url}
-            </a>
-          ))}
-        </div>
-      ) : null}
-
-      <div className="mt-1.5 flex items-center gap-1">
-        <button
-          type="button"
-          onClick={() => void actions.onVoteComment(node.id, 1)}
-          disabled={actions.isVotingComment}
-          aria-pressed={isUpvoted}
-          className={`inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[12px] font-medium disabled:opacity-50 ${
-            isUpvoted
-              ? 'bg-emerald-50 text-emerald-700'
-              : 'text-slate-500 hover:bg-slate-100 hover:text-emerald-600'
-          }`}
-          title="Upvote"
-        >
-          <ArrowBigUp className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
-          <span className="tabular-nums">{node.voteScore}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => void actions.onVoteComment(node.id, 2)}
-          disabled={actions.isVotingComment}
-          aria-pressed={isDownvoted}
-          className={`inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-medium disabled:opacity-50 ${
-            isDownvoted ? 'bg-rose-50 text-rose-700' : 'text-slate-500 hover:bg-slate-100 hover:text-rose-500'
-          }`}
-          title="Downvote"
-        >
-          <ArrowBigDown className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            isReplying
-              ? actions.onCancelReply()
-              : actions.onStartReply(node.id, node.authorName, parsed.body || node.content)
-          }
-          className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[12px] font-medium text-slate-500 hover:bg-slate-100 hover:text-primary"
-        >
-          <CornerDownRight className="h-3 w-3" strokeWidth={2} aria-hidden />
-          {isReplying ? actions.t('forum.commentSection.cancelReply') : actions.t('forum.commentSection.reply')}
-        </button>
-        {actions.isQuestionPost && actions.canAcceptAnswer && !node.isAcceptedAnswer ? (
-          <button
-            type="button"
-            onClick={() => void actions.onAcceptAnswer(node.id)}
-            disabled={actions.isAcceptingAnswer}
-            className="inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-medium text-emerald-700 hover:bg-emerald-50 disabled:opacity-60"
-          >
-            {actions.t('forum.commentSection.acceptAnswer')}
-          </button>
-        ) : null}
-        {actions.canPinComment ? (
-          <button
-            type="button"
-            onClick={() => void actions.onPinComment(node.id)}
-            disabled={actions.isPinningComment}
-            className={`inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-medium disabled:opacity-60 ${
-              node.isPinned ? 'text-amber-800 hover:bg-amber-50' : 'text-slate-600 hover:bg-slate-100'
-            }`}
-          >
-            {node.isPinned ? actions.t('forum.commentSection.unpinComment') : actions.t('forum.commentSection.pinComment')}
-          </button>
-        ) : null}
-        {node.isAcceptedAnswer ? (
-          <span className="inline-flex items-center rounded bg-emerald-100 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-800">
-            {actions.t('forum.commentSection.acceptedAnswer')}
-          </span>
-        ) : null}
-        {node.isPinned ? (
-          <span className="inline-flex items-center rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800">
-            {actions.t('forum.commentSection.pinnedComment')}
-          </span>
-        ) : null}
-      </div>
-
-      {isReplying ? (
-        <form
-          onSubmit={(e) => void actions.onSubmitReply(e)}
-          className="mt-2 rounded-md border border-slate-200 bg-slate-50 p-2"
-        >
-          <textarea
-            value={actions.replyDraft}
-            onChange={(e) => actions.onReplyDraftChange(e.target.value)}
-            rows={2}
-            autoFocus
-            className="w-full rounded border border-slate-300 px-2 py-1.5 text-[13px] focus:border-primary focus:outline-none"
-            placeholder={actions.t('forum.detail.commentPlaceholder')}
-          />
-          <input
-            type="file"
-            multiple
-            onChange={(e) => actions.onReplyAttachmentsChange(Array.from(e.target.files ?? []))}
-            className="mt-2 w-full rounded border border-slate-300 px-2 py-1.5 text-[13px] file:mr-2 file:rounded file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-xs"
-          />
-          {actions.replyAttachments.length > 0 ? (
-            <p className="mt-1 text-[11px] text-slate-500">{actions.replyAttachments.length} file(s) selected</p>
-          ) : null}
-          {actions.hasTriedReplySubmit && !actions.replyDraft.trim() ? (
-            <p className="mt-0.5 text-[11px] text-rose-600">{actions.t('forum.feedback.commentRequired')}</p>
-          ) : null}
-          <div className="mt-1.5 flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={actions.onCancelReply}
-              className="rounded px-2.5 py-1 text-[12px] font-medium text-slate-600 hover:bg-slate-200"
-            >
-              {actions.t('forum.commentSection.cancelReply')}
-            </button>
-            <button
-              type="submit"
-              disabled={!actions.replyDraft.trim()}
-              className="rounded bg-primary px-2.5 py-1 text-[12px] font-medium text-white hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {actions.t('forum.commentSection.reply')}
-            </button>
+    <div className={`group/thread relative ${depth > 0 ? 'mt-2' : ''}`}>
+      <div className="flex gap-3">
+        <div className="flex-shrink-0">
+          <div className="flex h-8 w-8 select-none items-center justify-center rounded-full bg-slate-200 text-[13px] font-bold text-slate-700">
+            {avatarLetter}
           </div>
-        </form>
-      ) : null}
-
-      {node.children.length > 0 && !isCollapsed ? (
-        <div className="mt-2 space-y-1">
-          {node.children.map((ch) => (
-            <CommentBranch key={ch.id} node={ch} depth={depth + 1} actions={actions} />
-          ))}
         </div>
-      ) : null}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2 text-[13px]">
+            <span className="font-medium text-slate-900">{node.authorName}</span>
+            <span className="text-[12px] tabular-nums text-slate-500">{time}</span>
+          </div>
+          {parsed.body ? (
+            <p className="mt-0.5 break-words whitespace-pre-line text-[14px] leading-6 text-slate-800">
+              {renderWithMentions(parsed.body)}
+            </p>
+          ) : null}
+          {parsed.imageUrls.length > 0 ? (
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {parsed.imageUrls.map((url) => (
+                <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block">
+                  <img
+                    src={url}
+                    alt={actions.t('forum.detail.attachmentImageAlt')}
+                    loading="lazy"
+                    className="max-h-56 w-full rounded-md border border-slate-200 object-contain"
+                  />
+                </a>
+              ))}
+            </div>
+          ) : null}
+          {parsed.fileUrls.length > 0 ? (
+            <div className="mt-2 space-y-1">
+              {parsed.fileUrls.map((url) => (
+                <a
+                  key={url}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block break-all text-[13px] text-primary hover:underline"
+                >
+                  {url}
+                </a>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="mt-1.5 flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => void actions.onVoteComment(node.id, 1)}
+              disabled={actions.isVotingComment}
+              aria-pressed={isUpvoted}
+              className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[12px] font-medium disabled:opacity-50 ${
+                isUpvoted
+                  ? 'bg-emerald-50 text-emerald-700'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-emerald-600'
+              }`}
+              title="Upvote"
+            >
+              <ArrowBigUp className="h-4 w-4" strokeWidth={isUpvoted ? 2.5 : 1.5} aria-hidden />
+              <span className="tabular-nums">{node.voteScore}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => void actions.onVoteComment(node.id, 2)}
+              disabled={actions.isVotingComment}
+              aria-pressed={isDownvoted}
+              className={`inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium disabled:opacity-50 ${
+                isDownvoted ? 'bg-rose-50 text-rose-700' : 'text-slate-600 hover:bg-slate-100 hover:text-rose-500'
+              }`}
+              title="Downvote"
+            >
+              <ArrowBigDown className="h-4 w-4" strokeWidth={isDownvoted ? 2.5 : 1.5} aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                isReplying
+                  ? actions.onCancelReply()
+                  : actions.onStartReply(node.id, node.authorName, parsed.body || node.content)
+              }
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-medium text-slate-700 hover:bg-slate-100"
+            >
+              {isReplying ? actions.t('forum.commentSection.cancelReply') : actions.t('forum.commentSection.reply')}
+            </button>
+            {actions.isQuestionPost && actions.canAcceptAnswer && !node.isAcceptedAnswer ? (
+              <button
+                type="button"
+                onClick={() => void actions.onAcceptAnswer(node.id)}
+                disabled={actions.isAcceptingAnswer}
+                className="inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium text-emerald-700 hover:bg-emerald-50 disabled:opacity-60"
+              >
+                {actions.t('forum.commentSection.acceptAnswer')}
+              </button>
+            ) : null}
+            {actions.canPinComment ? (
+              <button
+                type="button"
+                onClick={() => void actions.onPinComment(node.id)}
+                disabled={actions.isPinningComment}
+                className={`inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium disabled:opacity-60 ${
+                  node.isPinned ? 'text-amber-800 hover:bg-amber-50' : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {node.isPinned ? actions.t('forum.commentSection.unpinComment') : actions.t('forum.commentSection.pinComment')}
+              </button>
+            ) : null}
+            {node.isAcceptedAnswer ? (
+              <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-1 text-[11px] font-semibold text-emerald-800">
+                {actions.t('forum.commentSection.acceptedAnswer')}
+              </span>
+            ) : null}
+            {node.isPinned ? (
+              <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-1 text-[11px] font-semibold text-amber-800">
+                {actions.t('forum.commentSection.pinnedComment')}
+              </span>
+            ) : null}
+          </div>
+
+          {isReplying ? (
+            <form
+              onSubmit={(e) => void actions.onSubmitReply(e)}
+              className="mt-2 rounded-md border border-slate-200 bg-slate-50 p-2"
+            >
+              <textarea
+                value={actions.replyDraft}
+                onChange={(e) => actions.onReplyDraftChange(e.target.value)}
+                rows={2}
+                autoFocus
+                className="w-full rounded border border-slate-300 px-2 py-1.5 text-[13px] focus:border-primary focus:outline-none"
+                placeholder={actions.t('forum.detail.commentPlaceholder')}
+              />
+              <input
+                type="file"
+                multiple
+                onChange={(e) => actions.onReplyAttachmentsChange(Array.from(e.target.files ?? []))}
+                className="mt-2 w-full rounded border border-slate-300 px-2 py-1.5 text-[13px] file:mr-2 file:rounded file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-xs"
+              />
+              {actions.replyAttachments.length > 0 ? (
+                <p className="mt-1 text-[11px] text-slate-500">{actions.replyAttachments.length} file(s) selected</p>
+              ) : null}
+              {actions.hasTriedReplySubmit && !actions.replyDraft.trim() ? (
+                <p className="mt-0.5 text-[11px] text-rose-600">{actions.t('forum.feedback.commentRequired')}</p>
+              ) : null}
+              <div className="mt-1.5 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={actions.onCancelReply}
+                  className="rounded-full px-3 py-1 text-[12px] font-medium text-slate-700 hover:bg-slate-200"
+                >
+                  {actions.t('forum.commentSection.cancelReply')}
+                </button>
+                <button
+                  type="submit"
+                  disabled={!actions.replyDraft.trim()}
+                  className="rounded-full bg-primary px-4 py-1 text-[12px] font-medium text-white hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {actions.t('forum.commentSection.reply')}
+                </button>
+              </div>
+            </form>
+          ) : null}
+        </div>
+      </div>
+
+      {hasChildren && (
+        <div className="mt-1">
+          {!isExpanded ? (
+            <div className="pl-[42px]">
+              <button
+                onClick={() => actions.onToggleCollapse(node.id)}
+                className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-medium text-primary hover:bg-blue-50 transition-colors"
+              >
+                <ChevronDown className="h-4 w-4" />
+                {node.children.length} {actions.t('forum.replies') || 'phản hồi'}
+              </button>
+            </div>
+          ) : (
+            <div className="relative pl-[42px] pt-1">
+              <div 
+                onClick={() => actions.onToggleCollapse(node.id)}
+                className="absolute top-0 bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-0" 
+              />
+              
+              <div className="relative z-10 space-y-4">
+                {node.children.map((ch) => (
+                  <CommentBranch key={ch.id} node={ch} depth={depth + 1} actions={actions} />
+                ))}
+              </div>
+              
+              <div className="relative z-10 mt-1">
+                <button
+                  onClick={() => actions.onToggleCollapse(node.id)}
+                  className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+                >
+                  <ChevronUp className="h-4 w-4" />
+                  {actions.t('forum.commentSection.hideReplies', 'Ẩn phản hồi')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
 
 export function ForumDetailPage() {
-  const [collapsedCommentIds, setCollapsedCommentIds] = useState<Set<string>>(new Set())
+  const [expandedCommentIds, setExpandedCommentIds] = useState<Set<string>>(new Set())
   const {
     t,
     post,
@@ -333,7 +365,7 @@ export function ForumDetailPage() {
   const parsedPost = parseForumRichContent(postContent)
 
   function onToggleCollapse(commentId: string) {
-    setCollapsedCommentIds((prev) => {
+    setExpandedCommentIds((prev) => {
       const next = new Set(prev)
       if (next.has(commentId)) next.delete(commentId)
       else next.add(commentId)
@@ -343,14 +375,14 @@ export function ForumDetailPage() {
 
   function onSortModeChange(mode: CommentSortMode) {
     setCommentSortMode(mode)
-    setCollapsedCommentIds(new Set())
+    setExpandedCommentIds(new Set())
   }
 
   const commentActions: CommentActions = {
     replyingToId: replyingToCommentId,
     replyDraft,
     hasTriedReplySubmit,
-    collapsedIds: collapsedCommentIds,
+    expandedIds: expandedCommentIds,
     onReplyDraftChange: setReplyDraft,
     onStartReply: (id, authorName, sourceContent) => onStartReply(id, authorName, sourceContent),
     onCancelReply,
