@@ -32,9 +32,16 @@ export class DeleteCommentHandler implements ICommandHandler<DeleteCommentComman
       throw new ForbiddenException('You do not have permission to delete this comment');
     }
 
-    await this.prisma.comments.update({
-      where: { id: command.commentId },
-      data: { is_deleted: true },
+    await this.prisma.$transaction(async (tx) => {
+      await tx.comments.update({
+        where: { id: command.commentId },
+        data: { is_deleted: true },
+      });
+
+      await tx.posts.update({
+        where: { id: comment.post_id },
+        data: { comment_count: { decrement: 1 } },
+      });
     });
 
     return { success: true };
