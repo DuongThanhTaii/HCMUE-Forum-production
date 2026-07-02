@@ -479,10 +479,10 @@ export const forumListApi = baseApi.injectEndpoints({
         if (!Array.isArray(raw)) return []
         return raw
           .map((row) => {
-            const r = row as { name?: string; Name?: string; postCount?: number; PostCount?: number; post_count?: number }
+            const r = row as { name?: string; Name?: string; postCount?: number; PostCount?: number; post_count?: number; usage_count?: number }
             const name = (r.name ?? r.Name ?? '').trim()
             if (!name) return null
-            const postCountRaw = r.postCount ?? r.PostCount ?? r.post_count
+            const postCountRaw = r.usage_count ?? r.postCount ?? r.PostCount ?? r.post_count
             const postCount = typeof postCountRaw === 'number' ? postCountRaw : Number(postCountRaw ?? 0) || 0
             return { name, postCount } satisfies ForumPopularTag
           })
