@@ -61,6 +61,27 @@ function renderWithMentions(content: string): ReactNode {
   })
 }
 
+function getRoleBadgeClasses(role: string): string {
+  const normalized = role.trim().toLowerCase()
+  switch (normalized) {
+    case 'admin':
+      return 'bg-rose-100 text-rose-800'
+    case 'moderator':
+      return 'bg-blue-100 text-blue-800'
+    case 'teacher':
+    case 'giảng viên':
+      return 'bg-emerald-100 text-emerald-800'
+    case 'student':
+    case 'sinh viên':
+      return 'bg-violet-100 text-violet-800'
+    case 'staff':
+    case 'nhân viên':
+      return 'bg-amber-100 text-amber-800'
+    default:
+      return 'bg-slate-200 text-slate-800'
+  }
+}
+
 function CommentBranch({
   node,
   depth,
@@ -97,10 +118,14 @@ function CommentBranch({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-[13px]">
             <span className="font-medium text-slate-900">{node.authorName}</span>
-            {node.authorRoles?.some(r => ['admin', 'moderator'].includes(r.toLowerCase())) && (
-              <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold text-blue-800 uppercase tracking-wide">
-                {node.authorRoles.find(r => ['admin', 'moderator'].includes(r.toLowerCase()))}
-              </span>
+            {node.authorRoles && node.authorRoles.length > 0 && (
+              <div className="flex items-center gap-1">
+                {node.authorRoles.map(role => (
+                  <span key={role} className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${getRoleBadgeClasses(role)}`}>
+                    {role}
+                  </span>
+                ))}
+              </div>
             )}
             <span className="text-[12px] tabular-nums text-slate-500">{time}</span>
           </div>
