@@ -32,6 +32,7 @@ import { ReportPostHandler } from './commands/report-post.handler';
 import { VoteCommentHandler } from './commands/vote-comment.handler';
 import { AcceptAnswerHandler } from './commands/accept-answer.handler';
 import { PinCommentHandler } from './commands/pin-comment.handler';
+import { DeleteCommentHandler } from './commands/delete-comment.handler';
 import { GetBookmarkedPostsHandler } from './queries/get-bookmarked-posts.handler';
 
 const CommandHandlers = [
@@ -47,6 +48,7 @@ const CommandHandlers = [
   VoteCommentHandler,
   AcceptAnswerHandler,
   PinCommentHandler,
+  DeleteCommentHandler,
 ];
 
 const QueryHandlers = [

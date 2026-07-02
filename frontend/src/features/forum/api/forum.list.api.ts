@@ -66,6 +66,7 @@ type RawForumComment = {
   author_name?: string | null
   authorAvatar?: string
   author_avatar?: string
+  authorRoles?: string[]
   content?: string
   parentCommentId?: string | null
   parent_comment_id?: string | null
@@ -114,6 +115,7 @@ export type ForumCommentItem = {
   authorId: string
   authorName: string
   authorAvatar?: string
+  authorRoles?: string[]
   content: string
   parentCommentId: string | null
   voteScore: number
@@ -308,6 +310,7 @@ function toSafeForumCommentItem(comment: RawForumComment, postIdFallback: string
   const authorName =
     named && named.length > 0 ? named : `User ${authorId.slice(0, 8)}`
   const authorAvatar = comment.authorAvatar?.trim() || comment.author_avatar?.trim() || undefined
+  const authorRoles = comment.authorRoles || []
   const rawCurrentVote = comment.currentUserVote ?? comment.userVote ?? comment.myVote ?? null
   const currentUserVote: 0 | 1 | 2 = rawCurrentVote === 1 ? 1 : rawCurrentVote === -1 || rawCurrentVote === 2 ? 2 : 0
   const isAcceptedAnswer = comment.isAcceptedAnswer === true || comment.is_accepted_answer === true
@@ -320,6 +323,7 @@ function toSafeForumCommentItem(comment: RawForumComment, postIdFallback: string
     authorId,
     authorName,
     authorAvatar,
+    authorRoles,
     content,
     parentCommentId,
     voteScore,
@@ -435,7 +439,16 @@ export const forumListApi = baseApi.injectEndpoints({
         if (typeof id === 'string' && id.trim()) return normalizeForumPostId(id)
         return ''
       },
-      invalidatesTags: [{ type: 'ForumPost', id: 'LIST' }],
+      invalidatesTags: ['ForumPost'],
+    }),
+    deleteComment: builder.mutation<void, { commentId: string; postId: string }>({
+      query: ({ commentId }) => ({
+        url: `/api/v1/comments/${commentId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { postId }) => [
+        { type: 'Comment' as const, id: `POST-${normalizeForumPostId(postId)}` },
+      ],
     }),
     uploadForumAttachments: builder.mutation<string[], File[]>({
       query: (files) => {
@@ -762,4 +775,5 @@ export const {
   useUploadForumAttachmentsMutation,
   usePublishForumPostMutation,
   useGetPopularForumTagsQuery,
+  useDeleteCommentMutation,
 } = forumListApi

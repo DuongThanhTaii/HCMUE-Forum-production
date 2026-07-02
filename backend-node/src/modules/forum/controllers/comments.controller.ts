@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Req,
+  Delete,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
@@ -14,6 +15,7 @@ import { GetPostCommentsQuery } from '../queries/get-post-comments.handler';
 import { VoteCommentCommand } from '../commands/vote-comment.handler';
 import { AcceptAnswerCommand } from '../commands/accept-answer.handler';
 import { PinCommentCommand } from '../commands/pin-comment.handler';
+import { DeleteCommentCommand } from '../commands/delete-comment.handler';
 
 @Controller('comments')
 export class CommentsController {
@@ -75,6 +77,17 @@ export class CommentsController {
   ) {
     return this.commandBus.execute(
       new PinCommentCommand(id, req.user.userId),
+    );
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async deleteComment(
+    @Param('id') id: string,
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new DeleteCommentCommand(id, req.user.userId, req.user.roles || []),
     );
   }
 }

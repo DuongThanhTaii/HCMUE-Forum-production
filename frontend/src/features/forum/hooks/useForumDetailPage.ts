@@ -26,6 +26,7 @@ import {
   useUploadForumAttachmentsMutation,
   useVoteCommentMutation,
   useVotePostMutation,
+  useDeleteCommentMutation,
 } from '../api/forum.list.api'
 
 export type CommentThreadNode = ForumCommentItem & { children: CommentThreadNode[] }
@@ -135,6 +136,7 @@ export function useForumDetailPage() {
   const [unbookmarkPost, { isLoading: isUnbookmarking }] = useUnbookmarkPostMutation()
   const [reportPost, { isLoading: isReporting }] = useReportPostMutation()
   const [uploadAttachments, { isLoading: isUploadingAttachments }] = useUploadForumAttachmentsMutation()
+  const [deleteComment, { isLoading: isDeletingComment }] = useDeleteCommentMutation()
 
   const fallbackTitle = t('forum.detail.fallbackTitle')
   const title = post?.title || `${fallbackTitle} #${id || t('common.noData')}`
@@ -583,9 +585,18 @@ export function useForumDetailPage() {
     isAcceptingAnswer,
     isPinningComment,
     isVoting,
+    onDeleteComment: async (commentId: string) => {
+      if (!window.confirm(t('forum.commentSection.confirmDelete', 'Bạn có chắc chắn muốn xóa bình luận này?'))) return
+      try {
+        await deleteComment({ commentId, postId: id }).unwrap()
+      } catch (error) {
+        console.error('Failed to delete comment:', error)
+      }
+    },
     isBookmarking,
     isUnbookmarking,
     isReporting,
+    isDeletingComment,
     isSummarizing,
     isLoadingRelated,
     isLoadingModerationHint,

@@ -22,10 +22,20 @@ export class GetPostCommentsHandler implements IQueryHandler<GetPostCommentsQuer
     const authorIds = [...new Set(comments.map((c) => c.author_id))];
     const users = await this.prisma.users.findMany({
       where: { id: { in: authorIds } },
-      select: { id: true, first_name: true, last_name: true, avatar: true },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar: true,
+        user_roles: { select: { role_id: true } },
+      },
     });
 
     const userMap = new Map(users.map((u) => [u.id, u]));
+    
+    // Get all roles
+    const roles = await this.prisma.roles.findMany();
+    const roleMap = new Map(roles.map(r => [r.id, r.name]));
 
     return comments.map((comment) => {
       const user = userMap.get(comment.author_id);
@@ -33,6 +43,7 @@ export class GetPostCommentsHandler implements IQueryHandler<GetPostCommentsQuer
         ...comment,
         authorName: user ? `${user.last_name} ${user.first_name}`.trim() : undefined,
         authorAvatar: user?.avatar,
+        authorRoles: user?.user_roles?.map((ur) => roleMap.get(ur.role_id)).filter(Boolean) || [],
       };
     });
   }

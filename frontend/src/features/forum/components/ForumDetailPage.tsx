@@ -41,6 +41,10 @@ type CommentActions = {
   canPinComment: boolean
   isPinningComment: boolean
   t: (key: string) => string
+  userId: string | null
+  hasModeratorRole: boolean
+  onDeleteComment: (commentId: string) => Promise<void>
+  isDeletingComment: boolean
 }
 
 function renderWithMentions(content: string): ReactNode {
@@ -78,7 +82,13 @@ function CommentBranch({
 
   return (
     <div className={`group/thread relative ${depth > 0 ? 'mt-2' : ''}`}>
-      <div className="flex gap-3">
+      {hasChildren && isExpanded && (
+        <div 
+          onClick={() => actions.onToggleCollapse(node.id)}
+          className="absolute top-[36px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-0" 
+        />
+      )}
+      <div className="flex gap-3 relative z-10">
         <div className="flex-shrink-0">
           <div className="flex h-8 w-8 select-none items-center justify-center rounded-full bg-slate-200 text-[13px] font-bold text-slate-700">
             {avatarLetter}
@@ -87,6 +97,11 @@ function CommentBranch({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-[13px]">
             <span className="font-medium text-slate-900">{node.authorName}</span>
+            {node.authorRoles?.some(r => ['admin', 'moderator'].includes(r.toLowerCase())) && (
+              <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold text-blue-800 uppercase tracking-wide">
+                {node.authorRoles.find(r => ['admin', 'moderator'].includes(r.toLowerCase()))}
+              </span>
+            )}
             <span className="text-[12px] tabular-nums text-slate-500">{time}</span>
           </div>
           {parsed.body ? (
@@ -195,6 +210,16 @@ function CommentBranch({
                 {actions.t('forum.commentSection.pinnedComment')}
               </span>
             ) : null}
+            {(node.authorId === actions.userId || actions.hasModeratorRole) && (
+              <button
+                type="button"
+                onClick={() => void actions.onDeleteComment(node.id)}
+                disabled={actions.isDeletingComment}
+                className="inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-60"
+              >
+                Xóa
+              </button>
+            )}
           </div>
 
           {isReplying ? (
@@ -244,7 +269,7 @@ function CommentBranch({
       </div>
 
       {hasChildren && (
-        <div className="mt-1">
+        <div className="mt-1 relative z-10">
           {!isExpanded ? (
             <div className="pl-[42px]">
               <button
@@ -256,19 +281,13 @@ function CommentBranch({
               </button>
             </div>
           ) : (
-            <div className="relative pl-[42px] pt-1">
-              <div 
-                onClick={() => actions.onToggleCollapse(node.id)}
-                className="absolute top-0 bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-0" 
-              />
-              
-              <div className="relative z-10 space-y-4">
+            <div className="relative pt-1">
+              <div className="relative z-10 space-y-4 pl-[42px]">
                 {node.children.map((ch) => (
                   <CommentBranch key={ch.id} node={ch} depth={depth + 1} actions={actions} />
                 ))}
               </div>
-              
-              <div className="relative z-10 mt-1">
+              <div className="relative z-10 mt-1 pl-[42px]">
                 <button
                   onClick={() => actions.onToggleCollapse(node.id)}
                   className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
@@ -361,6 +380,9 @@ export function ForumDetailPage() {
     isLoadingModerationHint,
     isLoading,
     isError,
+    userId,
+    onDeleteComment,
+    isDeletingComment,
   } = useForumDetailPage()
   const parsedPost = parseForumRichContent(postContent)
 
@@ -400,6 +422,10 @@ export function ForumDetailPage() {
     canPinComment,
     isPinningComment,
     t,
+    userId,
+    hasModeratorRole,
+    onDeleteComment,
+    isDeletingComment,
   }
 
   if (isLoading) {
