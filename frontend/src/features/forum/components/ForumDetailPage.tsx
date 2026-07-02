@@ -61,7 +61,7 @@ function renderWithMentions(content: string): ReactNode {
   })
 }
 
-function getRoleBadgeClasses(role: string): string {
+function getRoleBadgeClasses(role: string): string | null {
   const normalized = role.trim().toLowerCase()
   switch (normalized) {
     case 'admin':
@@ -73,7 +73,9 @@ function getRoleBadgeClasses(role: string): string {
       return 'bg-emerald-100 text-emerald-800'
     case 'student':
     case 'sinh viên':
-      return 'bg-violet-100 text-violet-800'
+    case 'user':
+    case 'người dùng':
+      return null
     case 'staff':
     case 'nhân viên':
       return 'bg-amber-100 text-amber-800'
@@ -103,10 +105,16 @@ function CommentBranch({
 
   return (
     <div className={`group/thread relative ${depth > 0 ? 'mt-2' : ''}`}>
+      {/* Branch curve connecting parent's vertical line to this child's avatar */}
+      {depth > 0 && (
+        <div className="absolute top-0 -left-[27px] w-[27px] h-[16px] rounded-bl-xl border-b-2 border-l-2 border-slate-200 z-0 pointer-events-none" />
+      )}
+      
+      {/* Main vertical line for this comment's children (curving into Hide Replies) */}
       {hasChildren && isExpanded && (
         <div 
           onClick={() => actions.onToggleCollapse(node.id)}
-          className="absolute top-[36px] bottom-2 left-[15px] w-[2px] cursor-pointer bg-slate-200 transition-colors hover:bg-slate-300 z-0" 
+          className="absolute top-[36px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-0" 
         />
       )}
       <div className="flex gap-3 relative z-10">
@@ -120,11 +128,15 @@ function CommentBranch({
             <span className="font-medium text-slate-900">{node.authorName}</span>
             {node.authorRoles && node.authorRoles.length > 0 && (
               <div className="flex items-center gap-1">
-                {node.authorRoles.map(role => (
-                  <span key={role} className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${getRoleBadgeClasses(role)}`}>
-                    {role}
-                  </span>
-                ))}
+                {node.authorRoles.map(role => {
+                  const badgeClass = getRoleBadgeClasses(role)
+                  if (!badgeClass) return null
+                  return (
+                    <span key={role} className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${badgeClass}`}>
+                      {role}
+                    </span>
+                  )
+                })}
               </div>
             )}
             <span className="text-[12px] tabular-nums text-slate-500">{time}</span>
