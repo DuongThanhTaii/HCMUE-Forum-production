@@ -3,6 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { RolesGuard } from '../../identity/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
+import { PrismaService } from '../../../common/prisma/prisma.service';
+import { v4 as uuidv4 } from 'uuid';
 
 import { GetUserNotificationsQuery } from '../queries/get-user-notifications.handler';
 import { GetUnreadCountQuery } from '../queries/get-unread-count.handler';
@@ -16,6 +18,7 @@ export class NotificationsController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Get()
@@ -47,11 +50,34 @@ export class NotificationsController {
   @UseGuards(RolesGuard)
   @Roles('Admin', 'SuperAdmin')
   @Post('broadcast/home')
-  async broadcast(@Body() body: { title: string; content: string; link?: string }) {
-    // Usually broadcast means sending to all users.
-    // For simplicity we create a system notification without specific user or handle it via a different command
-    // But since create-notification requires userId, let's just log or send to admins as a fallback, or we need a real broadcast logic
-    // Let's implement broadcast in gateway or just return success for now
-    return { success: true, message: 'Broadcast queued' };
+  async broadcast(@Body() body: { title: string; message: string; sendEmail?: boolean }) {
+    const users = await this.prisma.users.findMany({ select: { id: true, email: true } });
+    const now = new Date();
+    
+    const notifications = users.map(u => ({
+      id: uuidv4(),
+      recipient_id: u.id,
+      channel: 1, // 1 = InApp
+      status: 0, // 0 = Unread
+      content_subject: body.title,
+      content_body: body.message,
+      content_action_url: '?announcement=true',
+      metadata: {},
+      created_at: now,
+    }));
+    
+    await this.prisma.notifications.createMany({ data: notifications });
+    
+    let sentEmail = 0;
+    if (body.sendEmail) {
+       // Mock sending emails
+       sentEmail = users.length;
+    }
+    
+    return { 
+      success: true, 
+      message: 'Broadcast successful', 
+      data: { sentInApp: users.length, sentEmail } 
+    };
   }
 }

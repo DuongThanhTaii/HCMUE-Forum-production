@@ -60,7 +60,7 @@ export function StudentDashboard() {
             className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-medium text-slate-800 transition hover:border-sky-300 hover:bg-sky-50/50"
           >
             <Sparkles className="h-5 w-5 shrink-0 text-sky-600" aria-hidden />
-            Explore Discussions
+            {t('forum.explore.title', 'Khám phá')}
           </Link>
           <Link
             to="/learning/documents"
