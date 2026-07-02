@@ -41,15 +41,23 @@ export class VoteCommentHandler implements ICommandHandler<VoteCommentCommand> {
 
     if (existingVote) {
       const oldVoteValue = getVoteValue(existingVote.vote_type);
+      const newVoteValue = getVoteValue(voteType);
       
-      // Whether they click the same vote type OR the opposite vote type,
-      // we just remove their existing vote. This prevents the -2 delta
-      // which causes confusion (e.g. going from 1 to -1).
-      scoreDelta = -oldVoteValue;
-      
-      await this.prisma.comment_votes.delete({
-        where: { comment_id_user_id: { comment_id: commentId, user_id: userId } },
-      });
+      if (existingVote.vote_type !== voteType) {
+        scoreDelta = newVoteValue - oldVoteValue;
+        
+        await this.prisma.comment_votes.update({
+          where: { comment_id_user_id: { comment_id: commentId, user_id: userId } },
+          data: { vote_type: voteType, updated_at: new Date() },
+        });
+      } else {
+        // User clicked the same vote type -> remove the vote
+        scoreDelta = -oldVoteValue;
+        
+        await this.prisma.comment_votes.delete({
+          where: { comment_id_user_id: { comment_id: commentId, user_id: userId } },
+        });
+      }
     } else {
       scoreDelta = getVoteValue(voteType);
       
