@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { RolesGuard } from '../../identity/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { PrismaService } from '../../../common/prisma/prisma.service';
-import { v4 as uuidv4 } from 'uuid';
+import * as crypto from 'crypto';
 
 import { GetUserNotificationsQuery } from '../queries/get-user-notifications.handler';
 import { GetUnreadCountQuery } from '../queries/get-unread-count.handler';
@@ -55,7 +55,7 @@ export class NotificationsController {
     const now = new Date();
     
     const notifications = users.map(u => ({
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       recipient_id: u.id,
       channel: 1, // 1 = InApp
       status: 0, // 0 = Unread
