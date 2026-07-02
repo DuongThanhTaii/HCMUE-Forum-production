@@ -665,7 +665,7 @@ export const forumListApi = baseApi.injectEndpoints({
               const c = draft.find((x) => x.id === commentId)
               if (!c) return
               const previousVote = c.currentUserVote ?? 0
-              const nextVote: 0 | 1 | 2 = previousVote === voteType ? 0 : voteType
+              const nextVote: 0 | 1 | 2 = previousVote !== 0 ? 0 : voteType
               const delta = scoreValueFromVote(nextVote) - scoreValueFromVote(previousVote)
               c.voteScore = (c.voteScore ?? 0) + delta
               c.currentUserVote = nextVote
