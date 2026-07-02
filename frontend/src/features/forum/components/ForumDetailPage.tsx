@@ -44,7 +44,7 @@ type CommentActions = {
   t: (key: string) => string
   userId: string | null
   hasModeratorRole: boolean
-  onDeleteComment: (commentId: string) => Promise<void>
+  onDeleteComment: (commentId: string) => void
   isDeletingComment: boolean
   hoveredCommentId: string | null
   setHoveredCommentId: (id: string | null) => void
