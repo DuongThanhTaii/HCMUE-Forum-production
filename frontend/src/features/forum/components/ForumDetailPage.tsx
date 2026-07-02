@@ -7,6 +7,7 @@ import { featureFlags } from '@shared/config/featureFlags'
 import type { CommentSortMode, CommentThreadNode } from '../hooks/useForumDetailPage'
 import { useForumDetailPage } from '../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../lib/parseForumRichContent'
+import { ConfirmDeleteCommentModal } from './ConfirmDeleteCommentModal'
 
 function formatCommentTime(value: string) {
   const date = new Date(value)
@@ -436,6 +437,9 @@ export function ForumDetailPage() {
     hoveredCommentId,
     setHoveredCommentId,
     isLineHovered,
+    commentToDelete,
+    setCommentToDelete,
+    onConfirmDeleteComment,
   } = useForumDetailPage()
   const parsedPost = parseForumRichContent(postContent)
 
@@ -896,6 +900,13 @@ export function ForumDetailPage() {
           ) : null}
         </div>
       </section>
+
+      <ConfirmDeleteCommentModal
+        isOpen={commentToDelete !== null}
+        isDeleting={isDeletingComment}
+        onClose={() => setCommentToDelete(null)}
+        onConfirm={onConfirmDeleteComment}
+      />
     </div>
   )
 }

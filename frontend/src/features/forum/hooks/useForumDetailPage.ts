@@ -113,6 +113,7 @@ export function useForumDetailPage() {
   const [commentAttachments, setCommentAttachments] = useState<File[]>([])
   const [replyAttachments, setReplyAttachments] = useState<File[]>([])
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null)
+  const [commentToDelete, setCommentToDelete] = useState<string | null>(null)
 
   const isLineHovered = useCallback((node: CommentThreadNode): boolean => {
     if (node.id === hoveredCommentId) return true
@@ -592,10 +593,16 @@ export function useForumDetailPage() {
     isAcceptingAnswer,
     isPinningComment,
     isVoting,
-    onDeleteComment: async (commentId: string) => {
-      if (!window.confirm(t('forum.commentSection.confirmDelete', 'Bạn có chắc chắn muốn xóa bình luận này?'))) return
+    onDeleteComment: (commentId: string) => {
+      setCommentToDelete(commentId)
+    },
+    commentToDelete,
+    setCommentToDelete,
+    onConfirmDeleteComment: async () => {
+      if (!commentToDelete || !id) return
       try {
-        await deleteComment({ commentId, postId: id }).unwrap()
+        await deleteComment({ commentId: commentToDelete, postId: id }).unwrap()
+        setCommentToDelete(null)
       } catch (error) {
         console.error('Failed to delete comment:', error)
       }
