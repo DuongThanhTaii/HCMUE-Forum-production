@@ -362,8 +362,8 @@ export const forumListApi = baseApi.injectEndpoints({
             (typeof row.Id === 'string' && row.Id.trim()) ||
             ''
           if (!id) continue
-          const parentRaw = row.parentCategoryId ?? row.ParentCategoryId
-          const postCountRaw = row.postCount ?? row.PostCount
+          const parentRaw = row.parentCategoryId ?? row.ParentCategoryId ?? (row as any).parent_category_id
+          const postCountRaw = row.postCount ?? row.PostCount ?? (row as any).post_count
           const displayOrderRaw = row.displayOrder ?? row.DisplayOrder
           categories.push({
             id,
@@ -479,10 +479,11 @@ export const forumListApi = baseApi.injectEndpoints({
         if (!Array.isArray(raw)) return []
         return raw
           .map((row) => {
-            const r = row as { name?: string; Name?: string; postCount?: number; PostCount?: number }
+            const r = row as { name?: string; Name?: string; postCount?: number; PostCount?: number; post_count?: number }
             const name = (r.name ?? r.Name ?? '').trim()
             if (!name) return null
-            const postCount = typeof r.postCount === 'number' ? r.postCount : Number(r.PostCount ?? 0) || 0
+            const postCountRaw = r.postCount ?? r.PostCount ?? r.post_count
+            const postCount = typeof postCountRaw === 'number' ? postCountRaw : Number(postCountRaw ?? 0) || 0
             return { name, postCount } satisfies ForumPopularTag
           })
           .filter((x): x is ForumPopularTag => x !== null)
