@@ -109,7 +109,9 @@
     "expandThread": "Mở rộng",
     "quotePrefix": "@{{author}} đã viết:",
     "acceptedAnswer": "Câu trả lời đúng",
-    "author": "Tác giả"
+    "author": "Tác giả",
+    "hideReplies": "Ẩn phản hồi",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa bình luận này?"
   },
   "meta": {
     "views": "lượt xem",

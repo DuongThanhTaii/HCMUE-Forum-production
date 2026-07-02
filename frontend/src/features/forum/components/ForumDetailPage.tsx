@@ -106,7 +106,7 @@ function CommentBranch({
       {hasChildren && isExpanded && (
         <div 
           onClick={() => actions.onToggleCollapse(node.id)}
-          className="absolute top-[36px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-0" 
+          className="absolute top-[36px] bottom-2 left-[15px] w-[2px] cursor-pointer bg-slate-200 transition-colors hover:bg-slate-300 z-0" 
         />
       )}
       <div className="flex gap-3 relative z-10">
@@ -318,7 +318,7 @@ function CommentBranch({
                   className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  {actions.t('forum.commentSection.hideReplies') || 'Ẩn phản hồi'}
+                  {actions.t('forum.commentSection.hideReplies') === 'forum.commentSection.hideReplies' ? 'Ẩn phản hồi' : actions.t('forum.commentSection.hideReplies')}
                 </button>
               </div>
             </div>

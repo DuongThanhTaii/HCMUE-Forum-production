@@ -109,7 +109,9 @@
     "expandThread": "Expand",
     "quotePrefix": "@{{author}} wrote:",
     "acceptedAnswer": "Accepted answer",
-    "author": "Author"
+    "author": "Author",
+    "hideReplies": "Hide replies",
+    "confirmDelete": "Are you sure you want to delete this comment?"
   },
   "meta": {
     "views": "views",
