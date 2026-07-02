@@ -107,14 +107,14 @@ function CommentBranch({
     <div className={`group/thread relative ${depth > 0 ? 'mt-2' : ''}`}>
       {/* Branch curve connecting parent's vertical line to this child's avatar */}
       {depth > 0 && (
-        <div className="absolute top-0 -left-[27px] w-[27px] h-[16px] rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors group-hover/thread:border-slate-400 z-0 pointer-events-none" />
+        <div className="absolute top-0 -left-[27px] w-[27px] h-[16px] rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors z-0 pointer-events-none" />
       )}
       
       {/* Main vertical line for this comment's children (curving into Hide Replies) */}
       {hasChildren && isExpanded && (
         <div 
           onClick={() => actions.onToggleCollapse(node.id)}
-          className="absolute top-[36px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 group-hover/thread:border-slate-400 z-20" 
+          className="absolute top-[36px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 border-slate-200 transition-colors hover:border-slate-400 z-20" 
         />
       )}
       <div className="flex gap-3 relative z-10">
