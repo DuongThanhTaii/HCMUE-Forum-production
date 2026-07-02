@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
 export class GetPostCommentsQuery {
-  constructor(public readonly postId: string) {}
+  constructor(public readonly postId: string, public readonly userId?: string) {}
 }
 
 @QueryHandler(GetPostCommentsQuery)
@@ -17,6 +17,17 @@ export class GetPostCommentsHandler implements IQueryHandler<GetPostCommentsQuer
 
     if (comments.length === 0) {
       return [];
+    }
+
+    let userVotes = new Map<string, number>();
+    if (query.userId) {
+      const votes = await this.prisma.comment_votes.findMany({
+        where: {
+          user_id: query.userId,
+          comment_id: { in: comments.map(c => c.id) }
+        }
+      });
+      userVotes = new Map(votes.map(v => [v.comment_id, v.vote_type]));
     }
 
     const authorIds = [...new Set(comments.map((c) => c.author_id))];
@@ -44,6 +55,7 @@ export class GetPostCommentsHandler implements IQueryHandler<GetPostCommentsQuer
         authorName: user ? `${user.last_name} ${user.first_name}`.trim() : undefined,
         authorAvatar: user?.avatar,
         authorRoles: user?.user_roles?.map((ur) => roleMap.get(ur.role_id)).filter(Boolean) || [],
+        currentUserVote: userVotes.get(comment.id) ?? null,
       };
     });
   }

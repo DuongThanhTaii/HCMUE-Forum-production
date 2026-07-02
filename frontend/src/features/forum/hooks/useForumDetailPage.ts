@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
+import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -112,6 +112,13 @@ export function useForumDetailPage() {
   const [hasTriedReplySubmit, setHasTriedReplySubmit] = useState(false)
   const [commentAttachments, setCommentAttachments] = useState<File[]>([])
   const [replyAttachments, setReplyAttachments] = useState<File[]>([])
+  const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null)
+
+  const isLineHovered = useCallback((node: CommentThreadNode): boolean => {
+    if (node.id === hoveredCommentId) return true
+    if (node.children.some(c => c.id === hoveredCommentId)) return true
+    return false
+  }, [hoveredCommentId])
   const [isCommentCooldownActive, setIsCommentCooldownActive] = useState(false)
   const commentCooldownTimerRef = useRef<number | null>(null)
   const { data: post, isLoading, isError } = useGetForumPostByIdQuery(id, {
@@ -602,5 +609,8 @@ export function useForumDetailPage() {
     isLoadingModerationHint,
     isLoading,
     isError,
+    hoveredCommentId,
+    setHoveredCommentId,
+    isLineHovered,
   }
 }

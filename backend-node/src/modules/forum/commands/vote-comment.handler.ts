@@ -50,6 +50,13 @@ export class VoteCommentHandler implements ICommandHandler<VoteCommentCommand> {
           where: { comment_id_user_id: { comment_id: commentId, user_id: userId } },
           data: { vote_type: voteType, updated_at: new Date() },
         });
+      } else {
+        // User clicked the same vote type -> remove the vote
+        scoreDelta = -oldVoteValue;
+        
+        await this.prisma.comment_votes.delete({
+          where: { comment_id_user_id: { comment_id: commentId, user_id: userId } },
+        });
       }
     } else {
       scoreDelta = getVoteValue(voteType);

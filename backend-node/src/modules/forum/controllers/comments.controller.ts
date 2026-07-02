@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../identity/guards/optional-jwt-auth.guard';
 import { CreateCommentCommand } from '../commands/create-comment.handler';
 import { GetPostCommentsQuery } from '../queries/get-post-comments.handler';
 import { VoteCommentCommand } from '../commands/vote-comment.handler';
@@ -25,8 +26,9 @@ export class CommentsController {
   ) {}
 
   @Get('post/:postId')
-  async getComments(@Param('postId') postId: string) {
-    return this.queryBus.execute(new GetPostCommentsQuery(postId));
+  @UseGuards(OptionalJwtAuthGuard)
+  async getComments(@Param('postId') postId: string, @Req() req?: any) {
+    return this.queryBus.execute(new GetPostCommentsQuery(postId, req?.user?.userId));
   }
 
   @Post('posts/:postId')
