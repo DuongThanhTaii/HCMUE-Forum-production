@@ -89,6 +89,9 @@ export function ForumDetailPage() {
     commentToDelete,
     setCommentToDelete,
     onConfirmDeleteComment,
+    currentUser,
+    commentSortMode,
+    setCommentSortMode,
   } = useForumDetailPage()
 
   function onToggleCollapse(commentId: string) {
@@ -272,6 +275,9 @@ export function ForumDetailPage() {
             isSubmittingComment={isSubmittingComment}
             isUploadingAttachments={isUploadingAttachments}
             onSubmitComment={onSubmitComment}
+            currentUser={currentUser}
+            commentSortMode={commentSortMode}
+            setCommentSortMode={setCommentSortMode}
           />
         </main>
 

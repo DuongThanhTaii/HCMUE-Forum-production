@@ -1,4 +1,5 @@
 import type { FormEvent, ReactNode } from 'react'
+import type { User } from '@shared/types/auth'
 import { ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
 import type { CommentThreadNode } from '../../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
@@ -245,12 +246,12 @@ function CommentBranch({
                 <div className="mt-3 flex items-center justify-between">
                   <div className="flex gap-1">
                     {/* Mock Toolbar icons for visual consistency */}
-                    <button type="button" className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Bold className="h-4 w-4" /></button>
-                    <button type="button" className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Italic className="h-4 w-4" /></button>
+                    <button type="button" onClick={() => actions.onReplyDraftChange(actions.replyDraft + ' **chữ đậm** ')} className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Bold className="h-4 w-4" /></button>
+                    <button type="button" onClick={() => actions.onReplyDraftChange(actions.replyDraft + ' *chữ nghiêng* ')} className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Italic className="h-4 w-4" /></button>
                     <div className="w-[1px] h-4 bg-slate-300 mx-1 self-center" />
-                    <button type="button" className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><LinkIcon className="h-4 w-4" /></button>
-                    <button type="button" className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Code className="h-4 w-4" /></button>
-                    <button type="button" className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Quote className="h-4 w-4" /></button>
+                    <button type="button" onClick={() => actions.onReplyDraftChange(actions.replyDraft + ' [liên kết](https://) ')} className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><LinkIcon className="h-4 w-4" /></button>
+                    <button type="button" onClick={() => actions.onReplyDraftChange(actions.replyDraft + ' `mã code` ')} className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Code className="h-4 w-4" /></button>
+                    <button type="button" onClick={() => actions.onReplyDraftChange(actions.replyDraft + ' > trích dẫn \n')} className="p-1.5 text-slate-400 hover:text-slate-700 rounded hover:bg-slate-200"><Quote className="h-4 w-4" /></button>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -323,6 +324,9 @@ interface ThreadCommentsProps {
   isSubmittingComment: boolean
   isUploadingAttachments: boolean
   onSubmitComment: (e: FormEvent<HTMLFormElement>) => Promise<void>
+  currentUser?: User | null
+  commentSortMode: 'top' | 'new'
+  setCommentSortMode: (mode: 'top' | 'new') => void
 }
 
 export function ThreadComments({
@@ -336,8 +340,16 @@ export function ThreadComments({
   canSubmitComment,
   isSubmittingComment,
   isUploadingAttachments,
-  onSubmitComment
+  onSubmitComment,
+  currentUser,
+  commentSortMode,
+  setCommentSortMode,
 }: ThreadCommentsProps) {
+  const userInitials = currentUser?.fullName?.charAt(0)?.toUpperCase() || 'ME'
+
+  const insertFormat = (format: string) => {
+    onCommentDraftChange(commentDraft + format)
+  }
   return (
     <div className="mt-4 rounded-xl border border-slate-200 bg-white">
       <div className="flex flex-wrap items-center justify-between border-b border-slate-100 p-4 sm:p-6 pb-4">
@@ -347,8 +359,18 @@ export function ThreadComments({
         <div className="flex items-center gap-2 text-[13px]">
           <span className="text-slate-500 hidden sm:inline">Sắp xếp:</span>
           <div className="flex bg-slate-100/80 rounded-lg p-1">
-            <button className="px-4 py-1.5 bg-white rounded-md shadow-sm font-semibold text-sky-700 transition-colors">Top</button>
-            <button className="px-4 py-1.5 font-medium text-slate-600 hover:text-slate-900 transition-colors">Mới nhất</button>
+            <button 
+              onClick={() => setCommentSortMode('top')}
+              className={`px-4 py-1.5 rounded-md shadow-sm font-semibold transition-colors ${commentSortMode === 'top' ? 'bg-white text-sky-700' : 'text-slate-600 hover:text-slate-900 shadow-none bg-transparent'}`}
+            >
+              Top
+            </button>
+            <button 
+              onClick={() => setCommentSortMode('new')}
+              className={`px-4 py-1.5 rounded-md shadow-sm font-semibold transition-colors ${commentSortMode === 'new' ? 'bg-white text-sky-700' : 'text-slate-600 hover:text-slate-900 shadow-none bg-transparent'}`}
+            >
+              Mới nhất
+            </button>
           </div>
         </div>
       </div>
@@ -358,9 +380,13 @@ export function ThreadComments({
           <form onSubmit={(e) => void onSubmitComment(e)} className="rounded-xl border border-slate-200 bg-white focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden shadow-sm">
             <div className="p-3 pb-0 flex gap-3">
               <div className="flex-shrink-0 mt-1">
-                <div className="flex h-9 w-9 select-none items-center justify-center rounded-full bg-indigo-600 text-[14px] font-bold text-white shadow-sm">
-                  DT
-                </div>
+                {currentUser?.avatar ? (
+                  <img src={currentUser.avatar} alt="User Avatar" className="h-9 w-9 rounded-full object-cover shadow-sm" />
+                ) : (
+                  <div className="flex h-9 w-9 select-none items-center justify-center rounded-full bg-indigo-600 text-[14px] font-bold text-white shadow-sm">
+                    {userInitials}
+                  </div>
+                )}
               </div>
               <textarea
                 value={commentDraft}
@@ -373,11 +399,11 @@ export function ThreadComments({
             
             <div className="px-3 py-3 mt-2 flex flex-wrap items-center justify-between border-t border-slate-100 bg-slate-50">
               <div className="flex gap-1 text-slate-500">
-                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Bold className="h-4 w-4" /></button>
-                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Italic className="h-4 w-4" /></button>
-                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Code className="h-4 w-4" /></button>
-                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><LinkIcon className="h-4 w-4" /></button>
-                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><ImageIcon className="h-4 w-4" /></button>
+                <button type="button" onClick={() => insertFormat(' **chữ đậm** ')} className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Bold className="h-4 w-4" /></button>
+                <button type="button" onClick={() => insertFormat(' *chữ nghiêng* ')} className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Italic className="h-4 w-4" /></button>
+                <button type="button" onClick={() => insertFormat(' `mã code` ')} className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Code className="h-4 w-4" /></button>
+                <button type="button" onClick={() => insertFormat(' [liên kết](https://) ')} className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><LinkIcon className="h-4 w-4" /></button>
+                <button type="button" onClick={() => insertFormat(' ![hình ảnh](https://) ')} className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><ImageIcon className="h-4 w-4" /></button>
                 <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Paperclip className="h-4 w-4" /></button>
               </div>
               <div className="flex items-center gap-3 mt-2 sm:mt-0">

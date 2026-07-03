@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useAuth } from '@features/auth/context/useAuth'
-import { selectUserRole, selectUserId } from '@features/auth/model/auth.slice'
+import { selectUserRole, selectUserId, selectUser } from '@features/auth/model/auth.slice'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import {
   useModerationHintMutation,
@@ -95,6 +95,7 @@ export function useForumDetailPage() {
   const { requireAuth } = useAuth()
   const roles = useAppSelector(selectUserRole)
   const userId = useAppSelector(selectUserId)
+  const currentUser = useAppSelector(selectUser)
   const hasModeratorRole = useMemo(
     () => (roles ?? []).some((role) => role.trim().toLowerCase() === 'moderator'),
     [roles],
@@ -619,5 +620,6 @@ export function useForumDetailPage() {
     hoveredCommentId,
     setHoveredCommentId,
     isLineHovered,
+    currentUser,
   }
 }
