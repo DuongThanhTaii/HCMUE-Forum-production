@@ -229,7 +229,6 @@ export function ForumDetailPage() {
             onSharePost={onSharePost}
             onOpenReportModal={onOpenReportModal}
             isReporting={isReporting}
-            t={t}
           />
 
           {/* Interaction Status Messages */}
@@ -261,7 +260,6 @@ export function ForumDetailPage() {
             isSubmittingComment={isSubmittingComment}
             isUploadingAttachments={isUploadingAttachments}
             onSubmitComment={onSubmitComment}
-            t={t}
           />
         </main>
 
