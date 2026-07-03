@@ -33,6 +33,18 @@ export class GetMessagesHandler implements IQueryHandler<GetMessagesQuery> {
     });
     const userMap = new Map(users.map(u => [u.id, `${u.first_name} ${u.last_name}`.trim()]));
 
+    const messageIds = messages.map(m => m.id);
+    const rawReactions = await this.prisma.message_reactions.findMany({
+      where: { message_id: { in: messageIds } },
+    });
+    const reactionMap = new Map<string, Record<string, string[]>>();
+    for (const r of rawReactions) {
+      if (!reactionMap.has(r.message_id)) reactionMap.set(r.message_id, {});
+      const mReactions = reactionMap.get(r.message_id)!;
+      if (!mReactions[r.emoji]) mReactions[r.emoji] = [];
+      mReactions[r.emoji].push(r.user_id);
+    }
+
     const items = messages.map(m => ({
       id: m.id,
       conversationId: m.conversation_id,
@@ -44,7 +56,7 @@ export class GetMessagesHandler implements IQueryHandler<GetMessagesQuery> {
       editedAt: m.edited_at,
       isDeleted: m.is_deleted,
       replyToMessageId: m.reply_to_message_id,
-      reactions: {}, // stub
+      reactions: reactionMap.get(m.id) || {},
       attachments: [], // stub
     }));
 

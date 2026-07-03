@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { SendMessageCommand } from '../commands/send-message.handler';
 import { GetMessagesQuery } from '../queries/get-messages.handler';
 import { AddReactionCommand } from '../commands/add-reaction.handler';
+import { RemoveReactionCommand } from '../commands/remove-reaction.handler';
+import { DeleteMessageCommand } from '../commands/delete-message.handler';
 
 @Controller('chat/messages')
 @UseGuards(JwtAuthGuard)
@@ -58,6 +60,29 @@ export class MessagesController {
   ) {
     return this.commandBus.execute(
       new AddReactionCommand(messageId, req.user.userId, emoji, conversationId),
+    );
+  }
+
+  @Delete(':id/reactions/:emoji')
+  async removeReaction(
+    @Request() req: any,
+    @Param('id') messageId: string,
+    @Param('emoji') emoji: string,
+    @Body('conversationId') conversationId: string,
+  ) {
+    return this.commandBus.execute(
+      new RemoveReactionCommand(messageId, req.user.userId, emoji, conversationId),
+    );
+  }
+
+  @Delete(':id')
+  async deleteMessage(
+    @Request() req: any,
+    @Param('id') messageId: string,
+    @Body('conversationId') conversationId: string,
+  ) {
+    return this.commandBus.execute(
+      new DeleteMessageCommand(messageId, req.user.userId, conversationId),
     );
   }
 

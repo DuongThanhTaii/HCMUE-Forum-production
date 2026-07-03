@@ -21,6 +21,7 @@ function hubToDisplay(m: HubMessageNotification): MessageDto {
     replyToMessageId: m.replyToMessageId ?? null,
     reactions: {},
     attachments: m.attachments ?? [],
+    senderDisplayName: m.senderName,
   }
 }
 

@@ -182,6 +182,8 @@ export function MessageBubble({
     }
   }
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
   const submitEdit = async () => {
     if (!conversationId || !draft.trim()) return
     try {
@@ -197,11 +199,11 @@ export function MessageBubble({
     }
   }
 
-  const confirmDelete = async () => {
+  const handleUnsend = async () => {
     if (!conversationId) return
-    if (!window.confirm(t('chat.message.confirmUnsend'))) return
     try {
       await deleteMessage({ messageId: message.id, conversationId }).unwrap()
+      setShowDeleteModal(false)
       setMenuOpen(false)
     } catch {
       /* optional */
@@ -330,24 +332,16 @@ export function MessageBubble({
               setMenuOpen(false)
             }}
             onReport={() => void submitReport()}
-            onDelete={() => void confirmDelete()}
+            onDelete={() => setShowDeleteModal(true)}
           />
         </div>
       )}
 
-      <div
-        className={`relative max-w-[85%] rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
-      >
-
-
+      <div className={`flex flex-col max-w-[85%] ${isSelf ? 'items-end' : 'items-start'}`}>
         {replyParent && (
           <button
             type="button"
-            className={`mb-2 w-full rounded-lg border-l-2 px-2 py-1 text-left text-xs ${
-              isSelf
-                ? 'border-indigo-300 bg-indigo-500/40 text-indigo-100'
-                : 'border-slate-300 bg-slate-200/80 text-slate-600'
-            }`}
+            className="mb-1 flex items-center gap-1.5 text-left text-xs text-slate-500 hover:text-slate-700 transition-colors px-1"
             onClick={() => {
               const target = document.querySelector(
                 `[data-message-id="${replyParent.id}"]`,
@@ -358,7 +352,7 @@ export function MessageBubble({
               }
             }}
           >
-            <span className="block font-medium opacity-90">
+            <span className="font-medium opacity-90">
               {(() => {
                 const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
                 const parentIsMe = replyParent.senderId === currentUserId
@@ -373,76 +367,81 @@ export function MessageBubble({
                 }
               })()}
             </span>
-            <span className="line-clamp-2">{replyPreviewText(replyParent, t)}</span>
+            <span className="line-clamp-1 max-w-[150px] italic opacity-80 truncate">
+              {replyPreviewText(replyParent, t)}
+            </span>
           </button>
         )}
 
-        {editing ? (
-          <div className="space-y-2 pt-5">
-            <textarea
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              rows={3}
-              className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900"
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                className="rounded-lg px-2 py-1 text-xs text-slate-600 hover:bg-slate-100"
-                onClick={() => {
-                  setEditing(false)
-                  setDraft(trimmed)
-                }}
-              >
-                {t('common.cancel')}
-              </button>
-              <button
-                type="button"
-                className="rounded-lg bg-indigo-600 px-2 py-1 text-xs text-white disabled:opacity-50"
-                disabled={editState.isLoading || !draft.trim()}
-                onClick={() => void submitEdit()}
-              >
-                {t('chat.message.saveEdit')}
-              </button>
+        <div
+          className={`relative w-full rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
+        >
+          {editing ? (
+            <div className="space-y-2 pt-1">
+              <textarea
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                rows={3}
+                className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="rounded-lg px-2 py-1 text-xs text-slate-600 hover:bg-slate-100"
+                  onClick={() => {
+                    setEditing(false)
+                    setDraft(trimmed)
+                  }}
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg bg-indigo-600 px-2 py-1 text-xs text-white disabled:opacity-50"
+                  disabled={editState.isLoading || !draft.trim()}
+                  onClick={() => void submitEdit()}
+                >
+                  {t('chat.message.saveEdit')}
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {audioItems.map((a) => {
-              const audioSrc = resolveChatAssetUrl(a.fileUrl)
-              return (
-                <VoiceMessagePlayer key={`${message.id}-${audioSrc}`} src={audioSrc} isSelf={isSelf} />
-              )
-            })}
-            {imageItems.map((a) => (
-              <a
-                key={`${message.id}-img-${a.fileUrl}`}
-                href={resolveChatAssetUrl(a.fileUrl)}
-                target="_blank"
-                rel="noreferrer"
-                className="block"
-              >
-                <img
-                  src={resolveChatAssetUrl(a.fileUrl)}
-                  alt=""
-                  className="max-h-56 max-w-full rounded-lg object-cover"
-                />
-              </a>
-            ))}
-            {fileItems.map((a) => (
-              <a
-                key={`${message.id}-file-${a.fileUrl}`}
-                href={resolveChatAssetUrl(a.fileUrl)}
-                target="_blank"
-                rel="noreferrer"
-                className={isSelf ? 'text-indigo-100 underline' : 'text-indigo-600 underline'}
-              >
-                {a.fileName || t('chat.attachment')}
-              </a>
-            ))}
-            {hasText && <div className="whitespace-pre-wrap break-words">{trimmed}</div>}
-          </div>
-        )}
+          ) : (
+            <div className="space-y-2">
+              {audioItems.map((a) => {
+                const audioSrc = resolveChatAssetUrl(a.fileUrl)
+                return (
+                  <VoiceMessagePlayer key={`${message.id}-${audioSrc}`} src={audioSrc} isSelf={isSelf} />
+                )
+              })}
+              {imageItems.map((a) => (
+                <a
+                  key={`${message.id}-img-${a.fileUrl}`}
+                  href={resolveChatAssetUrl(a.fileUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block"
+                >
+                  <img
+                    src={resolveChatAssetUrl(a.fileUrl)}
+                    alt=""
+                    className="max-h-56 max-w-full rounded-lg object-cover"
+                  />
+                </a>
+              ))}
+              {fileItems.map((a) => (
+                <a
+                  key={`${message.id}-file-${a.fileUrl}`}
+                  href={resolveChatAssetUrl(a.fileUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={isSelf ? 'text-indigo-100 underline' : 'text-indigo-600 underline'}
+                >
+                  {a.fileName || t('chat.attachment')}
+                </a>
+              ))}
+              {hasText && <div className="whitespace-pre-wrap break-words">{trimmed}</div>}
+            </div>
+          )}
 
         {reactionEntries.length > 0 && (
           <div className="mt-1.5 flex flex-wrap gap-1">
@@ -487,6 +486,7 @@ export function MessageBubble({
             />
           )}
         </div>
+      </div>
       </div>
 
       {!isSelf && !editing && (canModify || canReport || canReply || canCopy) && (
@@ -542,8 +542,58 @@ export function MessageBubble({
               setMenuOpen(false)
             }}
             onReport={() => void submitReport()}
-            onDelete={() => void confirmDelete()}
+            onDelete={() => setShowDeleteModal(true)}
           />
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl text-slate-900">
+            <h3 className="mb-2 text-lg font-semibold">{t('chat.message.unsendTitle', 'Thu hồi tin nhắn')}</h3>
+            <p className="mb-5 text-sm text-slate-600">{t('chat.message.confirmUnsend')}</p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                type="button"
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                onClick={() => void handleUnsend()}
+              >
+                {t('chat.message.unsend', 'Thu hồi')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl text-slate-900">
+            <h3 className="mb-2 text-lg font-semibold">{t('chat.message.unsendTitle', 'Thu hồi tin nhắn')}</h3>
+            <p className="mb-5 text-sm text-slate-600">{t('chat.message.confirmUnsend')}</p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                type="button"
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                onClick={() => void handleUnsend()}
+              >
+                {t('chat.message.unsend', 'Thu hồi')}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
