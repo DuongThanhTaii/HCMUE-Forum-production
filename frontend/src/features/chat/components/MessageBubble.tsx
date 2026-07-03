@@ -260,8 +260,8 @@ export function MessageBubble({
         className={`flex ${isSelf ? 'justify-end' : 'justify-start'} ${highlightClass}`}
       >
         <div
-          className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm italic ${
-            isSelf ? 'bg-indigo-600/90 text-indigo-100' : 'bg-slate-100 text-slate-500'
+          className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm italic border ${
+            isSelf ? 'border-indigo-200 text-indigo-400' : 'border-slate-200 text-slate-400'
           }`}
         >
           {isSelf ? t('chat.message.removedSelf') : t('chat.message.removedOther')}
@@ -339,43 +339,45 @@ export function MessageBubble({
 
       <div className={`flex flex-col max-w-[85%] ${isSelf ? 'items-end' : 'items-start'}`}>
         {replyParent && (
-          <button
-            type="button"
-            className="mb-1 flex items-center gap-1.5 text-left text-xs text-slate-500 hover:text-slate-700 transition-colors px-1"
-            onClick={() => {
-              const target = document.querySelector(
-                `[data-message-id="${replyParent.id}"]`,
-              )
-              const scrollRoot = menuRef.current?.closest('[data-chat-scroll]')
-              if (target instanceof HTMLElement && scrollRoot instanceof HTMLElement) {
-                scrollElementWithinContainer(scrollRoot, target, 'center')
+          <div className="mb-1 text-xs text-slate-500 px-1 font-medium">
+            {(() => {
+              const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
+              const parentIsMe = replyParent.senderId === currentUserId
+              if (isSelf) {
+                return parentIsMe
+                  ? t('chat.reply.youRepliedToYourself')
+                  : t('chat.reply.youRepliedTo', { name: parentName })
+              } else {
+                return parentIsMe
+                  ? t('chat.reply.theyRepliedToYou')
+                  : t('chat.reply.theyRepliedTo', { name: parentName })
               }
-            }}
-          >
-            <span className="font-medium opacity-90">
-              {(() => {
-                const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
-                const parentIsMe = replyParent.senderId === currentUserId
-                if (isSelf) {
-                  return parentIsMe
-                    ? t('chat.reply.youRepliedToYourself')
-                    : t('chat.reply.youRepliedTo', { name: parentName })
-                } else {
-                  return parentIsMe
-                    ? t('chat.reply.theyRepliedToYou')
-                    : t('chat.reply.theyRepliedTo', { name: parentName })
-                }
-              })()}
-            </span>
-            <span className="line-clamp-1 max-w-[150px] italic opacity-80 truncate">
-              {replyPreviewText(replyParent, t)}
-            </span>
-          </button>
+            })()}
+          </div>
         )}
 
         <div
           className={`relative w-full rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
         >
+          {replyParent && (
+            <button
+              type="button"
+              className={`mb-2 flex w-full flex-col items-start rounded-xl p-2 text-left text-xs transition-colors ${
+                isSelf ? 'bg-indigo-700/50 hover:bg-indigo-700/70' : 'bg-slate-200/60 hover:bg-slate-200/80'
+              }`}
+              onClick={() => {
+                const target = document.querySelector(`[data-message-id="${replyParent.id}"]`)
+                const scrollRoot = menuRef.current?.closest('[data-chat-scroll]')
+                if (target instanceof HTMLElement && scrollRoot instanceof HTMLElement) {
+                  scrollElementWithinContainer(scrollRoot, target, 'center')
+                }
+              }}
+            >
+              <span className="line-clamp-1 italic opacity-90">
+                {replyPreviewText(replyParent, t)}
+              </span>
+            </button>
+          )}
           {editing ? (
             <div className="space-y-2 pt-1">
               <textarea
@@ -572,30 +574,6 @@ export function MessageBubble({
         </div>
       )}
 
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl text-slate-900">
-            <h3 className="mb-2 text-lg font-semibold">{t('chat.message.unsendTitle', 'Thu hồi tin nhắn')}</h3>
-            <p className="mb-5 text-sm text-slate-600">{t('chat.message.confirmUnsend')}</p>
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                {t('common.cancel')}
-              </button>
-              <button
-                type="button"
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-                onClick={() => void handleUnsend()}
-              >
-                {t('chat.message.unsend', 'Thu hồi')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

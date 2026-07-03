@@ -151,8 +151,8 @@
     "unsend": "Thu hồi",
     "saveEdit": "Lưu",
     "confirmUnsend": "Thu hồi tin nhắn này cho mọi người?",
-    "removedSelf": "Bạn đã thu hồi một tin nhắn",
-    "removedOther": "Tin nhắn đã bị thu hồi",
+    "removedSelf": "Tin nhắn này đã bị thu hồi",
+    "removedOther": "Tin nhắn này đã bị thu hồi",
     "editedLabel": "Đã chỉnh sửa"
   },
   "reactions": {

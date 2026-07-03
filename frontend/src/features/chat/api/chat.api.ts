@@ -478,10 +478,10 @@ export const chatApi = baseApi.injectEndpoints({
       void,
       { messageId: string; conversationId: string; emoji: string }
     >({
-      query: ({ messageId, emoji }) => ({
+      query: ({ messageId, emoji, conversationId }) => ({
         url: `/api/v1/chat/messages/${messageId}/reactions`,
         method: 'POST',
-        body: { emoji },
+        body: { emoji, conversationId },
       }),
       invalidatesTags: (_r, _e, arg) => [
         { type: 'ChatMessage', id: arg.conversationId },
@@ -492,9 +492,10 @@ export const chatApi = baseApi.injectEndpoints({
       void,
       { messageId: string; conversationId: string; emoji: string }
     >({
-      query: ({ messageId, emoji }) => ({
+      query: ({ messageId, emoji, conversationId }) => ({
         url: `/api/v1/chat/messages/${messageId}/reactions/${encodeURIComponent(emoji)}`,
         method: 'DELETE',
+        body: { conversationId },
       }),
       invalidatesTags: (_r, _e, arg) => [
         { type: 'ChatMessage', id: arg.conversationId },
