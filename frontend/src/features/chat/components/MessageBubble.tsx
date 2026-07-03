@@ -338,32 +338,14 @@ export function MessageBubble({
       )}
 
       <div className={`flex flex-col max-w-[85%] ${isSelf ? 'items-end' : 'items-start'}`}>
-        {replyParent && (
-          <div className="mb-1 text-xs text-slate-500 px-1 font-medium">
-            {(() => {
-              const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
-              const parentIsMe = replyParent.senderId === currentUserId
-              if (isSelf) {
-                return parentIsMe
-                  ? t('chat.reply.youRepliedToYourself')
-                  : t('chat.reply.youRepliedTo', { name: parentName })
-              } else {
-                return parentIsMe
-                  ? t('chat.reply.theyRepliedToYou')
-                  : t('chat.reply.theyRepliedTo', { name: parentName })
-              }
-            })()}
-          </div>
-        )}
-
         <div
-          className={`relative w-full rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
+          className={`relative w-full rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-[#5b3af5] text-white' : 'bg-slate-100 text-slate-900'}`}
         >
           {replyParent && (
             <button
               type="button"
-              className={`mb-2 flex w-full flex-col items-start rounded-xl p-2 text-left text-xs transition-colors ${
-                isSelf ? 'bg-indigo-700/50 hover:bg-indigo-700/70' : 'bg-slate-200/60 hover:bg-slate-200/80'
+              className={`mb-2 flex w-full flex-col items-start rounded-lg p-2 text-left text-xs transition-colors border-l-[3px] ${
+                isSelf ? 'bg-white/10 hover:bg-white/20 border-white/70' : 'bg-black/5 hover:bg-black/10 border-indigo-400'
               }`}
               onClick={() => {
                 const target = document.querySelector(`[data-message-id="${replyParent.id}"]`)
@@ -373,7 +355,16 @@ export function MessageBubble({
                 }
               }}
             >
-              <span className="line-clamp-1 italic opacity-90">
+              <span className="font-semibold opacity-100 mb-0.5">
+                {(() => {
+                  const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
+                  const parentIsMe = replyParent.senderId === currentUserId
+                  return parentIsMe
+                    ? t('chat.reply.youRepliedToYourself', 'Trả lời chính mình')
+                    : t('chat.reply.youRepliedTo', { name: parentName, defaultValue: `Trả lời ${parentName}` })
+                })()}
+              </span>
+              <span className="line-clamp-1 italic opacity-80">
                 {replyPreviewText(replyParent, t)}
               </span>
             </button>
@@ -445,52 +436,49 @@ export function MessageBubble({
             </div>
           )}
 
+          <div
+            className={`mt-1 flex flex-wrap items-center gap-x-2 text-[10px] ${isSelf ? 'text-indigo-200' : 'text-slate-400'}`}
+          >
+            <span>{new Date(message.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            {message.editedAt && (
+              <span className="italic">{t('chat.message.editedLabel')}</span>
+            )}
+            {isSelf && isLastOwnMessage && isDirectDm && (
+              <ReadReceiptIndicator
+                messageId={message.id}
+                currentUserId={currentUserId}
+                peerUserId={peerUserId}
+                enabled
+              />
+            )}
+          </div>
+        </div>
+
         {reactionEntries.length > 0 && (
-          <div className="mt-1.5 flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1 -mt-2.5 mb-1 ml-2 mr-2 z-10 bg-white dark:bg-slate-800 rounded-full shadow-sm px-1 py-0.5 border border-slate-100">
             {reactionEntries.map(([emoji, users]) => {
               const mine = currentUserId ? users.includes(currentUserId) : false
               return (
                 <button
                   key={emoji}
                   type="button"
-                  className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-xs ${
+                  className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs font-medium ${
                     mine
-                      ? isSelf
-                        ? 'bg-white/25 ring-1 ring-white/40'
-                        : 'bg-indigo-100 text-indigo-800 ring-1 ring-indigo-200'
-                      : isSelf
-                        ? 'bg-white/15 text-indigo-50'
-                        : 'bg-white text-slate-700 ring-1 ring-slate-200'
+                      ? 'bg-indigo-50 text-indigo-600'
+                      : 'bg-transparent text-slate-600 hover:bg-slate-50'
                   }`}
                   onClick={() => void toggleReaction(emoji)}
                 >
                   <span>{emoji}</span>
-                  <span>{users.length}</span>
+                  {users.length > 1 && <span>{users.length}</span>}
                 </button>
               )
             })}
           </div>
         )}
 
-        <div
-          className={`mt-1 flex flex-wrap items-center gap-x-2 text-[10px] ${isSelf ? 'text-indigo-100' : 'text-slate-400'}`}
-        >
-          <span>{new Date(message.sentAt).toLocaleString()}</span>
-          {message.editedAt && (
-            <span className="italic">{t('chat.message.editedLabel')}</span>
-          )}
-          {isSelf && isLastOwnMessage && isDirectDm && (
-            <ReadReceiptIndicator
-              messageId={message.id}
-              currentUserId={currentUserId}
-              peerUserId={peerUserId}
-              enabled
-            />
-          )}
-        </div>
-      </div>
-      </div>
 
+      </div>
       {!isSelf && !editing && (canModify || canReport || canReply || canCopy) && (
         <div className={`relative flex items-center gap-1 transition-opacity ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
           <button
