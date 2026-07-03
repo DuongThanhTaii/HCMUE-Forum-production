@@ -10,7 +10,7 @@ import { ThreadHeader } from './detail/ThreadHeader'
 import { AISummaryCard } from './detail/AISummaryCard'
 import { ThreadContent } from './detail/ThreadContent'
 import { ActionBar } from './detail/ActionBar'
-import { ThreadComments, CommentActions } from './detail/ThreadComments'
+import { ThreadComments, type CommentActions } from './detail/ThreadComments'
 import { RightSidebar } from './detail/RightSidebar'
 
 export function ForumDetailPage() {
@@ -26,8 +26,6 @@ export function ForumDetailPage() {
     voteScore,
     commentThreads,
     commentDraft,
-    commentAttachments,
-    setCommentAttachments,
     onCommentDraftChange,
     hasTriedCommentSubmit,
     canSubmitComment,
@@ -36,8 +34,6 @@ export function ForumDetailPage() {
     onVoteComment,
     onAcceptAnswer,
     onPinComment,
-    commentSortMode,
-    setCommentSortMode,
     replyingToCommentId,
     replyDraft,
     setReplyDraft,
@@ -57,18 +53,14 @@ export function ForumDetailPage() {
     reportDescription,
     setReportDescription,
     onSharePost,
-    onShareFacebook,
     onSummarizePost,
     onLoadRelatedPosts,
-    onGenerateModerationHint,
     interactionErrorKey,
     interactionSuccessKey,
     copilotError,
     copilotSummary,
     copilotRelated,
-    copilotModeration,
     hasModeratorRole,
-    isThreadTopic,
     isQuestionPost,
     canAcceptAnswer,
     canPinComment,
@@ -86,7 +78,6 @@ export function ForumDetailPage() {
     isReporting,
     isSummarizing,
     isLoadingRelated,
-    isLoadingModerationHint,
     isLoading,
     isError,
     userId,

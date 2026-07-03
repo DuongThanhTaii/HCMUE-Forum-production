@@ -1,5 +1,5 @@
 import { Eye, MessageCircle, Heart, Bookmark, Clock3, Pin, Lock, CheckCircle2 } from 'lucide-react'
-import type { ForumDetailItem } from '../../../api/forum.list.api'
+import type { ForumDetailItem } from '../../api/forum.list.api'
 
 interface ThreadHeaderProps {
   post: Partial<ForumDetailItem>
@@ -126,7 +126,7 @@ export function ThreadHeader({ post, title, category, authorLine, activityText, 
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
+          {post.tags.map((tag: string) => (
             <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-md border border-slate-200 bg-slate-50 text-[12px] font-medium text-slate-600 hover:bg-slate-100 cursor-pointer transition-colors">
               {tag}
             </span>

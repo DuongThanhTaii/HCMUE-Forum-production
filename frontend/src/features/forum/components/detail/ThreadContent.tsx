@@ -1,4 +1,4 @@
-import { parseForumRichContent } from '../../../lib/parseForumRichContent'
+import { parseForumRichContent } from '../../lib/parseForumRichContent'
 
 interface ThreadContentProps {
   content: string
@@ -23,7 +23,7 @@ export function ThreadContent({ content, t }: ThreadContentProps) {
             {t('forum.detail.attachmentsLabel') || 'Attached Images'}
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {parsedPost.imageUrls.map((url) => (
+            {parsedPost.imageUrls.map((url: string) => (
               <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block group">
                 <img
                   src={url}
@@ -44,7 +44,7 @@ export function ThreadContent({ content, t }: ThreadContentProps) {
             {t('forum.detail.attachmentsLabel') || 'Attached Files'}
           </p>
           <div className="space-y-2">
-            {parsedPost.fileUrls.map((url) => (
+            {parsedPost.fileUrls.map((url: string) => (
               <a
                 key={url}
                 href={url}

@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import { ArrowBigUp, ArrowBigDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
-import type { CommentThreadNode, CommentSortMode } from '../../hooks/useForumDetailPage'
+import type { CommentThreadNode } from '../../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
 
 function formatCommentTime(value: string) {
@@ -327,7 +326,6 @@ interface ThreadCommentsProps {
   isSubmittingComment: boolean
   isUploadingAttachments: boolean
   onSubmitComment: (e: FormEvent<HTMLFormElement>) => Promise<void>
-  t: (key: string) => string
 }
 
 export function ThreadComments({
@@ -341,8 +339,7 @@ export function ThreadComments({
   canSubmitComment,
   isSubmittingComment,
   isUploadingAttachments,
-  onSubmitComment,
-  t
+  onSubmitComment
 }: ThreadCommentsProps) {
   return (
     <div className="mt-8 pt-8 border-t border-slate-200">

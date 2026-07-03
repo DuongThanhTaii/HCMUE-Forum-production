@@ -12,7 +12,6 @@ interface ActionBarProps {
   onSharePost: () => void
   onOpenReportModal: () => void
   isReporting: boolean
-  t: (key: string) => string
 }
 
 export function ActionBar({
@@ -26,8 +25,7 @@ export function ActionBar({
   onToggleBookmark,
   onSharePost,
   onOpenReportModal,
-  isReporting,
-  t
+  isReporting
 }: ActionBarProps) {
   return (
     <div className="mt-8 flex flex-wrap items-center gap-3 border-y border-slate-200 py-4">

@@ -1,6 +1,6 @@
-import { Calendar, UserRound, Eye, MessageCircle, Heart, Bookmark, Clock3, GraduationCap, Briefcase, FileText } from 'lucide-react'
+import { Calendar, Eye, MessageCircle, Heart, Bookmark, Clock3, GraduationCap, Briefcase, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import type { ForumDetailItem } from '../../../api/forum.list.api'
+import type { ForumDetailItem } from '../../api/forum.list.api'
 import type { RelatedPostsResult } from '@features/assistant/api/assistant.api'
 
 interface RightSidebarProps {
