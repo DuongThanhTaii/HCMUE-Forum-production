@@ -19,11 +19,12 @@ export class ConversationsController {
 
   @Post('direct')
   async createDirectConversation(@Request() req: any, @Body() body: any) {
+    const participants = Array.from(new Set([req.user.userId, ...(body.participantIds || [])]));
     return this.commandBus.execute(
       new CreateConversationCommand(
         1, // direct type
         req.user.userId,
-        body.participantIds || [],
+        participants,
         body.title || 'Direct Message',
       ),
     );
@@ -31,11 +32,12 @@ export class ConversationsController {
 
   @Post('group')
   async createGroupConversation(@Request() req: any, @Body() body: any) {
+    const participants = Array.from(new Set([req.user.userId, ...(body.participantIds || [])]));
     return this.commandBus.execute(
       new CreateConversationCommand(
         2, // group type
         req.user.userId,
-        body.participantIds || [],
+        participants,
         body.title,
       ),
     );

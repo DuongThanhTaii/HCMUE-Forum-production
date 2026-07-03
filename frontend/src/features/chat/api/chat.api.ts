@@ -64,7 +64,7 @@ function mapMessage(raw: Record<string, unknown>): MessageDto {
 }
 
 function mapConversation(raw: Record<string, unknown>): ConversationDto {
-  const p = raw.participantIds
+  const p = raw.participantIds ?? raw.participants
   const participantIds = Array.isArray(p) ? p.map((x) => String(x)) : []
   return {
     id: String(raw.id ?? ''),

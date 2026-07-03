@@ -17,15 +17,18 @@ export class SearchChatUsersHandler implements IQueryHandler<SearchChatUsersQuer
         { email: { contains: q, mode: 'insensitive' } },
         { first_name: { contains: q, mode: 'insensitive' } },
         { last_name: { contains: q, mode: 'insensitive' } },
-        // also search full name by splitting? Prisma doesn't have an easy concat search without raw query,
-        // but contains on first/last name usually works well enough.
       ];
     } else {
-      whereClause.user_roles = {
-        some: {
-          roles: { name: 'Student' }
-        }
-      };
+      const studentRole = await this.prisma.roles.findFirst({
+        where: { name: 'Student' }
+      });
+      if (studentRole) {
+        whereClause.user_roles = {
+          some: {
+            role_id: studentRole.id
+          }
+        };
+      }
     }
 
     const users = await this.prisma.users.findMany({
