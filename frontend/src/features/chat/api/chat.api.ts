@@ -405,11 +405,11 @@ export const chatApi = baseApi.injectEndpoints({
         query: (body) => ({
           url: '/api/v1/chat/conversations/direct',
           method: 'POST',
-          body: { otherUserId: body.otherUserId },
+          body: { participantIds: [body.otherUserId] },
         }),
         transformResponse: (response: unknown) => {
           const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
-          return { conversationId: String(raw.conversationId ?? '') }
+          return { conversationId: String(raw.id ?? raw.conversationId ?? '') }
         },
         invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
       }
@@ -429,7 +429,7 @@ export const chatApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: unknown) => {
         const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
-        return { conversationId: String(raw.conversationId ?? '') }
+        return { conversationId: String(raw.id ?? raw.conversationId ?? '') }
       },
       invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
     }),
