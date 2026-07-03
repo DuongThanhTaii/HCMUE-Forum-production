@@ -11,7 +11,7 @@ export function readStr(obj: Record<string, unknown>, camel: string, pascal: str
 export function parseHubMessageNotification(payload: unknown): HubMessageNotification | null {
   if (!payload || typeof payload !== 'object') return null
   const p = payload as Record<string, unknown>
-  const messageId = readStr(p, 'messageId', 'MessageId')
+  const messageId = readStr(p, 'messageId', 'MessageId') || readStr(p, 'id', 'Id')
   const conversationId = readStr(p, 'conversationId', 'ConversationId')
   const rawChannel = p.channelId ?? p.ChannelId
   const channelId =

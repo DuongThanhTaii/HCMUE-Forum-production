@@ -11,7 +11,7 @@ export function ReactionPicker({
     <div
       role="toolbar"
       aria-label="Reactions"
-      className={`absolute z-50 shadow-xl ${className}`}
+      className={`absolute bottom-full mb-1 z-50 shadow-xl ${className}`}
       onClick={(e) => e.stopPropagation()}
     >
       <EmojiPicker

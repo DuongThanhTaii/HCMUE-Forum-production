@@ -344,7 +344,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     const conn = connectionRef.current
     if (!conn || !conn.connected) return
     try {
-      conn.emit('SendTypingIndicator', conversationId, isTyping)
+      conn.emit('SendTypingIndicator', { conversationId, isTyping })
     } catch {
       // ignore
     }

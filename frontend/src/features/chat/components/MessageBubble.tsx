@@ -322,7 +322,7 @@ export function MessageBubble({
             </button>
             {pickerOpen && (
               <ReactionPicker
-                className="absolute right-0 top-full z-20 mt-1"
+                className={isSelf ? 'right-0' : 'left-0'}
                 onPick={(emoji) => void toggleReaction(emoji)}
               />
             )}
