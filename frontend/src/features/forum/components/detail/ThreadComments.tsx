@@ -1,5 +1,7 @@
 import type { FormEvent, ReactNode } from 'react'
 import type { User } from '@shared/types/auth'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
 import type { CommentThreadNode } from '../../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
@@ -52,6 +54,12 @@ function getRoleBadgeClasses(role: string): string | null {
   }
 }
 
+function getInitial(name?: string) {
+  if (!name) return 'U'
+  const parts = name.trim().split(' ')
+  return parts[parts.length - 1].charAt(0).toUpperCase()
+}
+
 export interface CommentActions {
   replyingToId: string | null
   replyDraft: string
@@ -100,7 +108,7 @@ function CommentBranch({
   const parsed = parseForumRichContent(node.content)
   const hasChildren = node.children.length > 0
 
-  const avatarLetter = node.authorName.charAt(0).toUpperCase()
+  const avatarLetter = getInitial(node.authorName)
 
   return (
     <div 
@@ -158,9 +166,11 @@ function CommentBranch({
             </div>
             {parsed.body ? (
               <div className="prose prose-slate max-w-none prose-p:text-[14px] prose-p:leading-[1.6]">
-                <p className="break-words whitespace-pre-line text-slate-800 m-0">
-                  {renderWithMentions(parsed.body)}
-                </p>
+                <div className="break-words text-slate-800 m-0">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm max-w-none prose-p:my-1">
+                    {parsed.body}
+                  </ReactMarkdown>
+                </div>
               </div>
             ) : null}
             {parsed.imageUrls.length > 0 ? (
@@ -212,10 +222,10 @@ function CommentBranch({
 
               {(node.authorId === actions.userId || actions.hasModeratorRole) && (
                 <>
-                  <button type="button" className="hover:text-slate-900 transition-colors">
-                    Ghim
+                  <button type="button" onClick={() => void actions.onPinComment(node.id)} className="hover:text-slate-900 transition-colors">
+                    {node.isPinned ? 'Bỏ ghim' : 'Ghim'}
                   </button>
-                  <button type="button" className="hover:text-slate-900 transition-colors">
+                  <button type="button" onClick={() => alert('Tính năng sửa đang được phát triển')} className="hover:text-slate-900 transition-colors">
                     Chỉnh sửa
                   </button>
                   <button
@@ -259,14 +269,14 @@ function CommentBranch({
                       onClick={actions.onCancelReply}
                       className="rounded-lg px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-200 transition-colors"
                     >
-                      Cancel
+                      Hủy
                     </button>
                     <button
                       type="submit"
                       disabled={!actions.replyDraft.trim()}
                       className="rounded-lg bg-primary px-5 py-1.5 text-[13px] font-semibold text-white shadow-sm hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                     >
-                      Reply
+                      Trả lời
                     </button>
                   </div>
                 </div>
@@ -301,7 +311,7 @@ function CommentBranch({
                   className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  Hide replies
+                  Ẩn bình luận
                 </button>
               </div>
             </div>
@@ -345,7 +355,7 @@ export function ThreadComments({
   commentSortMode,
   setCommentSortMode,
 }: ThreadCommentsProps) {
-  const userInitials = currentUser?.fullName?.charAt(0)?.toUpperCase() || 'ME'
+  const userInitials = getInitial(currentUser?.fullName)
 
   const insertFormat = (format: string) => {
     onCommentDraftChange(commentDraft + format)

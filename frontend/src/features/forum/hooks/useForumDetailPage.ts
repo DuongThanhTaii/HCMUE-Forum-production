@@ -308,16 +308,8 @@ export function useForumDetailPage() {
 
   function onStartReply(commentId: string, authorName?: string, sourceContent?: string) {
     if (!ensureAuthenticated()) return
-    const safeAuthor = (authorName || t('forum.commentSection.author')).trim()
-    const content = (sourceContent || '').trim()
-    const quoteBody = content
-      .slice(0, 240)
-      .split('\n')
-      .map((line) => `> ${line}`)
-      .join('\n')
-    const quotePrefix = t('forum.commentSection.quotePrefix', { author: safeAuthor })
     setReplyingToCommentId(commentId)
-    setReplyDraft(content ? `${quotePrefix}\n${quoteBody}\n\n` : '')
+    setReplyDraft('')
     setReplyAttachments([])
     setHasTriedReplySubmit(false)
   }
