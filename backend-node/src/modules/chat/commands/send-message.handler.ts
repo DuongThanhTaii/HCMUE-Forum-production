@@ -38,12 +38,21 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
       data: { last_message_at: new Date() },
     });
 
+    const sender = await this.prisma.users.findUnique({
+      where: { id: command.senderId },
+      select: { first_name: true, last_name: true },
+    });
+    const senderName = sender ? `${sender.first_name} ${sender.last_name}`.trim() : 'Người dùng';
+
     const messageDto = {
+      messageId: message.id, // Usually messageId for hub
       id: message.id,
       conversationId: message.conversation_id,
       senderId: message.sender_id,
+      senderName,
       content: message.content,
       type: message.type,
+      messageType: message.type,
       sentAt: message.sent_at,
       editedAt: message.edited_at,
       isDeleted: message.is_deleted,

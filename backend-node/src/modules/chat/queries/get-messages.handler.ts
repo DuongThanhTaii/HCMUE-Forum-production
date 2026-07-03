@@ -26,10 +26,18 @@ export class GetMessagesHandler implements IQueryHandler<GetMessagesQuery> {
       this.prisma.messages.count({ where }),
     ]);
 
+    const senderIds = Array.from(new Set(messages.map(m => m.sender_id)));
+    const users = await this.prisma.users.findMany({
+      where: { id: { in: senderIds } },
+      select: { id: true, first_name: true, last_name: true },
+    });
+    const userMap = new Map(users.map(u => [u.id, `${u.first_name} ${u.last_name}`.trim()]));
+
     const items = messages.map(m => ({
       id: m.id,
       conversationId: m.conversation_id,
       senderId: m.sender_id,
+      senderDisplayName: userMap.get(m.sender_id) || null,
       content: m.content,
       type: m.type,
       sentAt: m.sent_at,
