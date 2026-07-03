@@ -1,5 +1,5 @@
 import type { FormEvent, ReactNode } from 'react'
-import { ArrowBigUp, ArrowBigDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
 import type { CommentThreadNode } from '../../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
 
@@ -115,14 +115,14 @@ function CommentBranch({
     >
       {/* Branch curve connecting parent's vertical line to this child's avatar */}
       {depth > 0 && (
-        <div className={`absolute top-0 -left-[27px] w-[27px] h-[16px] rounded-bl-xl border-b-2 border-l-2 transition-colors z-0 pointer-events-none ${actions.isLineHovered(node) ? 'border-slate-300' : 'border-slate-100'}`} />
+        <div className={`absolute top-0 -left-[33px] w-[33px] h-[16px] rounded-bl-xl border-b-2 border-l-2 transition-colors z-0 pointer-events-none ${actions.isLineHovered(node) ? 'border-slate-300' : 'border-slate-100'}`} />
       )}
       
       {/* Main vertical line for this comment's children */}
       {hasChildren && isExpanded && (
         <div 
           onClick={() => actions.onToggleCollapse(node.id)}
-          className={`absolute top-[40px] bottom-4 left-[15px] w-[27px] cursor-pointer rounded-bl-xl border-b-2 border-l-2 transition-colors z-20 hover:border-slate-300 ${actions.isLineHovered(node) ? 'border-slate-300' : 'border-slate-100'}`} 
+          className={`absolute top-[32px] bottom-[24px] left-[15px] w-4 cursor-pointer border-l-2 transition-colors z-20 hover:border-slate-300 ${actions.isLineHovered(node) ? 'border-slate-300' : 'border-slate-100'}`} 
         />
       )}
       <div className="flex gap-4 relative z-10">
@@ -177,33 +177,25 @@ function CommentBranch({
               </div>
             ) : null}
 
-            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
-              <div className="flex items-center rounded-full bg-slate-50 border border-slate-200 p-0.5">
-                <button
-                  type="button"
-                  onClick={() => void actions.onVoteComment(node.id, 1)}
-                  disabled={actions.isVotingComment}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-medium disabled:opacity-50 transition-colors ${
-                    isUpvoted
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'text-slate-600 hover:bg-slate-200 hover:text-emerald-700'
-                  }`}
-                >
-                  <ArrowBigUp className="h-4 w-4" strokeWidth={isUpvoted ? 2.5 : 1.5} />
-                  <span className="tabular-nums font-bold">{node.voteScore}</span>
-                </button>
-                <div className="w-[1px] h-4 bg-slate-200 mx-0.5" />
-                <button
-                  type="button"
-                  onClick={() => void actions.onVoteComment(node.id, 2)}
-                  disabled={actions.isVotingComment}
-                  className={`inline-flex items-center rounded-full px-2 py-1 text-[12px] font-medium disabled:opacity-50 transition-colors ${
-                    isDownvoted ? 'bg-rose-100 text-rose-800' : 'text-slate-600 hover:bg-slate-200 hover:text-rose-700'
-                  }`}
-                >
-                  <ArrowBigDown className="h-4 w-4" strokeWidth={isDownvoted ? 2.5 : 1.5} />
-                </button>
-              </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-slate-500">
+              <button
+                type="button"
+                onClick={() => void actions.onVoteComment(node.id, 1)}
+                disabled={actions.isVotingComment}
+                className={`flex items-center gap-1.5 transition-colors disabled:opacity-50 ${isUpvoted ? 'text-emerald-600' : 'hover:text-emerald-600'}`}
+              >
+                <ThumbsUp className={`h-4 w-4 ${isUpvoted ? 'fill-current' : ''}`} />
+                {node.voteScore > 0 && <span>{node.voteScore}</span>}
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => void actions.onVoteComment(node.id, 2)}
+                disabled={actions.isVotingComment}
+                className={`flex items-center gap-1.5 transition-colors disabled:opacity-50 ${isDownvoted ? 'text-rose-600' : 'hover:text-rose-600'}`}
+              >
+                <ThumbsDown className={`h-4 w-4 ${isDownvoted ? 'fill-current' : ''}`} />
+              </button>
 
               <button
                 type="button"
@@ -212,21 +204,26 @@ function CommentBranch({
                     ? actions.onCancelReply()
                     : actions.onStartReply(node.id, node.authorName, parsed.body || node.content)
                 }
-                className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                className="hover:text-slate-900 transition-colors"
               >
-                {isReplying ? actions.t('forum.commentSection.cancelReply') : 'Reply'}
+                {isReplying ? actions.t('forum.commentSection.cancelReply') : 'Trả lời'}
               </button>
 
               {(node.authorId === actions.userId || actions.hasModeratorRole) && (
                 <>
-                  <span className="text-slate-300 text-[10px]">|</span>
+                  <button type="button" className="hover:text-slate-900 transition-colors">
+                    Ghim
+                  </button>
+                  <button type="button" className="hover:text-slate-900 transition-colors">
+                    Chỉnh sửa
+                  </button>
                   <button
                     type="button"
                     onClick={() => void actions.onDeleteComment(node.id)}
                     disabled={actions.isDeletingComment}
-                    className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[12px] font-medium text-slate-500 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-60 transition-colors"
+                    className="hover:text-rose-600 disabled:opacity-60 transition-colors"
                   >
-                    Delete
+                    Xóa
                   </button>
                 </>
               )}
@@ -342,69 +339,80 @@ export function ThreadComments({
   onSubmitComment
 }: ThreadCommentsProps) {
   return (
-    <div className="mt-8 pt-8 border-t border-slate-200">
-      <h3 className="text-[18px] font-bold text-slate-900 mb-6">
-        Comments ({commentCount})
-      </h3>
+    <div className="mt-4 rounded-xl border border-slate-200 bg-white">
+      <div className="flex flex-wrap items-center justify-between border-b border-slate-100 p-4 sm:p-6 pb-4">
+        <h3 className="text-[16px] font-bold text-slate-900">
+          Trả lời ({commentCount})
+        </h3>
+        <div className="flex items-center gap-2 text-[13px]">
+          <span className="text-slate-500 hidden sm:inline">Sắp xếp:</span>
+          <div className="flex bg-slate-100/80 rounded-lg p-1">
+            <button className="px-4 py-1.5 bg-white rounded-md shadow-sm font-semibold text-sky-700 transition-colors">Top</button>
+            <button className="px-4 py-1.5 font-medium text-slate-600 hover:text-slate-900 transition-colors">Mới nhất</button>
+          </div>
+        </div>
+      </div>
 
-      <div className="mb-8">
-        <form onSubmit={(e) => void onSubmitComment(e)} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex gap-4">
-            <div className="flex-shrink-0">
-              <div className="flex h-10 w-10 select-none items-center justify-center rounded-full bg-slate-200 text-[15px] font-bold text-slate-700 shadow-sm">
-                ME
+      <div className="p-4 sm:p-6 pt-6">
+        <div className="mb-8">
+          <form onSubmit={(e) => void onSubmitComment(e)} className="rounded-xl border border-slate-200 bg-white focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all overflow-hidden shadow-sm">
+            <div className="p-3 pb-0 flex gap-3">
+              <div className="flex-shrink-0 mt-1">
+                <div className="flex h-9 w-9 select-none items-center justify-center rounded-full bg-indigo-600 text-[14px] font-bold text-white shadow-sm">
+                  DT
+                </div>
               </div>
-            </div>
-            <div className="flex-1 min-w-0">
               <textarea
                 value={commentDraft}
                 onChange={(e) => onCommentDraftChange(e.target.value)}
-                rows={3}
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-[14px] focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none resize-y transition-shadow"
-                placeholder="Leave a comment..."
+                rows={2}
+                className="w-full text-[14px] bg-transparent outline-none resize-none placeholder-slate-400 min-h-[50px] mt-1.5"
+                placeholder="Viết bình luận của bạn..."
               />
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex gap-1 bg-slate-50 p-1 rounded-lg border border-slate-200">
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><Bold className="h-4 w-4" /></button>
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><Italic className="h-4 w-4" /></button>
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><LinkIcon className="h-4 w-4" /></button>
-                  <div className="w-[1px] h-4 bg-slate-300 mx-1 self-center" />
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><Code className="h-4 w-4" /></button>
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><Quote className="h-4 w-4" /></button>
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><ImageIcon className="h-4 w-4" /></button>
-                  <button type="button" className="p-1.5 text-slate-500 hover:text-slate-900 rounded hover:bg-white hover:shadow-sm transition-all"><Paperclip className="h-4 w-4" /></button>
-                </div>
-                <div className="flex items-center gap-3">
-                  {hasTriedCommentSubmit && !commentDraft.trim() && (
-                    <span className="text-[12px] font-medium text-rose-600">Comment cannot be empty</span>
-                  )}
-                  <button
-                    type="submit"
-                    disabled={!canSubmitComment}
-                    className="rounded-lg bg-primary px-6 py-2 text-[14px] font-bold text-white shadow-sm hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
-                  >
-                    {isSubmittingComment || isUploadingAttachments ? 'Submitting...' : 'Comment'}
-                  </button>
-                </div>
+            </div>
+            
+            <div className="px-3 py-3 mt-2 flex flex-wrap items-center justify-between border-t border-slate-100 bg-slate-50">
+              <div className="flex gap-1 text-slate-500">
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Bold className="h-4 w-4" /></button>
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Italic className="h-4 w-4" /></button>
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Code className="h-4 w-4" /></button>
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><LinkIcon className="h-4 w-4" /></button>
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><ImageIcon className="h-4 w-4" /></button>
+                <button type="button" className="p-1.5 hover:text-slate-900 rounded hover:bg-slate-200/60 transition-all"><Paperclip className="h-4 w-4" /></button>
+              </div>
+              <div className="flex items-center gap-3 mt-2 sm:mt-0">
+                {hasTriedCommentSubmit && !commentDraft.trim() && (
+                  <span className="text-[12px] font-medium text-rose-600">Bình luận trống</span>
+                )}
+                <button type="button" className="text-[13px] font-semibold text-slate-600 border border-slate-300 bg-white px-3 py-1.5 rounded-lg flex items-center gap-2 hover:bg-slate-50 transition-colors">
+                  <Paperclip className="h-4 w-4" /> Chọn tệp
+                </button>
+                <button
+                  type="submit"
+                  disabled={!canSubmitComment}
+                  className="rounded-lg bg-primary px-5 py-1.5 text-[14px] font-bold text-white shadow-sm hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+                >
+                  {isSubmittingComment || isUploadingAttachments ? 'Đang gửi...' : 'Trả lời'}
+                </button>
               </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
 
-      <div className="space-y-4">
-        {isCommentsLoading ? (
-          <div className="py-8 text-center text-[14px] font-medium text-slate-500">Loading comments...</div>
-        ) : commentThreads.length > 0 ? (
-          commentThreads.map((node) => (
-            <CommentBranch key={node.id} node={node} depth={0} actions={commentActions} />
-          ))
-        ) : (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 py-12 text-center">
-            <h4 className="text-[15px] font-bold text-slate-900 mb-1">No comments yet</h4>
-            <p className="text-[14px] text-slate-500 mb-4">Be the first to reply and start the discussion.</p>
-          </div>
-        )}
+        <div className="space-y-4">
+          {isCommentsLoading ? (
+            <div className="py-8 text-center text-[14px] font-medium text-slate-500">Đang tải bình luận...</div>
+          ) : commentThreads.length > 0 ? (
+            commentThreads.map((node) => (
+              <CommentBranch key={node.id} node={node} depth={0} actions={commentActions} />
+            ))
+          ) : (
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 py-12 text-center">
+              <h4 className="text-[15px] font-bold text-slate-900 mb-1">Chưa có bình luận</h4>
+              <p className="text-[14px] text-slate-500 mb-4">Hãy là người đầu tiên trả lời và bắt đầu cuộc thảo luận.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

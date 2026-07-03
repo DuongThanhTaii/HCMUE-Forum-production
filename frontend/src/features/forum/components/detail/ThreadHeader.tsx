@@ -8,6 +8,7 @@ interface ThreadHeaderProps {
   authorLine: string | null
   activityText: string
   t: (key: string) => string
+  children?: React.ReactNode
 }
 
 function getRoleBadgeClasses(role: string): string | null {
@@ -33,14 +34,14 @@ function getRoleBadgeClasses(role: string): string | null {
   }
 }
 
-export function ThreadHeader({ post, title, category, authorLine, activityText, t }: ThreadHeaderProps) {
+export function ThreadHeader({ post, title, category, authorLine, activityText, t, children }: ThreadHeaderProps) {
   const avatarLetter = (post.authorName || 'U').charAt(0).toUpperCase()
   
   // Try to parse author roles if provided
   const authorRoles: string[] = [] // Post API doesn't return author roles directly right now, leaving empty for mock
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm transition-all duration-200 ease-out hover:-translate-y-[2px]">
+    <div className="transition-all duration-200">
       <h1 className="text-[28px] sm:text-[32px] font-bold text-slate-900 leading-tight">
         {title}
       </h1>
@@ -98,28 +99,28 @@ export function ThreadHeader({ post, title, category, authorLine, activityText, 
         </div>
       </div>
 
-      {/* Statistics Row */}
-      <div className="mt-5 flex flex-wrap items-center gap-4 text-[13px] font-medium text-slate-500">
-        <div className="flex items-center gap-1.5" title="Views">
-          <Eye className="h-4 w-4" />
-          <span>{post.viewCount ?? 0}</span>
+      {/* Statistics & Action Row */}
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div className="flex flex-wrap items-center gap-4 text-[13px] font-medium text-slate-500">
+          <div className="flex items-center gap-1.5" title="Views">
+            <Eye className="h-4 w-4" />
+            <span>{post.viewCount ?? 0}</span>
+          </div>
+          <div className="flex items-center gap-1.5" title="Replies">
+            <MessageCircle className="h-4 w-4" />
+            <span>{post.replyCount ?? 0}</span>
+          </div>
+          <div className="flex items-center gap-1.5" title="Likes">
+            <Heart className="h-4 w-4" />
+            <span>{post.likeCount ?? post.voteScore ?? 0}</span>
+          </div>
+          <div className="flex items-center gap-1.5" title="Bookmarks">
+            <Bookmark className="h-4 w-4" />
+            <span>{post.bookmarkCount ?? 0}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5" title="Replies">
-          <MessageCircle className="h-4 w-4" />
-          <span>{post.replyCount ?? 0}</span>
-        </div>
-        <div className="flex items-center gap-1.5" title="Likes">
-          <Heart className="h-4 w-4" />
-          <span>{post.likeCount ?? post.voteScore ?? 0}</span>
-        </div>
-        <div className="flex items-center gap-1.5" title="Bookmarks">
-          <Bookmark className="h-4 w-4" />
-          <span>{post.bookmarkCount ?? 0}</span>
-        </div>
-        {/* Mocked reading time as it's not in the API yet */}
-        <div className="flex items-center gap-1.5" title="Reading Time">
-          <Clock3 className="h-4 w-4" />
-          <span>5 min read</span>
+        <div className="flex flex-wrap items-center gap-3">
+          {children}
         </div>
       </div>
 

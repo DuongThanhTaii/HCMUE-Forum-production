@@ -183,53 +183,65 @@ export function ForumDetailPage() {
             </span>
           </nav>
 
-          {/* Thread Header Card */}
-          <ThreadHeader 
-            post={post || {}} 
-            title={title} 
-            category={category} 
-            authorLine={authorLine} 
-            activityText={activityText} 
-            t={t} 
-          />
+          {/* Single Content Block */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-6">
+            <div className="p-6">
+              {/* Thread Header Card */}
+              <ThreadHeader 
+                post={post || {}} 
+                title={title} 
+                category={category} 
+                authorLine={authorLine} 
+                activityText={activityText} 
+                t={t} 
+              >
+                {/* Action Bar inside Header */}
+                <ActionBar
+                  isUpvoted={isUpvoted}
+                  isVoting={isVoting}
+                  onUpvotePost={onUpvotePost}
+                  voteScore={voteScore}
+                  isBookmarked={isBookmarked}
+                  isBookmarking={isBookmarking}
+                  isUnbookmarking={isUnbookmarking}
+                  onToggleBookmark={onToggleBookmark}
+                  onSharePost={onSharePost}
+                  onOpenReportModal={onOpenReportModal}
+                  isReporting={isReporting}
+                />
+              </ThreadHeader>
 
-          {/* Action Bar */}
-          <ActionBar
-            isUpvoted={isUpvoted}
-            isVoting={isVoting}
-            onUpvotePost={onUpvotePost}
-            voteScore={voteScore}
-            isBookmarked={isBookmarked}
-            isBookmarking={isBookmarking}
-            isUnbookmarking={isUnbookmarking}
-            onToggleBookmark={onToggleBookmark}
-            onSharePost={onSharePost}
-            onOpenReportModal={onOpenReportModal}
-            isReporting={isReporting}
-          />
+              {/* AI Summary Card */}
+              <AISummaryCard 
+                summary={copilotSummary} 
+                isLoading={isSummarizing} 
+                error={copilotError} 
+                onRetry={onSummarizePost} 
+              />
 
-          {/* AI Summary Card */}
-          <AISummaryCard 
-            summary={copilotSummary} 
-            isLoading={isSummarizing} 
-            error={copilotError} 
-            onRetry={onSummarizePost} 
-          />
+              {/* Provide a way to manually trigger AI summary if it hasn't been triggered */}
+              {!copilotSummary && !isSummarizing && !copilotError && (
+                 <div className="mt-6">
+                    <button
+                      onClick={onSummarizePost}
+                      className="flex items-center gap-2 text-[13px] font-semibold text-sky-600 hover:text-sky-700 hover:underline"
+                    >
+                      ✨ Generate AI Summary
+                    </button>
+                 </div>
+              )}
 
-          {/* Provide a way to manually trigger AI summary if it hasn't been triggered */}
-          {!copilotSummary && !isSummarizing && !copilotError && (
-             <div className="mt-8">
-                <button
-                  onClick={onSummarizePost}
-                  className="flex items-center gap-2 text-[13px] font-semibold text-sky-600 hover:text-sky-700 hover:underline"
-                >
-                  ✨ Generate AI Summary
-                </button>
-             </div>
-          )}
-
-          {/* Thread Content */}
-          <ThreadContent content={postContent} t={t} />
+              {/* Thread Content */}
+              <div className="mt-8">
+                <h2 className="text-[18px] font-bold text-slate-900 mb-4">Nội dung</h2>
+                <ThreadContent content={postContent} t={t} />
+              </div>
+              
+              <div className="mt-8 text-[13px] text-slate-500 border-t border-slate-100 pt-4">
+                Cập nhật lần cuối: {activityText}
+              </div>
+            </div>
+          </div>
 
           {/* Interaction Status Messages */}
           {(interactionSuccessKey || interactionErrorKey) && (
