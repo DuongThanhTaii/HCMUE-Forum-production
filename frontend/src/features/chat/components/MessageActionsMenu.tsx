@@ -8,6 +8,7 @@ export function MessageActionsMenu({
   canReport,
   canDelete,
   deleteLoading,
+  className = 'right-0',
   onCopy,
   onReply,
   onEdit,
@@ -21,6 +22,7 @@ export function MessageActionsMenu({
   canReport: boolean
   canDelete: boolean
   deleteLoading?: boolean
+  className?: string
   onCopy: () => void
   onReply: () => void
   onEdit: () => void
@@ -31,7 +33,7 @@ export function MessageActionsMenu({
   if (!open) return null
 
   return (
-    <div className="absolute right-0 z-10 mt-1 min-w-[9rem] rounded-lg border border-slate-200 bg-white py-1 text-left text-sm shadow-lg">
+    <div className={`absolute z-10 mt-1 min-w-[9rem] rounded-lg border border-slate-200 bg-white py-1 text-left text-sm shadow-lg ${className}`}>
       {canCopy && (
         <button
           type="button"

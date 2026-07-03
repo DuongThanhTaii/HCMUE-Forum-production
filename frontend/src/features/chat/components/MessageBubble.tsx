@@ -99,8 +99,6 @@ export function MessageBubble({
   const imageItems = attachments.filter((a) => isImageMime(a.mimeType))
   const fileItems = attachments.filter((a) => !isAudioMime(a.mimeType) && !isImageMime(a.mimeType))
   const hasText = trimmed.length > 0
-  const senderLabel =
-    message.senderDisplayName?.trim() || `${message.senderId.slice(0, 8)}…`
   const typeUpper = (message.type ?? '').toUpperCase()
   const withinEditWindow =
     Date.now() - new Date(message.sentAt).getTime() < EDIT_WINDOW_MS
@@ -230,7 +228,7 @@ export function MessageBubble({
           {isSelf
             ? t('chat.calls.missedCallSent')
             : t('chat.calls.missedCallReceived', {
-                name: message.senderDisplayName?.trim() || senderLabel,
+                name: message.senderDisplayName?.trim() || t('chat.user'),
               })}
         </div>
       </div>
@@ -264,11 +262,6 @@ export function MessageBubble({
             isSelf ? 'bg-indigo-600/90 text-indigo-100' : 'bg-slate-100 text-slate-500'
           }`}
         >
-          {!isSelf && (
-            <div className="mb-0.5 text-[10px] font-medium not-italic uppercase tracking-wide text-slate-500">
-              {senderLabel}
-            </div>
-          )}
           {isSelf ? t('chat.message.removedSelf') : t('chat.message.removedOther')}
         </div>
       </div>
@@ -287,12 +280,6 @@ export function MessageBubble({
         } ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
         ref={menuRef}
       >
-        {!isSelf && (
-          <div className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-500">
-            {senderLabel}
-          </div>
-        )}
-
         {(canModify || canReport || canReply || canCopy) && !editing && (
           <div className={`absolute right-1 top-1 flex items-center gap-0.5 ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
             {canReact && (
@@ -328,6 +315,7 @@ export function MessageBubble({
             )}
             <MessageActionsMenu
               open={menuOpen}
+              className={isSelf ? 'right-0' : 'left-0'}
               canCopy={canCopy}
               canReply={Boolean(canReply)}
               canEdit={canEdit}
