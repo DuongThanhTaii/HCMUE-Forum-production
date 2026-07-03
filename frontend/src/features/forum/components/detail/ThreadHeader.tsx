@@ -1,4 +1,4 @@
-import { Eye, MessageCircle, Heart, Bookmark, Clock3, Pin, Lock, CheckCircle2 } from 'lucide-react'
+import { Eye, MessageCircle, Heart, Bookmark, Pin, Lock, CheckCircle2 } from 'lucide-react'
 import type { ForumDetailItem } from '../../api/forum.list.api'
 
 interface ThreadHeaderProps {
