@@ -524,7 +524,7 @@ export const chatApi = baseApi.injectEndpoints({
 
     searchChatUsers: build.query<UserListItemDto[], { q: string; take?: number }>({
       query: ({ q, take = 24 }) => ({
-        url: '/api/v1/users',
+        url: '/api/v1/users/search-chat',
         params: { search: q, take },
       }),
       transformResponse: (response: unknown) => {

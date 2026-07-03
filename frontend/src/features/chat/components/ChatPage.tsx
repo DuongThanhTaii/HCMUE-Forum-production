@@ -96,7 +96,7 @@ export function ChatPage() {
   const { data: myChannels } = useGetMyChannelsQuery()
   const qTrim = userQuery.trim()
   const searchUsersArg =
-    dmPickerOpen && qTrim.length >= 2 ? { q: qTrim, take: 24 } : skipToken
+    dmPickerOpen ? { q: qTrim, take: 24 } : skipToken
   const { data: searchHits, isFetching: searchLoading } = useSearchChatUsersQuery(searchUsersArg)
   const [joinChannel] = useJoinChannelMutation()
   const [createDm] = useCreateDirectConversationMutation()
@@ -408,11 +408,7 @@ export function ChatPage() {
               className="mb-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-indigo-500 focus:ring-2"
             />
             <ul className="max-h-56 overflow-y-auto rounded-xl border border-slate-100">
-              {qTrim.length < 2 ? (
-                <li className="px-3 py-6 text-center text-sm text-slate-500">
-                  {t('chat.dm.typeToSearch')}
-                </li>
-              ) : searchLoading ? (
+              {searchLoading ? (
                 <li className="px-3 py-4 text-center text-sm text-slate-500">{t('common.loading')}</li>
               ) : !(searchHits ?? []).filter((u) => u.id !== currentUserId).length ? (
                 <li className="px-3 py-4 text-center text-sm text-slate-500">{t('chat.dm.noResults')}</li>

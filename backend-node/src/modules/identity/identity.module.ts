@@ -10,6 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { IdentityRepository } from './repositories/identity.repository';
 import { GetUserByIdHandler } from './queries/get-user-by-id.handler';
 import { GetUsersHandler } from './queries/get-users.handler';
+import { SearchChatUsersHandler } from './queries/search-chat-users.handler';
 import { UpdateUserProfileHandler } from './commands/update-user-profile.handler';
 import { BlockUserHandler } from './commands/block-user.handler';
 import { AssignRoleToUserHandler } from './commands/assign-role-to-user.handler';
@@ -52,6 +53,7 @@ const QueryHandlers = [
   GetRoleByIdHandler,
   GetPermissionsHandler,
   GetPermissionByIdHandler,
+  SearchChatUsersHandler,
 ];
 
 @Module({

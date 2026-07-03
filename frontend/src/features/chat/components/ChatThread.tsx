@@ -254,9 +254,14 @@ export function ChatThread({
         {bubbleList}
       </ChatMessageList>
       {typingPeers.length > 0 && (
-        <p className="shrink-0 text-xs text-slate-500">
-          {typingPeers.join(', ')} {t('chat.typing')}
-        </p>
+        <div className="flex shrink-0 items-center gap-2 px-4 pb-2 text-xs text-slate-500">
+          <div className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2 shadow-sm">
+            <span className="block h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '0ms' }}></span>
+            <span className="block h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '150ms' }}></span>
+            <span className="block h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '300ms' }}></span>
+          </div>
+          <span>{typingPeers.join(', ')} {t('chat.typing')}</span>
+        </div>
       )}
     </div>
   )

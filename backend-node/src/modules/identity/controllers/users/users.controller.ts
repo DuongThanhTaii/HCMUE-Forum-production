@@ -8,6 +8,7 @@ import {
   Request,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
@@ -15,6 +16,7 @@ import { RolesGuard } from '../../guards/roles.guard';
 import { Roles } from '../../../../common/decorators/roles.decorator';
 import { GetUserByIdQuery } from '../../queries/get-user-by-id.query';
 import { GetUsersQuery } from '../../queries/get-users.query';
+import { SearchChatUsersQuery } from '../../queries/search-chat-users.query';
 import { UpdateUserProfileCommand } from '../../commands/update-user-profile.command';
 import { BlockUserCommand } from '../../commands/block-user.command';
 import { AssignRoleToUserCommand } from '../../commands/assign-role-to-user.handler';
@@ -55,6 +57,11 @@ export class UsersController {
   @Get()
   async getUsers() {
     return this.queryBus.execute(new GetUsersQuery());
+  }
+
+  @Get('search-chat')
+  async searchChatUsers(@Query('search') search: string, @Query('take') take: string) {
+    return this.queryBus.execute(new SearchChatUsersQuery(search, parseInt(take) || 24));
   }
 
   @UseGuards(RolesGuard)
