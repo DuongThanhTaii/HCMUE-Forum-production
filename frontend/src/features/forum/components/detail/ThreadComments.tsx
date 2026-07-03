@@ -17,20 +17,6 @@ function formatCommentTime(value: string) {
   })}`
 }
 
-function renderWithMentions(content: string): ReactNode {
-  const parts = content.split(/(@[a-zA-Z0-9._-]+)/g)
-  return parts.map((part, index) => {
-    if (/^@[a-zA-Z0-9._-]+$/.test(part)) {
-      return (
-        <span key={`${part}-${index}`} className="font-medium text-primary">
-          {part}
-        </span>
-      )
-    }
-    return <span key={`${index}-${part.slice(0, 10)}`}>{part}</span>
-  })
-}
-
 function getRoleBadgeClasses(role: string): string | null {
   const normalized = role.trim().toLowerCase()
   switch (normalized) {
@@ -66,7 +52,7 @@ export interface CommentActions {
   hasTriedReplySubmit: boolean
   expandedIds: Set<string>
   onReplyDraftChange: (v: string) => void
-  onStartReply: (id: string, authorName?: string, sourceContent?: string) => void
+  onStartReply: (id: string) => void
   onCancelReply: () => void
   onToggleCollapse: (id: string) => void
   onSubmitReply: (e: FormEvent<HTMLFormElement>) => Promise<void>
@@ -166,8 +152,8 @@ function CommentBranch({
             </div>
             {parsed.body ? (
               <div className="prose prose-slate max-w-none prose-p:text-[14px] prose-p:leading-[1.6]">
-                <div className="break-words text-slate-800 m-0">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm max-w-none prose-p:my-1">
+                <div className="break-words text-slate-800 m-0 prose prose-sm max-w-none prose-p:my-1">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {parsed.body}
                   </ReactMarkdown>
                 </div>
@@ -213,7 +199,7 @@ function CommentBranch({
                 onClick={() =>
                   isReplying
                     ? actions.onCancelReply()
-                    : actions.onStartReply(node.id, node.authorName, parsed.body || node.content)
+                    : actions.onStartReply(node.id)
                 }
                 className="hover:text-slate-900 transition-colors"
               >

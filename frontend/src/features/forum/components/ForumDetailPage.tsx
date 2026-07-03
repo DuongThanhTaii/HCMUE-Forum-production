@@ -109,7 +109,7 @@ export function ForumDetailPage() {
     hasTriedReplySubmit,
     expandedIds: expandedCommentIds,
     onReplyDraftChange: setReplyDraft,
-    onStartReply: (id, authorName, sourceContent) => onStartReply(id, authorName, sourceContent),
+    onStartReply: (id) => onStartReply(id),
     onCancelReply,
     onToggleCollapse,
     onSubmitReply,

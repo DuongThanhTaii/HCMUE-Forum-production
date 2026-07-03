@@ -306,7 +306,7 @@ export function useForumDetailPage() {
     }
   }
 
-  function onStartReply(commentId: string, authorName?: string, sourceContent?: string) {
+  function onStartReply(commentId: string) {
     if (!ensureAuthenticated()) return
     setReplyingToCommentId(commentId)
     setReplyDraft('')
