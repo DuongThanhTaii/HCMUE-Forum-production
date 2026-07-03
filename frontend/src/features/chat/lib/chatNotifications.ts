@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 const lastNotifiedByThread = new Map<string, string>()
 
 export function notifyInboundChatMessage(opts: {
@@ -9,6 +11,12 @@ export function notifyInboundChatMessage(opts: {
   const prev = lastNotifiedByThread.get(opts.threadKey)
   if (prev === opts.messageId) return
   lastNotifiedByThread.set(opts.threadKey, opts.messageId)
+
+  // Show an in-app toast notification
+  toast(`Tin nhắn mới từ ${opts.title}: ${opts.body}`, {
+    icon: '💬',
+    duration: 4000,
+  })
 
   if (typeof Notification === 'undefined') return
   if (Notification.permission !== 'granted') return

@@ -294,7 +294,7 @@ export function MessageBubble({
         )}
 
         {(canModify || canReport || canReply || canCopy) && !editing && (
-          <div className="absolute right-1 top-1 flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
+          <div className={`absolute right-1 top-1 flex items-center gap-0.5 ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
             {canReact && (
               <button
                 type="button"

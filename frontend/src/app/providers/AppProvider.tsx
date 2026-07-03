@@ -7,10 +7,15 @@ type AppProviderProps = {
   children: ReactNode
 }
 
+import { Toaster } from 'react-hot-toast'
+
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <Provider store={store}>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        {children}
+        <Toaster position="top-right" />
+      </AuthProvider>
     </Provider>
   )
 }
