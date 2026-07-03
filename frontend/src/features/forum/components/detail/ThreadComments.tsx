@@ -70,7 +70,7 @@ export interface CommentActions {
   t: (key: string) => string
   userId: string | null
   hasModeratorRole: boolean
-  onDeleteComment: (commentId: string) => Promise<void>
+  onDeleteComment: (commentId: string) => void
   isDeletingComment: boolean
   hoveredCommentId: string | null
   setHoveredCommentId: (id: string | null) => void
@@ -152,7 +152,7 @@ function CommentBranch({
             {node.isPinned && (
               <div className="flex items-center gap-1.5 text-[12px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 w-fit mb-2 shadow-sm">
                 <Pin className="h-3 w-3" />
-                {actions.t('forum.commentSection.pinnedNotice') || 'Bình luận này đã được tác giả hay mod ghim'}
+                {actions.t('forum.commentSection.pinnedNotice') || 'Bình luận này đã được ghim!'}
               </div>
             )}
             {parsed.body ? (
