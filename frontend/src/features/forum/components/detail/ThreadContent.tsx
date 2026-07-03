@@ -1,4 +1,6 @@
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface ThreadContentProps {
   content: string
@@ -11,8 +13,10 @@ export function ThreadContent({ content, t }: ThreadContentProps) {
   return (
     <div className="mt-8 prose prose-slate max-w-none prose-p:text-[16px] md:prose-p:text-[17px] prose-p:leading-[1.7] prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl">
       {parsedPost.body ? (
-        <div className="whitespace-pre-line text-slate-800">
-          {parsedPost.body}
+        <div className="whitespace-pre-line text-slate-800 prose prose-slate max-w-none prose-p:my-2 prose-strong:font-bold">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {parsedPost.body}
+          </ReactMarkdown>
         </div>
       ) : null}
 

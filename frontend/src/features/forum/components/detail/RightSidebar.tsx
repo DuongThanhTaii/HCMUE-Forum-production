@@ -1,24 +1,27 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { ForumDetailItem } from '../../api/forum.list.api'
-import type { RelatedPostsResult } from '@features/assistant/api/assistant.api'
-import { useGetPopularForumTagsQuery } from '../../api/forum.list.api'
+import { useGetPopularForumTagsQuery, useGetForumListQuery } from '../../api/forum.list.api'
 
 interface RightSidebarProps {
   post: Partial<ForumDetailItem>
   authorLine: string | null
-  relatedPosts: RelatedPostsResult | null
-  isLoadingRelated: boolean
-  onLoadRelatedPosts: () => void
-  tags: string[]
 }
 
-export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated }: RightSidebarProps) {
+export function RightSidebar({ post, authorLine }: RightSidebarProps) {
   const { t } = useTranslation()
   const avatarLetter = (post.authorName || authorLine || 'U').charAt(0).toUpperCase()
   
   // Fetch popular tags
   const { data: popularTags = [] } = useGetPopularForumTagsQuery({ count: 8 })
+
+  // Fetch related posts by category
+  const { data: relatedPostsList, isLoading: isLoadingRelatedList } = useGetForumListQuery(
+    { categoryId: post.categoryId, pageSize: 6 },
+    { skip: !post.categoryId }
+  )
+
+  const filteredRelated = relatedPostsList?.filter(p => p.id !== post.id).slice(0, 5) || []
 
   return (
     <aside className="space-y-6 w-full lg:w-[340px] xl:w-[360px] shrink-0 sticky top-24 self-start hidden lg:block">
@@ -66,7 +69,7 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated 
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
         <h3 className="font-bold text-slate-900 text-[16px] mb-4">{t('forum.rightSidebar.relatedDiscussions', 'Chủ đề liên quan')}</h3>
         
-        {isLoadingRelated ? (
+        {isLoadingRelatedList ? (
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
               <div key={i} className="animate-pulse">
@@ -75,21 +78,21 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated 
               </div>
             ))}
           </div>
-        ) : relatedPosts?.items?.length ? (
+        ) : filteredRelated.length > 0 ? (
           <div className="space-y-4">
-            {relatedPosts.items.slice(0, 5).map((item) => (
+            {filteredRelated.map((item) => (
               <Link key={item.id} to={`/threads/${item.id}`} className="block group pb-1 last:pb-0">
                 <h4 className="text-[14px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors line-clamp-2">
                   {item.title}
                 </h4>
                 <div className="flex items-center gap-2 mt-1.5 text-[12px] text-slate-500">
-                  <span>14 {t('forum.rightSidebar.replies', 'trả lời').toLowerCase()}</span>
+                  <span>{item.replyCount ?? 0} {t('forum.rightSidebar.replies', 'trả lời').toLowerCase()}</span>
                 </div>
               </Link>
             ))}
-            <button className="w-full mt-2 py-2 bg-slate-50 text-slate-700 font-semibold text-[13px] rounded-lg hover:bg-slate-100 transition-colors">
+            <Link to={`/explore?category=${post.categoryId}`} className="w-full mt-2 py-2 bg-slate-50 text-slate-700 font-semibold text-[13px] rounded-lg hover:bg-slate-100 transition-colors text-center block">
               {t('forum.rightSidebar.seeAll', 'Xem tất cả')}
-            </button>
+            </Link>
           </div>
         ) : (
           <p className="text-[13px] text-slate-500 text-center py-2">{t('forum.rightSidebar.noRelatedFound', 'Không có chủ đề liên quan')}</p>
@@ -109,9 +112,9 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated 
             <p className="text-[13px] text-slate-500">Đang cập nhật...</p>
           )}
         </div>
-        <button className="w-full mt-4 py-2 bg-transparent text-primary font-semibold text-[13px] hover:underline transition-colors text-center block">
+        <Link to="/explore" className="w-full mt-4 py-2 bg-transparent text-primary font-semibold text-[13px] hover:underline transition-colors text-center block">
           Xem tất cả thẻ
-        </button>
+        </Link>
       </div>
     </aside>
   )

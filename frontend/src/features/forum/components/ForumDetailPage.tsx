@@ -54,12 +54,10 @@ export function ForumDetailPage() {
     setReportDescription,
     onSharePost,
     onSummarizePost,
-    onLoadRelatedPosts,
     interactionErrorKey,
     interactionSuccessKey,
     copilotError,
     copilotSummary,
-    copilotRelated,
     hasModeratorRole,
     isQuestionPost,
     canAcceptAnswer,
@@ -77,7 +75,6 @@ export function ForumDetailPage() {
     isUnbookmarking,
     isReporting,
     isSummarizing,
-    isLoadingRelated,
     isLoading,
     isError,
     userId,
@@ -286,10 +283,6 @@ export function ForumDetailPage() {
         <RightSidebar
           post={post || {}}
           authorLine={authorLine}
-          relatedPosts={copilotRelated}
-          isLoadingRelated={isLoadingRelated}
-          onLoadRelatedPosts={onLoadRelatedPosts}
-          tags={post?.tags || []}
         />
       </div>
 
