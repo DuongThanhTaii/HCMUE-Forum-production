@@ -182,7 +182,7 @@ export function ChatThread({
         preview,
         senderLabel:
           message.senderDisplayName?.trim() ||
-          `${message.senderId.slice(0, 8)}…`,
+          t('chat.user'),
       })
     },
     [onReply, t],

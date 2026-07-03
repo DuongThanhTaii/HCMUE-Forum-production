@@ -271,72 +271,74 @@ export function MessageBubble({
   return (
     <div
       data-message-id={message.id}
-      className={`group flex ${isSelf ? 'justify-end' : 'justify-start'} ${highlightClass}`}
-      ref={hoverRef}
+      className={`group flex items-center gap-2 ${isSelf ? 'justify-end' : 'justify-start'} ${highlightClass}`}
+      ref={(el) => {
+        hoverRef.current = el
+        menuRef.current = el
+      }}
     >
-      <div
-        className={`relative max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
-          (canModify || canReport || canReact) && !editing ? 'pt-6' : ''
-        } ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
-        ref={menuRef}
-      >
-        {(canModify || canReport || canReply || canCopy) && !editing && (
-          <div className={`absolute right-1 top-1 flex items-center gap-0.5 ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
-            {canReact && (
-              <button
-                type="button"
-                className={`rounded p-0.5 ${isSelf ? 'text-indigo-200 hover:bg-white/10' : 'text-slate-500 hover:bg-slate-200'}`}
-                aria-label={t('chat.reactions.add')}
-                onClick={() => {
-                  setPickerOpen((o) => !o)
-                  setMenuOpen(false)
-                }}
-              >
-                <SmilePlus className="h-4 w-4" />
-              </button>
-            )}
+      {isSelf && !editing && (canModify || canReport || canReply || canCopy) && (
+        <div className={`relative flex items-center gap-1 transition-opacity ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
+          {canReact && (
             <button
               type="button"
-              className={`rounded p-0.5 ${isSelf ? 'text-indigo-200 hover:bg-white/10' : 'text-slate-500 hover:bg-slate-200'}`}
-              aria-expanded={menuOpen}
-              aria-label={t('chat.message.actions')}
+              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              aria-label={t('chat.reactions.add')}
               onClick={() => {
-                setMenuOpen((o) => !o)
-                setPickerOpen(false)
+                setPickerOpen((o) => !o)
+                setMenuOpen(false)
               }}
             >
-              <MoreHorizontal className="h-4 w-4" />
+              <SmilePlus className="h-4 w-4" />
             </button>
-            {pickerOpen && (
-              <ReactionPicker
-                className={isSelf ? 'right-0' : 'left-0'}
-                onPick={(emoji) => void toggleReaction(emoji)}
-              />
-            )}
-            <MessageActionsMenu
-              open={menuOpen}
-              className={isSelf ? 'right-0' : 'left-0'}
-              canCopy={canCopy}
-              canReply={Boolean(canReply)}
-              canEdit={canEdit}
-              canReport={canReport}
-              canDelete={canModify}
-              deleteLoading={deleteState.isLoading}
-              onCopy={() => void copyText()}
-              onReply={() => {
-                onReply?.(message)
-                setMenuOpen(false)
-              }}
-              onEdit={() => {
-                setDraft(trimmed)
-                setEditing(true)
-                setMenuOpen(false)
-              }}
-              onReport={() => void submitReport()}
-              onDelete={() => void confirmDelete()}
+          )}
+          <button
+            type="button"
+            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+            aria-expanded={menuOpen}
+            aria-label={t('chat.message.actions')}
+            onClick={() => {
+              setMenuOpen((o) => !o)
+              setPickerOpen(false)
+            }}
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
+          {pickerOpen && (
+            <ReactionPicker
+              className="right-0"
+              onPick={(emoji) => void toggleReaction(emoji)}
             />
-          </div>
-        )}
+          )}
+          <MessageActionsMenu
+            open={menuOpen}
+            className="right-0"
+            canCopy={canCopy}
+            canReply={Boolean(canReply)}
+            canEdit={canEdit}
+            canReport={canReport}
+            canDelete={canModify}
+            deleteLoading={deleteState.isLoading}
+            onCopy={() => void copyText()}
+            onReply={() => {
+              onReply?.(message)
+              setMenuOpen(false)
+            }}
+            onEdit={() => {
+              setDraft(trimmed)
+              setEditing(true)
+              setMenuOpen(false)
+            }}
+            onReport={() => void submitReport()}
+            onDelete={() => void confirmDelete()}
+          />
+        </div>
+      )}
+
+      <div
+        className={`relative max-w-[85%] rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-900'}`}
+      >
+
 
         {replyParent && (
           <button
@@ -357,8 +359,7 @@ export function MessageBubble({
             }}
           >
             <span className="block font-medium opacity-90">
-              {replyParent.senderDisplayName?.trim() ||
-                `${replyParent.senderId.slice(0, 8)}…`}
+              {replyParent.senderDisplayName?.trim() || t('chat.user')}
             </span>
             <span className="line-clamp-2">{replyPreviewText(replyParent, t)}</span>
           </button>
@@ -475,6 +476,64 @@ export function MessageBubble({
           )}
         </div>
       </div>
+
+      {!isSelf && !editing && (canModify || canReport || canReply || canCopy) && (
+        <div className={`relative flex items-center gap-1 transition-opacity ${menuOpen || pickerOpen ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'}`}>
+          <button
+            type="button"
+            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+            aria-expanded={menuOpen}
+            aria-label={t('chat.message.actions')}
+            onClick={() => {
+              setMenuOpen((o) => !o)
+              setPickerOpen(false)
+            }}
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
+          {canReact && (
+            <button
+              type="button"
+              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              aria-label={t('chat.reactions.add')}
+              onClick={() => {
+                setPickerOpen((o) => !o)
+                setMenuOpen(false)
+              }}
+            >
+              <SmilePlus className="h-4 w-4" />
+            </button>
+          )}
+          {pickerOpen && (
+            <ReactionPicker
+              className="left-0"
+              onPick={(emoji) => void toggleReaction(emoji)}
+            />
+          )}
+          <MessageActionsMenu
+            open={menuOpen}
+            className="left-0"
+            canCopy={canCopy}
+            canReply={Boolean(canReply)}
+            canEdit={canEdit}
+            canReport={canReport}
+            canDelete={canModify}
+            deleteLoading={deleteState.isLoading}
+            onCopy={() => void copyText()}
+            onReply={() => {
+              onReply?.(message)
+              setMenuOpen(false)
+            }}
+            onEdit={() => {
+              setDraft(trimmed)
+              setEditing(true)
+              setMenuOpen(false)
+            }}
+            onReport={() => void submitReport()}
+            onDelete={() => void confirmDelete()}
+          />
+        </div>
+      )}
     </div>
   )
 }

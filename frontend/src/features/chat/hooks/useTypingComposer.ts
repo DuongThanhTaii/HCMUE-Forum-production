@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react'
-import { TYPING_DEBOUNCE_MS, TYPING_IDLE_STOP_MS } from '../constants/typingThrottle'
+import { TYPING_IDLE_STOP_MS } from '../constants/typingThrottle'
 
 type Params = {
   enabled: boolean
@@ -8,14 +8,11 @@ type Params = {
 }
 
 export function useTypingComposer({ enabled, conversationId, sendTyping }: Params) {
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const typingTrueSent = useRef(false)
 
   const clearTimers = useCallback(() => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
     if (idleTimer.current) clearTimeout(idleTimer.current)
-    debounceTimer.current = null
     idleTimer.current = null
   }, [])
 
@@ -30,20 +27,21 @@ export function useTypingComposer({ enabled, conversationId, sendTyping }: Param
   const onComposerChange = useCallback(
     (text: string) => {
       if (!enabled || !conversationId) return
-      clearTimers()
 
       if (!text.trim()) {
         flushStop()
         return
       }
 
-      debounceTimer.current = setTimeout(() => {
-        if (!typingTrueSent.current) {
-          typingTrueSent.current = true
-          void sendTyping(conversationId, true)
-        }
-        debounceTimer.current = null
-      }, TYPING_DEBOUNCE_MS)
+      if (idleTimer.current) {
+        clearTimeout(idleTimer.current)
+        idleTimer.current = null
+      }
+
+      if (!typingTrueSent.current) {
+        typingTrueSent.current = true
+        void sendTyping(conversationId, true)
+      }
 
       idleTimer.current = setTimeout(() => {
         typingTrueSent.current = false
@@ -51,7 +49,7 @@ export function useTypingComposer({ enabled, conversationId, sendTyping }: Param
         idleTimer.current = null
       }, TYPING_IDLE_STOP_MS)
     },
-    [clearTimers, conversationId, enabled, flushStop, sendTyping]
+    [conversationId, enabled, flushStop, sendTyping]
   )
 
   return { onComposerChange, flushStop }
