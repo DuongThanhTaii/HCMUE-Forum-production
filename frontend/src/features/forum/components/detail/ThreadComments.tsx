@@ -67,7 +67,7 @@ export interface CommentActions {
   isAcceptingAnswer: boolean
   canPinComment: boolean
   isPinningComment: boolean
-  t: (key: string, defaultValue?: string) => string
+  t: any
   userId: string | null
   hasModeratorRole: boolean
   onDeleteComment: (commentId: string) => void

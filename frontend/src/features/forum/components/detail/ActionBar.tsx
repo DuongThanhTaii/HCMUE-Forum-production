@@ -12,7 +12,7 @@ interface ActionBarProps {
   onSharePost: () => void
   onOpenReportModal: () => void
   isReporting: boolean
-  t: (key: string, defaultValue?: string) => string
+  t: any
 }
 
 export function ActionBar({
