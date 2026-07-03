@@ -7,6 +7,9 @@ import { ChatProvider } from '@features/chat/context/ChatContext';
 import { ChatDock } from '@features/chat/components/ChatDock';
 import { NotificationProvider } from '@features/notifications/context/NotificationContext';
 
+import { CallProvider } from '@features/chat/context/CallContext';
+import { GlobalCallOverlay } from '@features/chat/components/GlobalCallOverlay';
+
 export function MainLayout() {
   const { isAuthenticated } = useAuth();
   const includeChatShell = isAuthenticated || AUTH_BYPASS_IN_DEV;
@@ -38,8 +41,11 @@ export function MainLayout() {
       {withNotifications(
         includeChatShell ? (
           <ChatProvider>
-            {layout}
-            <ChatDock />
+            <CallProvider>
+              {layout}
+              <ChatDock />
+              <GlobalCallOverlay />
+            </CallProvider>
           </ChatProvider>
         ) : (
           layout

@@ -53,22 +53,20 @@ type IncomingPending = {
 
 // ─── hook ─────────────────────────────────────────────────────────────────────
 
-export function useWebRtcCall(options: {
-  conversationId: string
-  remoteUserId: string | null
-  canCall: boolean
-}) {
-  const { conversationId, remoteUserId, canCall } = options
+export function useWebRtcCall() {
   const { subscribeWebRtcSignal, relayWebRtcSignal, reportMissedCall, reportCallEnded } = useChatContext()
   const { t } = useTranslation()
   const selfId = useAppSelector((s) => s.auth.user?.id ?? null)
+
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null)
+  const [activeRemoteUserId, setActiveRemoteUserId] = useState<string | null>(null)
 
   const [phase, setPhase] = useState<CallPhase>('idle')
   const [callMode, setCallMode] = useState<CallUiMode>('voice')
   const [error, setError] = useState<string | null>(null)
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
-  const [incoming, setIncoming] = useState<IncomingPending | null>(null)
+  const [incoming, setIncoming] = useState<IncomingPending & { conversationId: string } | null>(null)
   const [muted, setMuted] = useState(false)
 
   const pcRef = useRef<RTCPeerConnection | null>(null)
@@ -78,6 +76,11 @@ export function useWebRtcCall(options: {
   const remoteSetRef = useRef(false)
   const lastRemoteUserRef = useRef<string | null>(null)
   const connectedAtRef = useRef<number | null>(null)
+  const activeConversationIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    activeConversationIdRef.current = activeConversationId
+  }, [activeConversationId])
 
   // ── primitives ──────────────────────────────────────────────────────────────
 
@@ -117,6 +120,8 @@ export function useWebRtcCall(options: {
     connectedAtRef.current = null
     setIncoming(null)
     setMuted(false)
+    setActiveConversationId(null)
+    setActiveRemoteUserId(null)
   }, [closePeer, stopLocalTracks, syncPhase])
 
   const flushIce = useCallback(async (pc: RTCPeerConnection) => {
@@ -128,9 +133,12 @@ export function useWebRtcCall(options: {
 
   const relay = useCallback(
     async (targetUserId: string, kind: string, payload: string) => {
-      await relayWebRtcSignal(conversationId, targetUserId, kind, payload)
+      const cid = activeConversationIdRef.current || incoming?.conversationId
+      if (cid) {
+        await relayWebRtcSignal(cid, targetUserId, kind, payload)
+      }
     },
-    [conversationId, relayWebRtcSignal]
+    [relayWebRtcSignal, incoming]
   )
 
   const setupPeer = useCallback((targetUserId: string): RTCPeerConnection => {
@@ -163,14 +171,17 @@ export function useWebRtcCall(options: {
 
   // ── outgoing call ────────────────────────────────────────────────────────────
 
-  const startOutgoing = useCallback(async (mode: CallUiMode) => {
-    if (!canCall || !remoteUserId || !selfId) return
+  const startOutgoing = useCallback(async (mode: CallUiMode, targetConversationId: string, targetRemoteUserId: string) => {
+    if (!targetRemoteUserId || !selfId) return
 
     // --- synchronous state reset (all batched by React) ---
     resetCallState()
     setError(null)
     setCallMode(mode)
     syncPhase('outgoing')
+    setActiveConversationId(targetConversationId)
+    setActiveRemoteUserId(targetRemoteUserId)
+    activeConversationIdRef.current = targetConversationId
 
     try {
       const stream = await (
@@ -181,18 +192,18 @@ export function useWebRtcCall(options: {
       localStreamRef.current = stream
       setLocalStream(stream)
 
-      const pc = setupPeer(remoteUserId)
+      const pc = setupPeer(targetRemoteUserId)
       stream.getTracks().forEach((t) => pc.addTrack(t, stream))
 
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
-      await relay(remoteUserId, 'offer', serializeSdp(pc.localDescription!))
+      await relay(targetRemoteUserId, 'offer', serializeSdp(pc.localDescription!))
     } catch (e) {
       // Reset FIRST, then set error — React batches these; error wins (last write).
       resetCallState()
       setError(extractRelayError(e, t))
     }
-  }, [canCall, remoteUserId, selfId, resetCallState, syncPhase, setupPeer, relay, t])
+  }, [selfId, resetCallState, syncPhase, setupPeer, relay, t])
 
   // ── accept incoming ──────────────────────────────────────────────────────────
 
@@ -201,6 +212,9 @@ export function useWebRtcCall(options: {
     if (!pending || !selfId) return
     setError(null)
     setIncoming(null)
+    setActiveConversationId(pending.conversationId)
+    setActiveRemoteUserId(pending.fromUserId)
+    activeConversationIdRef.current = pending.conversationId
 
     try {
       const desc = parseSessionDescription(pending.offerPayload)
@@ -236,27 +250,28 @@ export function useWebRtcCall(options: {
 
   const rejectIncoming = useCallback(async () => {
     if (!incoming) return
-    try { await relay(incoming.fromUserId, 'hangup', '{}') } catch { /**/ }
+    try { await relayWebRtcSignal(incoming.conversationId, incoming.fromUserId, 'hangup', '{}') } catch { /**/ }
     resetCallState()
     setError(null)
-  }, [incoming, relay, resetCallState])
+  }, [incoming, relayWebRtcSignal, resetCallState])
 
   const endCall = useCallback(async () => {
     const prevPhase = phaseRef.current
-    const target = lastRemoteUserRef.current ?? remoteUserId
-    if (target) {
-      try { await relay(target, 'hangup', '{}') } catch { /**/ }
+    const target = lastRemoteUserRef.current ?? activeRemoteUserId
+    const cid = activeConversationIdRef.current || incoming?.conversationId
+    if (target && cid) {
+      try { await relayWebRtcSignal(cid, target, 'hangup', '{}') } catch { /**/ }
     }
-    if (prevPhase === 'outgoing') void reportMissedCall(conversationId)
-    if (prevPhase === 'connected') {
+    if (cid && prevPhase === 'outgoing') void reportMissedCall(cid)
+    if (cid && prevPhase === 'connected') {
       const startedAt = connectedAtRef.current
       const durationSeconds =
         startedAt != null ? Math.max(1, Math.round((Date.now() - startedAt) / 1000)) : undefined
-      void reportCallEnded(conversationId, durationSeconds)
+      void reportCallEnded(cid, durationSeconds)
     }
     resetCallState()
     setError(null)
-  }, [conversationId, relay, remoteUserId, reportCallEnded, reportMissedCall, resetCallState])
+  }, [activeRemoteUserId, incoming, relayWebRtcSignal, reportCallEnded, reportMissedCall, resetCallState])
 
   const dismissError = useCallback(() => setError(null), [])
 
@@ -320,9 +335,15 @@ export function useWebRtcCall(options: {
   // ── signal handler ───────────────────────────────────────────────────────────
 
   const handleRemoteSignal = useCallback(async (sig: WebRtcSignalPayload) => {
-    if (!canCall || !selfId) return
-    if (sig.conversationId !== conversationId) return
+    if (!selfId) return
     if (sig.fromUserId === selfId) return
+
+    // If we are currently in a call, and this signal is for a DIFFERENT conversation, ignore it
+    // Wait, if we are in a call and get an offer from someone else, we should reject it or ignore it.
+    if (phaseRef.current !== 'idle' && sig.conversationId !== activeConversationIdRef.current) {
+        // Optionally send a busy signal here
+        return
+    }
 
     const peerId = sig.fromUserId
     const k = sig.kind
@@ -369,7 +390,7 @@ export function useWebRtcCall(options: {
       const od = parseSessionDescription(sig.payload)
       const wantsVideo = sdpHasVideo(od.sdp ?? '')
       setCallMode(wantsVideo ? 'video' : 'voice')
-      setIncoming({ fromUserId: peerId, fromUserName: sig.fromUserName || peerId.slice(0, 8), offerPayload: sig.payload, wantsVideo })
+      setIncoming({ conversationId: sig.conversationId, fromUserId: peerId, fromUserName: sig.fromUserName || peerId.slice(0, 8), offerPayload: sig.payload, wantsVideo })
       syncPhase('incoming')
       return
     }
@@ -390,19 +411,21 @@ export function useWebRtcCall(options: {
         setError(extractRelayError(e, t))
       }
     }
-  }, [attachRenegotiation, callMode, canCall, conversationId, flushIce, relay, resetCallState, selfId, syncPhase, t])
+  }, [attachRenegotiation, callMode, flushIce, relay, resetCallState, selfId, syncPhase, t])
 
   // ── effects ──────────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    if (!canCall || !conversationId || !selfId) return
+    if (!selfId) return
     return subscribeWebRtcSignal((sig) => { void handleRemoteSignal(sig) })
-  }, [canCall, conversationId, handleRemoteSignal, selfId, subscribeWebRtcSignal])
+  }, [handleRemoteSignal, selfId, subscribeWebRtcSignal])
 
   // Strict Mode note: do NOT clean up RTCPeerConnection on unmount.
   // React Strict Mode does mount→unmount→mount in dev which would kill an active call.
 
   return {
+    activeConversationId,
+    activeRemoteUserId,
     phase,
     callMode,
     error,
@@ -410,9 +433,9 @@ export function useWebRtcCall(options: {
     remoteStream,
     incoming,
     muted,
-    startVoice: () => void startOutgoing('voice'),
-    startVideo: () => void startOutgoing('video'),
-    startScreenCall: () => void startOutgoing('screen'),
+    startVoice: (cid: string, uid: string) => void startOutgoing('voice', cid, uid),
+    startVideo: (cid: string, uid: string) => void startOutgoing('video', cid, uid),
+    startScreenCall: (cid: string, uid: string) => void startOutgoing('screen', cid, uid),
     acceptIncoming,
     rejectIncoming,
     endCall,

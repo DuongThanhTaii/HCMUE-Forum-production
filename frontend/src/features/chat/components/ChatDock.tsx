@@ -316,7 +316,6 @@ export function ChatDock() {
 
         {panel === 'thread' && activeThreadRef && (
           <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-2 pb-2 pt-1">
-            <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
             <ChatConversationPanel
               threadRef={activeThreadRef}
               currentUserId={currentUserId}
@@ -326,6 +325,9 @@ export function ChatDock() {
               isMuted={activeConv?.isMuted ?? false}
               isBlockedWithPeer={activeConv?.isBlockedWithPeer ?? false}
               onPeerBlocked={backToList}
+              headerActions={
+                <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
+              }
             />
           </div>
         )}

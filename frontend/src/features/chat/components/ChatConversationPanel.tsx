@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Info, Search } from 'lucide-react'
 import type {
   ChatThreadRef,
   MessageDto,
@@ -22,6 +21,8 @@ export function ChatConversationPanel({
   isMuted = false,
   isBlockedWithPeer = false,
   onPeerBlocked,
+  headerLeft,
+  headerActions,
 }: {
   threadRef: ChatThreadRef
   currentUserId: string | null
@@ -31,6 +32,8 @@ export function ChatConversationPanel({
   isMuted?: boolean
   isBlockedWithPeer?: boolean
   onPeerBlocked?: () => void
+  headerLeft?: React.ReactNode
+  headerActions?: React.ReactNode
 }) {
   const { t } = useTranslation()
   const scrollOnSentRef = useRef<(() => void) | null>(null)
@@ -56,35 +59,25 @@ export function ChatConversationPanel({
   }, [])
 
   return (
-    <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden">
+    <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {conversationId ? (
-        <div className="flex shrink-0 items-center justify-end gap-1">
-          <ConversationHeaderMenu
-            conversationId={conversationId}
-            peerUserId={peerUserId ?? null}
-            peerName={conversationTitle}
-            isMuted={isMuted}
-            isBlockedWithPeer={isBlockedWithPeer}
-            onBlocked={onPeerBlocked}
-          />
-          <button
-            type="button"
-            onClick={() => setInfoOpen(true)}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-xs font-medium text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
-            aria-label={t('chat.info.open')}
-          >
-            <Info className="h-3.5 w-3.5" aria-hidden />
-            <span className="hidden sm:inline">{t('chat.info.open')}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-xs font-medium text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
-            aria-label={t('chat.search.open')}
-          >
-            <Search className="h-3.5 w-3.5" aria-hidden />
-            <span className="hidden sm:inline">{t('chat.search.open')}</span>
-          </button>
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-4 py-2.5 shadow-sm backdrop-blur">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            {headerLeft}
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            {headerActions}
+            <ConversationHeaderMenu
+              conversationId={conversationId}
+              peerUserId={peerUserId ?? null}
+              peerName={conversationTitle}
+              isMuted={isMuted}
+              isBlockedWithPeer={isBlockedWithPeer}
+              onBlocked={onPeerBlocked}
+              onOpenInfo={() => setInfoOpen(true)}
+              onOpenSearch={() => setSearchOpen(true)}
+            />
+          </div>
         </div>
       ) : null}
 

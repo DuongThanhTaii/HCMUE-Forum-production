@@ -1,7 +1,7 @@
 import { startTransition, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { BellOff } from 'lucide-react'
+import { ArrowLeft, BellOff } from 'lucide-react'
 import { skipToken } from '@reduxjs/toolkit/query/react'
 import {
   useCreateDirectConversationMutation,
@@ -454,35 +454,6 @@ export function ChatPage() {
           </div>
         ) : (
           <>
-            <div className="mb-2 flex items-start gap-3 border-b border-slate-200 pb-3">
-              {selected.kind === 'conversation' &&
-                (() => {
-                  const c = convos?.find((x) => x.id === selected.conversationId)
-                  if (!c) return null
-                  return (
-                    <ChatPeerAvatar
-                      name={primaryConversationTitle(c, currentUserId)}
-                      className="hidden sm:inline-flex"
-                    />
-                  )
-                })()}
-              <div className="min-w-0 flex-1">
-                <h2 className="text-base font-semibold leading-tight text-slate-900">
-                  {titleForSelected()}
-                </h2>
-                {subtitleForSelected() && (
-                  <p
-                    className={`mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
-                  >
-                    {selectedPeerActiveNow && (
-                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
-                    )}
-                    {subtitleForSelected()}
-                  </p>
-                )}
-              </div>
-            </div>
-            <ChatCallBar threadRef={selected} conversation={selectedConversation} />
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <ChatConversationPanel
               threadRef={selected}
@@ -500,6 +471,50 @@ export function ChatPage() {
                 setSelected(null)
                 if (narrow) setPanel('list')
               }}
+              headerLeft={
+                <>
+                  <button
+                    type="button"
+                    className="p-1 md:hidden -ml-2 text-slate-500 hover:text-slate-900 transition-colors"
+                    onClick={() => {
+                      setSelected(null)
+                      if (narrow) setPanel('list')
+                    }}
+                    aria-label={t('common.back')}
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                  </button>
+                  {selected.kind === 'conversation' &&
+                    (() => {
+                      const c = convos?.find((x) => x.id === selected.conversationId)
+                      if (!c) return null
+                      return (
+                        <ChatPeerAvatar
+                          name={primaryConversationTitle(c, currentUserId)}
+                          className="hidden sm:inline-flex"
+                        />
+                      )
+                    })()}
+                  <div className="min-w-0 flex-1">
+                    <h2 className="truncate text-base font-bold leading-tight text-slate-900">
+                      {titleForSelected()}
+                    </h2>
+                    {subtitleForSelected() && (
+                      <p
+                        className={`truncate mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
+                      >
+                        {selectedPeerActiveNow && (
+                          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
+                        )}
+                        {subtitleForSelected()}
+                      </p>
+                    )}
+                  </div>
+                </>
+              }
+              headerActions={
+                <ChatCallBar threadRef={selected} conversation={selectedConversation} />
+              }
             />
             </div>
           </>
