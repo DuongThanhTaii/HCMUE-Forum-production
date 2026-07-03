@@ -211,6 +211,7 @@ export function ForumDetailPage() {
                   onSharePost={onSharePost}
                   onOpenReportModal={onOpenReportModal}
                   isReporting={isReporting}
+                  t={t}
                 />
               </ThreadHeader>
 

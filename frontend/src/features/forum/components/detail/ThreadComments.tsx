@@ -67,7 +67,7 @@ export interface CommentActions {
   isAcceptingAnswer: boolean
   canPinComment: boolean
   isPinningComment: boolean
-  t: (key: string) => string
+  t: (key: string, defaultValue?: string) => string
   userId: string | null
   hasModeratorRole: boolean
   onDeleteComment: (commentId: string) => void
@@ -152,7 +152,7 @@ function CommentBranch({
             {node.isPinned && (
               <div className="flex items-center gap-1.5 text-[12px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 w-fit mb-2 shadow-sm">
                 <Pin className="h-3 w-3" />
-                {actions.t('forum.commentSection.pinnedNotice') || 'Bình luận này đã được ghim!'}
+                {actions.t('forum.commentSection.pinnedNotice', 'Bình luận này đã được ghim!')}
               </div>
             )}
             {parsed.body ? (
@@ -208,13 +208,13 @@ function CommentBranch({
                 }
                 className="hover:text-slate-900 transition-colors"
               >
-                {actions.t('forum.commentSection.reply') || 'Trả lời'}
+                {actions.t('forum.commentSection.reply', 'Trả lời')}
               </button>
 
               {(node.authorId === actions.userId || actions.hasModeratorRole) && (
                 <>
                   <button type="button" onClick={() => void actions.onPinComment(node.id)} className="hover:text-slate-900 transition-colors">
-                    {node.isPinned ? (actions.t('forum.commentSection.unpin') || 'Bỏ ghim') : (actions.t('forum.commentSection.pin') || 'Ghim')}
+                    {node.isPinned ? actions.t('forum.commentSection.unpin', 'Bỏ ghim') : actions.t('forum.commentSection.pin', 'Ghim')}
                   </button>
                   <button
                     type="button"
@@ -222,7 +222,7 @@ function CommentBranch({
                     disabled={actions.isDeletingComment}
                     className="hover:text-rose-600 transition-colors disabled:opacity-50"
                   >
-                    {actions.t('forum.commentSection.delete') || 'Xóa'}
+                    {actions.t('forum.commentSection.delete', 'Xóa')}
                   </button>
                 </>
               )}
@@ -239,7 +239,7 @@ function CommentBranch({
                   rows={3}
                   autoFocus
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-[14px] focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none bg-white resize-y"
-                  placeholder={actions.t('forum.commentSection.replyPlaceholder') || 'Viết câu trả lời của bạn...'}
+                  placeholder={actions.t('forum.commentSection.replyPlaceholder', 'Viết câu trả lời của bạn...')}
                 />
                 <div className="mt-3 flex items-center justify-between">
                   <div className="flex gap-1">
@@ -257,14 +257,14 @@ function CommentBranch({
                       onClick={actions.onCancelReply}
                       className="rounded-lg px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-200 transition-colors"
                     >
-                      {actions.t('forum.commentSection.cancel') || 'Hủy'}
+                      {actions.t('forum.commentSection.cancel', 'Hủy')}
                     </button>
                     <button
                       type="submit"
                       disabled={!actions.replyDraft.trim()}
                       className="rounded-lg bg-primary px-5 py-1.5 text-[13px] font-semibold text-white shadow-sm hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                     >
-                      {actions.t('forum.commentSection.reply') || 'Trả lời'}
+                      {actions.t('forum.commentSection.reply', 'Trả lời')}
                     </button>
                   </div>
                 </div>
@@ -283,7 +283,7 @@ function CommentBranch({
                 className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-primary bg-primary/5 hover:bg-primary/10 transition-colors"
               >
                 <ChevronDown className="h-4 w-4" />
-                {node.children.length} {actions.t('forum.replies') || 'replies'}
+                {node.children.length} {actions.t('forum.replies', 'phản hồi')}
               </button>
             </div>
           ) : (
@@ -293,13 +293,13 @@ function CommentBranch({
                   <CommentBranch key={ch.id} node={ch} depth={depth + 1} actions={actions} />
                 ))}
               </div>
-              <div className="relative z-10 mt-2 pl-[48px]">
+              <div className="mt-3 flex items-center gap-4 border-t border-slate-100 pt-3">
                 <button
                   onClick={() => actions.onToggleCollapse(node.id)}
                   className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  {actions.t('forum.commentSection.hideReplies') || 'Ẩn bình luận'}
+                  {actions.t('forum.commentSection.hideReplies', 'Ẩn bình luận')}
                 </button>
               </div>
             </div>
@@ -391,7 +391,7 @@ export function ThreadComments({
                 onChange={(e) => onCommentDraftChange(e.target.value)}
                 rows={2}
                 className="w-full text-[14px] bg-transparent outline-none resize-none placeholder-slate-400 min-h-[50px] mt-1.5"
-                placeholder={commentActions.t('forum.commentSection.commentPlaceholder') || 'Viết bình luận của bạn...'}
+                placeholder={commentActions.t('forum.commentSection.commentPlaceholder', 'Viết bình luận của bạn...')}
               />
             </div>
             

@@ -12,6 +12,7 @@ interface ActionBarProps {
   onSharePost: () => void
   onOpenReportModal: () => void
   isReporting: boolean
+  t: (key: string, defaultValue?: string) => string
 }
 
 export function ActionBar({
@@ -25,7 +26,8 @@ export function ActionBar({
   onToggleBookmark,
   onSharePost,
   onOpenReportModal,
-  isReporting
+  isReporting,
+  t
 }: ActionBarProps) {
   return (
     <div className="flex items-center gap-2">
@@ -41,7 +43,7 @@ export function ActionBar({
         }`}
       >
         <Heart className={`h-3.5 w-3.5 ${isUpvoted ? 'fill-current' : ''}`} />
-        <span>Thích</span>
+        <span>{t('forum.detail.like', 'Thích')}</span>
         {voteScore > 0 && <span className="ml-0.5 rounded px-1 py-0.5 text-[11px] font-bold bg-slate-100 text-slate-700">{voteScore}</span>}
       </button>
 
@@ -56,7 +58,7 @@ export function ActionBar({
         }`}
       >
         <Bookmark className={`h-3.5 w-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
-        <span>Đã lưu</span>
+        <span>{isBookmarked ? t('forum.detail.saved', 'Đã lưu') : t('forum.detail.save', 'Lưu')}</span>
       </button>
 
       {/* Secondary Actions */}
@@ -64,10 +66,10 @@ export function ActionBar({
         type="button"
         onClick={onSharePost}
         className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
-        title="Chia sẻ"
+        title={t('forum.detail.share', 'Chia sẻ')}
       >
         <Share2 className="h-3.5 w-3.5" />
-        <span>Chia sẻ</span>
+        <span>{t('forum.detail.share', 'Chia sẻ')}</span>
       </button>
 
       <button
@@ -75,7 +77,7 @@ export function ActionBar({
         onClick={onOpenReportModal}
         disabled={isReporting}
         className="inline-flex items-center justify-center rounded-lg border border-transparent px-2 py-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-        title="Báo cáo"
+        title={t('forum.detail.report', 'Báo cáo')}
       >
         <Flag className="h-4 w-4" />
       </button>
