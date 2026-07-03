@@ -1,5 +1,6 @@
 import { Calendar, Eye, MessageCircle, Heart, Bookmark, Clock3, GraduationCap, Briefcase, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import type { ForumDetailItem } from '../../api/forum.list.api'
 import type { RelatedPostsResult } from '@features/assistant/api/assistant.api'
 
@@ -13,6 +14,7 @@ interface RightSidebarProps {
 }
 
 export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated, onLoadRelatedPosts, tags }: RightSidebarProps) {
+  const { t } = useTranslation()
   const avatarLetter = (post.authorName || authorLine || 'U').charAt(0).toUpperCase()
 
   // Mock data for similar resources
@@ -27,40 +29,35 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated,
       
       {/* 1. Author Card */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="flex-shrink-0">
+        <div className="flex flex-col items-center justify-center text-center">
+          <div className="flex-shrink-0 mb-3">
             {post.authorAvatar ? (
-              <img src={post.authorAvatar} alt={post.authorName} className="h-14 w-14 rounded-full object-cover" />
+              <img src={post.authorAvatar} alt={post.authorName} className="h-16 w-16 rounded-full object-cover shadow-sm" />
             ) : (
-              <div className="flex h-14 w-14 select-none items-center justify-center rounded-full bg-slate-200 text-[20px] font-bold text-slate-700">
+              <div className="flex h-16 w-16 select-none items-center justify-center rounded-full bg-slate-200 text-[24px] font-bold text-slate-700 shadow-sm">
                 {avatarLetter}
               </div>
             )}
           </div>
           <div>
-            <h3 className="font-bold text-slate-900 text-[16px]">{post.authorName || authorLine || 'Unknown Author'}</h3>
-            <p className="text-[13px] text-slate-500">Student • Faculty of IT</p>
+            <h3 className="font-bold text-slate-900 text-[18px]">{post.authorName || authorLine || 'Unknown Author'}</h3>
+            <p className="text-[14px] text-slate-500 mt-1">{t('forum.rightSidebar.studentYear3')}</p>
           </div>
         </div>
         
-        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4">
+        <div className="mt-5 grid grid-cols-2 gap-3 border-y border-slate-100 py-4 mb-4">
           <div className="text-center">
-            <span className="block text-[16px] font-bold text-slate-900">42</span>
-            <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-500">Threads</span>
+            <span className="block text-[18px] font-bold text-slate-900">42</span>
+            <span className="block text-[12px] font-medium text-slate-500 mt-0.5">{t('forum.rightSidebar.posts')}</span>
           </div>
           <div className="text-center border-l border-slate-100">
-            <span className="block text-[16px] font-bold text-slate-900">128</span>
-            <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-500">Replies</span>
+            <span className="block text-[18px] font-bold text-slate-900">128</span>
+            <span className="block text-[12px] font-medium text-slate-500 mt-0.5">{t('forum.rightSidebar.replies')}</span>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-slate-500 bg-slate-50 rounded-lg py-2">
-          <Calendar className="h-3.5 w-3.5" />
-          <span>Joined Sep 2024</span>
-        </div>
-
-        <button className="mt-3 w-full rounded-lg bg-primary/10 py-2.5 text-[14px] font-semibold text-primary hover:bg-primary/20 transition-colors">
-          Follow User
+        <button className="w-full rounded-lg bg-white border border-primary py-2.5 text-[14px] font-semibold text-primary hover:bg-primary/5 transition-colors">
+          {t('forum.rightSidebar.follow')}
         </button>
       </div>
 
@@ -93,14 +90,7 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated,
 
       {/* 3. Related Discussions */}
       <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-slate-900 text-[15px]">Related Discussions</h3>
-          {!relatedPosts && !isLoadingRelated && (
-            <button onClick={onLoadRelatedPosts} className="text-[12px] font-medium text-primary hover:underline">
-              Load
-            </button>
-          )}
-        </div>
+        <h3 className="font-bold text-slate-900 text-[16px] mb-4">{t('forum.rightSidebar.relatedDiscussions')}</h3>
         
         {isLoadingRelated ? (
           <div className="space-y-4">
@@ -114,31 +104,33 @@ export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated,
         ) : relatedPosts?.items?.length ? (
           <div className="space-y-4">
             {relatedPosts.items.slice(0, 5).map((item) => (
-              <Link key={item.id} to={`/threads/${item.id}`} className="block group">
-                <h4 className="text-[13px] font-medium text-slate-800 leading-snug group-hover:text-primary transition-colors line-clamp-2">
+              <Link key={item.id} to={`/threads/${item.id}`} className="block group border-b border-slate-50 pb-3 last:border-0 last:pb-0">
+                <h4 className="text-[14px] font-medium text-primary leading-snug hover:underline transition-colors line-clamp-2">
                   {item.title}
                 </h4>
-                <div className="flex items-center gap-2 mt-1.5 text-[11px] text-slate-500">
-                  <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">Discussion</span>
-                  <span>•</span>
-                  <span>14 replies</span>
+                <div className="flex items-center gap-2 mt-1.5 text-[12px] text-slate-500">
+                  <span>14 {t('forum.rightSidebar.replies').toLowerCase()}</span>
                 </div>
               </Link>
             ))}
+            <button className="w-full mt-2 py-2 bg-slate-50 text-slate-600 font-medium text-sm rounded-lg hover:bg-slate-100 transition-colors">
+              {t('forum.rightSidebar.seeAll')}
+            </button>
           </div>
         ) : (
-          <p className="text-[13px] text-slate-500 text-center py-2">No related discussions found.</p>
+          <p className="text-[13px] text-slate-500 text-center py-2">{t('forum.rightSidebar.noRelatedFound')}</p>
         )}
       </div>
 
       {/* 4. Popular Tags */}
       {tags && tags.length > 0 && (
         <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
-          <h3 className="font-bold text-slate-900 text-[15px] mb-4">Thread Tags</h3>
+          <h3 className="font-bold text-slate-900 text-[16px] mb-4">{t('forum.rightSidebar.popularTags')}</h3>
           <div className="flex flex-wrap gap-2">
             {tags.map(tag => (
-              <Link key={tag} to={`/explore?tag=${tag}`} className="inline-flex px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-[12px] font-medium text-slate-700 hover:bg-slate-100 transition-colors">
+              <Link key={tag} to={`/explore?tag=${tag}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-medium text-slate-700 hover:bg-slate-100 transition-colors">
                 {tag}
+                <span className="text-[11px] text-slate-400 bg-white px-1.5 rounded-md border border-slate-100">12</span>
               </Link>
             ))}
           </div>

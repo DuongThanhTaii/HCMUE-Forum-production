@@ -1,5 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from '../../../common/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 export class GetPostsQuery {
   constructor(
@@ -51,27 +52,71 @@ export class GetPostsHandler implements IQueryHandler<GetPostsQuery> {
     }
     // if (query.isUnanswered) { whereClause.comment_count = 0; } // Assuming you want 0 replies
     
-    let orderByClause: any = { created_at: 'desc' };
-    if (query.sortBy === 1) { // Trending
-      orderByClause = { vote_score: 'desc' };
-    } else if (query.sortBy === 2) { // Recently Active (updated_at)
-      orderByClause = { updated_at: 'desc' };
-    } else if (query.sortBy === 3) { // Most Viewed
-      orderByClause = { view_count: 'desc' };
-    } else if (query.sortBy === 4) { // Most Liked
-      orderByClause = { vote_score: 'desc' };
-    }
-
     const skip = (query.pageNumber - 1) * query.pageSize;
     const take = query.pageSize;
 
-    const totalCount = await this.prisma.posts.count({ where: whereClause });
-    const postsData = await this.prisma.posts.findMany({
-      where: whereClause,
-      orderBy: orderByClause,
-      skip: skip,
-      take: take,
-    });
+    let totalCount = 0;
+    let postsData: any[] = [];
+
+    if (query.sortBy === 1) { // Trending
+      // Use Raw SQL for HackerNews hot ranking algorithm
+      const conditions: Prisma.Sql[] = [Prisma.sql`status = 2`];
+      if (query.categoryId) {
+        conditions.push(Prisma.sql`category_id = ${query.categoryId}`);
+      }
+      if (query.threadChannelId) {
+        conditions.push(Prisma.sql`thread_channel_id = ${query.threadChannelId}`);
+      }
+      if (query.searchTerm) {
+        if (query.searchTerm.startsWith('#')) {
+          const tag = query.searchTerm.slice(1).trim();
+          conditions.push(Prisma.sql`tags @> ARRAY[${tag}]::text[]`);
+        } else {
+          const search = `%${query.searchTerm}%`;
+          conditions.push(Prisma.sql`(title ILIKE ${search} OR content ILIKE ${search})`);
+        }
+      }
+      if (query.isPinned !== undefined) {
+        conditions.push(Prisma.sql`is_pinned = ${query.isPinned}`);
+      }
+      if (query.isSolved !== undefined) {
+        conditions.push(Prisma.sql`is_solved = ${query.isSolved}`);
+      }
+
+      const whereSql = Prisma.join(conditions, ' AND ');
+
+      const totalCountObj = await this.prisma.$queryRaw<{count: bigint}[]>`
+        SELECT COUNT(*) as count 
+        FROM forum.posts 
+        WHERE ${whereSql}
+      `;
+      totalCount = Number(totalCountObj[0].count);
+
+      postsData = await this.prisma.$queryRaw<any[]>`
+        SELECT * 
+        FROM forum.posts 
+        WHERE ${whereSql}
+        ORDER BY is_pinned DESC, (vote_score / POWER(EXTRACT(EPOCH FROM (NOW() - created_at))/3600 + 2, 1.5)) DESC
+        LIMIT ${take} OFFSET ${skip}
+      `;
+    } else {
+      let orderByClause: any = { created_at: 'desc' };
+      if (query.sortBy === 2) { // Recently Active (updated_at)
+        orderByClause = { updated_at: 'desc' };
+      } else if (query.sortBy === 3) { // Most Viewed
+        orderByClause = { view_count: 'desc' };
+      } else if (query.sortBy === 4) { // Most Liked
+        orderByClause = { vote_score: 'desc' };
+      }
+
+      totalCount = await this.prisma.posts.count({ where: whereClause });
+      postsData = await this.prisma.posts.findMany({
+        where: whereClause,
+        orderBy: orderByClause,
+        skip: skip,
+        take: take,
+      });
+    }
 
     const authorIds = postsData.map(p => p.author_id);
     const categoryIds = postsData.map(p => p.category_id).filter(id => id !== null) as string[];

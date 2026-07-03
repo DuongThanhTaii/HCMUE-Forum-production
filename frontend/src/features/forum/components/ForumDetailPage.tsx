@@ -193,6 +193,21 @@ export function ForumDetailPage() {
             t={t} 
           />
 
+          {/* Action Bar */}
+          <ActionBar
+            isUpvoted={isUpvoted}
+            isVoting={isVoting}
+            onUpvotePost={onUpvotePost}
+            voteScore={voteScore}
+            isBookmarked={isBookmarked}
+            isBookmarking={isBookmarking}
+            isUnbookmarking={isUnbookmarking}
+            onToggleBookmark={onToggleBookmark}
+            onSharePost={onSharePost}
+            onOpenReportModal={onOpenReportModal}
+            isReporting={isReporting}
+          />
+
           {/* AI Summary Card */}
           <AISummaryCard 
             summary={copilotSummary} 
@@ -215,21 +230,6 @@ export function ForumDetailPage() {
 
           {/* Thread Content */}
           <ThreadContent content={postContent} t={t} />
-
-          {/* Action Bar */}
-          <ActionBar
-            isUpvoted={isUpvoted}
-            isVoting={isVoting}
-            onUpvotePost={onUpvotePost}
-            voteScore={voteScore}
-            isBookmarked={isBookmarked}
-            isBookmarking={isBookmarking}
-            isUnbookmarking={isUnbookmarking}
-            onToggleBookmark={onToggleBookmark}
-            onSharePost={onSharePost}
-            onOpenReportModal={onOpenReportModal}
-            isReporting={isReporting}
-          />
 
           {/* Interaction Status Messages */}
           {(interactionSuccessKey || interactionErrorKey) && (

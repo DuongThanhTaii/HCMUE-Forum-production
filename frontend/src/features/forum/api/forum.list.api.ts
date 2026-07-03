@@ -242,6 +242,7 @@ function toSafeForumListItem(post: RawForumPost, index: number): ForumListItem {
     authorName: post.authorName?.trim() || undefined,
     authorAvatar: post.authorAvatar?.trim() || undefined,
     preview: post.preview?.trim() || post.content?.trim()?.substring(0, 200) || '',
+    content: post.content?.trim() || undefined,
     isPinned: post.isPinned ?? false,
     isLocked: post.isLocked ?? false,
     isSolved: post.isSolved ?? false,
@@ -523,6 +524,19 @@ export const forumListApi = baseApi.injectEndpoints({
           isPinned: params.isPinned ?? undefined,
         },
       }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const { pageNumber, ...rest } = queryArgs || {}
+        return `${endpointName}(${JSON.stringify(rest)})`
+      },
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg?.pageNumber === 1) {
+          return newItems
+        }
+        currentCache.push(...newItems)
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.pageNumber !== previousArg?.pageNumber
+      },
       transformResponse: (response: ApiSuccessEnvelope<PostsPayload>) => {
         const payload = response?.data
         const posts = payload?.posts ?? payload?.items ?? []

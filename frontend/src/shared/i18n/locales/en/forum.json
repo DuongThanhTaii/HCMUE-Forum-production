@@ -372,5 +372,15 @@
     "discussionsCount": "{{count}} discussions",
     "mockThread1": "How to ace the upcoming computer architecture exam?",
     "mockThread2": "Looking for a study group for Advanced Calculus"
+  },
+  "rightSidebar": {
+    "studentYear3": "Student - Year 3",
+    "posts": "Posts",
+    "replies": "Replies",
+    "follow": "Follow",
+    "relatedDiscussions": "Related Discussions",
+    "seeAll": "See all",
+    "noRelatedFound": "No related discussions found.",
+    "popularTags": "Popular Tags"
   }
 }

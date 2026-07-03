@@ -136,7 +136,7 @@ function CommentBranch({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm transition-shadow hover:shadow-md">
+          <div className="py-1">
             <div className="flex flex-wrap items-center gap-2 text-[13px] mb-2">
               <span className="font-semibold text-slate-900">{node.authorName}</span>
               {node.authorRoles && node.authorRoles.length > 0 && (

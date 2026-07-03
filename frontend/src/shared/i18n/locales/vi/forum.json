@@ -372,5 +372,15 @@
     "discussionsCount": "{{count}} thảo luận",
     "mockThread1": "Cách đạt điểm cao trong kỳ thi Kiến trúc máy tính sắp tới?",
     "mockThread2": "Tìm nhóm học chung môn Giải tích nâng cao"
+  },
+  "rightSidebar": {
+    "studentYear3": "Sinh viên - Năm 3",
+    "posts": "Bài viết",
+    "replies": "Trả lời",
+    "follow": "Theo dõi",
+    "relatedDiscussions": "Chủ đề liên quan",
+    "seeAll": "Xem tất cả",
+    "noRelatedFound": "Không tìm thấy chủ đề liên quan.",
+    "popularTags": "Thẻ phổ biến"
   }
 }

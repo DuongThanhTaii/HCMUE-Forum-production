@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { ChevronLeft, PenSquare, Search, Filter } from 'lucide-react'
+import { ChevronLeft, PenSquare, Search, Filter, Loader2 } from 'lucide-react'
+import { useEffect, useRef, useCallback } from 'react'
 import { useCategoryPage } from '../hooks/useCategoryPage'
 import { ThreadCard } from './ThreadCard'
 
@@ -20,7 +21,28 @@ export function CategoryPage() {
     setIsSolved,
     isUnanswered,
     setIsUnanswered,
+    loadMore,
+    isFetching,
   } = useCategoryPage()
+
+  const observerTarget = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && !isLoading && !isEmpty) {
+          loadMore()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current)
+    }
+
+    return () => observer.disconnect()
+  }, [isFetching, isLoading, isEmpty, loadMore])
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
@@ -142,10 +164,17 @@ export function CategoryPage() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {threads.map((thread) => (
             <ThreadCard key={thread.id} thread={thread} />
           ))}
+          
+          {/* Intersection Observer Target */}
+          <div ref={observerTarget} className="h-10 w-full flex items-center justify-center">
+            {isFetching && !isLoading && (
+              <Loader2 className="w-6 h-6 text-primary animate-spin" />
+            )}
+          </div>
         </div>
       )}
     </div>

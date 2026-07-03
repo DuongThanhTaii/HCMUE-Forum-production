@@ -11,6 +11,7 @@ export function useCategoryPage() {
   
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || searchParams.get('search') || '')
   const [sortBy, setSortBy] = useState<number>(0) // 0 = Newest, 1 = Trending, 2 = Recently Active, 3 = Most Viewed, 4 = Most Liked
+  const [pageNumber, setPageNumber] = useState(1)
   
   // Filters
   const [isPinned, setIsPinned] = useState<boolean | undefined>(undefined)
@@ -27,9 +28,9 @@ export function useCategoryPage() {
   const categoryId = categorySlug === 'all' ? undefined : activeCategory?.id
 
   // Fetch threads for the active category
-  const { data = [], isLoading: isLoadingThreads, isError } = useGetForumListQuery({
-    pageNumber: 1,
-    pageSize: 50,
+  const { data = [], isLoading: isLoadingThreads, isError, isFetching } = useGetForumListQuery({
+    pageNumber,
+    pageSize: 10,
     categoryId,
     searchTerm: searchTerm || undefined,
     sortBy,
@@ -40,13 +41,25 @@ export function useCategoryPage() {
     skip: categorySlug !== 'all' && !categoryId && !isLoadingCategories, // Skip if specific category not found
   })
 
-  const isLoading = isLoadingCategories || isLoadingThreads
+  const isLoading = isLoadingCategories || (isLoadingThreads && pageNumber === 1)
   const isEmpty = !isLoading && !isError && data.length === 0
+
+  const loadMore = () => {
+    if (!isFetching) {
+      setPageNumber(prev => prev + 1)
+    }
+  }
+
+  // Reset page when filters change
+  useMemo(() => {
+    setPageNumber(1)
+  }, [searchTerm, sortBy, isPinned, isSolved, isUnanswered, categoryId])
 
   return {
     activeCategory,
     threads: data,
     isLoading,
+    isFetching,
     isError,
     isEmpty,
     searchTerm,
@@ -59,5 +72,6 @@ export function useCategoryPage() {
     setIsSolved,
     isUnanswered,
     setIsUnanswered,
+    loadMore,
   }
 }

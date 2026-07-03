@@ -16,6 +16,7 @@ export type ForumListItem = {
   authorName?: string
   authorAvatar?: string
   preview: string
+  content?: string
   isPinned: boolean
   isLocked: boolean
   isSolved: boolean

@@ -24,16 +24,15 @@ export function ThreadCard({ thread }: ThreadCardProps) {
   }
 
   return (
-    <Link 
-      to={`/threads/${thread.id}`} 
-      className="group block w-full rounded-[12px] bg-white p-4 shadow-sm border border-slate-200 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md"
-    >
+    <div className="w-full rounded-[12px] bg-white p-4 shadow-sm border border-slate-200 transition-all duration-200 ease-out hover:shadow-md">
       <div className="flex flex-col gap-3">
         {/* Title and Status Indicators */}
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-lg font-semibold text-slate-900 group-hover:text-primary line-clamp-2">
-            {thread.title}
-          </h3>
+          <Link to={`/threads/${thread.id}`}>
+            <h3 className="text-xl font-bold text-slate-900 hover:text-primary transition-colors">
+              {thread.title}
+            </h3>
+          </Link>
           
           <div className="flex items-center gap-2 shrink-0">
             {thread.isPinned && (
@@ -57,9 +56,14 @@ export function ThreadCard({ thread }: ThreadCardProps) {
           </div>
         </div>
 
-        {/* Preview */}
-        {thread.preview && (
-          <p className="text-slate-600 text-sm line-clamp-2">
+        {/* Content */}
+        {thread.content ? (
+          <div 
+            className="prose prose-slate max-w-none text-slate-700 mt-2"
+            dangerouslySetInnerHTML={{ __html: thread.content }}
+          />
+        ) : thread.preview && (
+          <p className="text-slate-600 text-sm mt-2">
             {thread.preview}
           </p>
         )}
@@ -112,6 +116,6 @@ export function ThreadCard({ thread }: ThreadCardProps) {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
