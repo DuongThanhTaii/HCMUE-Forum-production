@@ -2,7 +2,7 @@ import type { FormEvent } from 'react'
 import type { User } from '@shared/types/auth'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Bold, Italic, Link as LinkIcon, Code, Quote, Image as ImageIcon, Paperclip, Pin } from 'lucide-react'
 import type { CommentThreadNode } from '../../hooks/useForumDetailPage'
 import { parseForumRichContent } from '../../lib/parseForumRichContent'
 
@@ -70,7 +70,7 @@ export interface CommentActions {
   t: (key: string) => string
   userId: string | null
   hasModeratorRole: boolean
-  onDeleteComment: (commentId: string) => void
+  onDeleteComment: (commentId: string) => Promise<void>
   isDeletingComment: boolean
   hoveredCommentId: string | null
   setHoveredCommentId: (id: string | null) => void
@@ -86,7 +86,6 @@ function CommentBranch({
   depth: number
   actions: CommentActions
 }) {
-  const time = formatCommentTime(node.createdAt)
   const isReplying = actions.replyingToId === node.id
   const isUpvoted = node.currentUserVote === 1
   const isDownvoted = node.currentUserVote === 2
@@ -148,8 +147,14 @@ function CommentBranch({
                 </div>
               )}
               <span className="text-[12px] text-slate-400">•</span>
-              <span className="text-[12px] tabular-nums text-slate-500">{time}</span>
+              <span className="text-[12px] tabular-nums text-slate-500">{formatCommentTime(node.createdAt)}</span>
             </div>
+            {node.isPinned && (
+              <div className="flex items-center gap-1.5 text-[12px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 w-fit mb-2 shadow-sm">
+                <Pin className="h-3 w-3" />
+                {actions.t('forum.commentSection.pinnedNotice') || 'Bình luận này đã được tác giả hay mod ghim'}
+              </div>
+            )}
             {parsed.body ? (
               <div className="prose prose-slate max-w-none prose-p:text-[14px] prose-p:leading-[1.6]">
                 <div className="break-words text-slate-800 m-0 prose prose-sm max-w-none prose-p:my-1">
@@ -203,24 +208,21 @@ function CommentBranch({
                 }
                 className="hover:text-slate-900 transition-colors"
               >
-                {isReplying ? actions.t('forum.commentSection.cancelReply') : 'Trả lời'}
+                {actions.t('forum.commentSection.reply') || 'Trả lời'}
               </button>
 
               {(node.authorId === actions.userId || actions.hasModeratorRole) && (
                 <>
                   <button type="button" onClick={() => void actions.onPinComment(node.id)} className="hover:text-slate-900 transition-colors">
-                    {node.isPinned ? 'Bỏ ghim' : 'Ghim'}
-                  </button>
-                  <button type="button" onClick={() => alert('Tính năng sửa đang được phát triển')} className="hover:text-slate-900 transition-colors">
-                    Chỉnh sửa
+                    {node.isPinned ? (actions.t('forum.commentSection.unpin') || 'Bỏ ghim') : (actions.t('forum.commentSection.pin') || 'Ghim')}
                   </button>
                   <button
                     type="button"
                     onClick={() => void actions.onDeleteComment(node.id)}
                     disabled={actions.isDeletingComment}
-                    className="hover:text-rose-600 disabled:opacity-60 transition-colors"
+                    className="hover:text-rose-600 transition-colors disabled:opacity-50"
                   >
-                    Xóa
+                    {actions.t('forum.commentSection.delete') || 'Xóa'}
                   </button>
                 </>
               )}
@@ -237,7 +239,7 @@ function CommentBranch({
                   rows={3}
                   autoFocus
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-[14px] focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none bg-white resize-y"
-                  placeholder="Write a reply..."
+                  placeholder={actions.t('forum.commentSection.replyPlaceholder') || 'Viết câu trả lời của bạn...'}
                 />
                 <div className="mt-3 flex items-center justify-between">
                   <div className="flex gap-1">
@@ -255,14 +257,14 @@ function CommentBranch({
                       onClick={actions.onCancelReply}
                       className="rounded-lg px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-200 transition-colors"
                     >
-                      Hủy
+                      {actions.t('forum.commentSection.cancel') || 'Hủy'}
                     </button>
                     <button
                       type="submit"
                       disabled={!actions.replyDraft.trim()}
                       className="rounded-lg bg-primary px-5 py-1.5 text-[13px] font-semibold text-white shadow-sm hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                     >
-                      Trả lời
+                      {actions.t('forum.commentSection.reply') || 'Trả lời'}
                     </button>
                   </div>
                 </div>
@@ -297,7 +299,7 @@ function CommentBranch({
                   className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  Ẩn bình luận
+                  {actions.t('forum.commentSection.hideReplies') || 'Ẩn bình luận'}
                 </button>
               </div>
             </div>
@@ -389,7 +391,7 @@ export function ThreadComments({
                 onChange={(e) => onCommentDraftChange(e.target.value)}
                 rows={2}
                 className="w-full text-[14px] bg-transparent outline-none resize-none placeholder-slate-400 min-h-[50px] mt-1.5"
-                placeholder="Viết bình luận của bạn..."
+                placeholder={commentActions.t('forum.commentSection.commentPlaceholder') || 'Viết bình luận của bạn...'}
               />
             </div>
             
