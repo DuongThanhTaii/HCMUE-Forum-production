@@ -171,29 +171,9 @@ export function ChatDock() {
 
   return (
     <div className="fixed bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl">
-      <div
-        className={`flex shrink-0 items-center gap-2 border-b border-slate-200 px-2 py-2 ${
-          panel === 'thread' ? 'pl-1' : ''
-        }`}
-      >
-        {panel === 'thread' && (
-          <button
-            type="button"
-            onClick={backToList}
-            className="rounded p-1.5 text-slate-600 hover:bg-slate-100"
-            aria-label={t('chat.dock.backToList')}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-        )}
-        {panel === 'thread' && activeConv && (
-          <ChatPeerAvatar
-            name={primaryConversationTitle(activeConv, currentUserId)}
-            className="h-9 w-9 text-[11px]"
-          />
-        )}
-        <div className="min-w-0 flex-1">
-          {panel === 'list' ? (
+      {panel === 'list' && (
+        <div className="flex shrink-0 items-center gap-2 border-b border-slate-200 px-2 py-2">
+          <div className="min-w-0 flex-1">
             <Link
               to="/chat"
               className="flex items-center gap-2 text-sm font-semibold text-slate-900 hover:text-indigo-600"
@@ -206,36 +186,29 @@ export function ChatDock() {
                 </span>
               )}
             </Link>
-          ) : (
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">{headerTitle}</p>
-              {headerSubtitle && (
-                <p className="truncate text-[11px] text-slate-500">{headerSubtitle}</p>
-              )}
-            </div>
-          )}
+          </div>
+          <div className="flex shrink-0 items-center gap-0.5">
+            <Link
+              to={activeConvId ? `/chat?conversation=${activeConvId}` : '/chat'}
+              className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+              aria-label={t('chat.dock.expandFull')}
+            >
+              <Maximize2 className="h-4 w-4" />
+            </Link>
+            <button
+              type="button"
+              className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+              onClick={() => {
+                setMinimized(true)
+                setDockVisibility('hidden')
+              }}
+              aria-label={t('chat.dock.minimize')}
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-0.5">
-          <Link
-            to={activeConvId ? `/chat?conversation=${activeConvId}` : '/chat'}
-            className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
-            aria-label={t('chat.dock.expandFull')}
-          >
-            <Maximize2 className="h-4 w-4" />
-          </Link>
-          <button
-            type="button"
-            className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
-            onClick={() => {
-              setMinimized(true)
-              setDockVisibility('hidden')
-            }}
-            aria-label={t('chat.dock.minimize')}
-          >
-            <Minus className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
+      )}
 
       <div className="flex h-[min(520px,82vh)] min-h-[320px] max-h-[85vh] flex-col overflow-hidden">
         {panel === 'list' && (
@@ -325,8 +298,52 @@ export function ChatDock() {
               isMuted={activeConv?.isMuted ?? false}
               isBlockedWithPeer={activeConv?.isBlockedWithPeer ?? false}
               onPeerBlocked={backToList}
+              headerLeft={
+                <>
+                  <button
+                    type="button"
+                    onClick={backToList}
+                    className="rounded p-1.5 text-slate-600 hover:bg-slate-100 -ml-2"
+                    aria-label={t('chat.dock.backToList')}
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  {activeConv && (
+                    <ChatPeerAvatar
+                      name={primaryConversationTitle(activeConv, currentUserId)}
+                      className="h-9 w-9 text-[11px]"
+                    />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-slate-900">{headerTitle}</p>
+                    {headerSubtitle && (
+                      <p className="truncate text-[11px] text-slate-500">{headerSubtitle}</p>
+                    )}
+                  </div>
+                </>
+              }
               headerActions={
-                <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
+                <>
+                  <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
+                  <Link
+                    to={activeConvId ? `/chat?conversation=${activeConvId}` : '/chat'}
+                    className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+                    aria-label={t('chat.dock.expandFull')}
+                  >
+                    <Maximize2 className="h-4 w-4" />
+                  </Link>
+                  <button
+                    type="button"
+                    className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+                    onClick={() => {
+                      setMinimized(true)
+                      setDockVisibility('hidden')
+                    }}
+                    aria-label={t('chat.dock.minimize')}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                </>
               }
             />
           </div>
