@@ -14,8 +14,26 @@ export class MessagesController {
   ) {}
 
   @Get()
-  async getMessages(@Query('conversationId') conversationId: string) {
-    return this.queryBus.execute(new GetMessagesQuery(conversationId));
+  async getMessages(
+    @Query('conversationId') conversationId: string,
+    @Query('page') page: string = '1',
+    @Query('pageSize') pageSize: string = '50',
+  ) {
+    const pageNum = parseInt(page, 10) || 1;
+    const sizeNum = parseInt(pageSize, 10) || 50;
+    const skip = (pageNum - 1) * sizeNum;
+    
+    const { items, totalCount } = await this.queryBus.execute(
+      new GetMessagesQuery(conversationId, skip, sizeNum),
+    );
+
+    return {
+      items,
+      page: pageNum,
+      pageSize: sizeNum,
+      totalCount,
+      totalPages: Math.ceil(totalCount / sizeNum),
+    };
   }
 
   @Post()

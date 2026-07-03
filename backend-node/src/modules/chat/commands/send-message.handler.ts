@@ -38,7 +38,24 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
       data: { last_message_at: new Date() },
     });
 
-    this.gateway.broadcastNewMessage(command.conversationId, message);
-    return message;
+    const messageDto = {
+      id: message.id,
+      conversationId: message.conversation_id,
+      senderId: message.sender_id,
+      content: message.content,
+      type: message.type,
+      sentAt: message.sent_at,
+      editedAt: message.edited_at,
+      isDeleted: message.is_deleted,
+      replyToMessageId: message.reply_to_message_id,
+      reactions: {},
+      attachments: [],
+    };
+
+    this.gateway.broadcastNewMessage(command.conversationId, messageDto);
+    return {
+      messageId: message.id,
+      sentAt: message.sent_at,
+    };
   }
 }
