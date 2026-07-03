@@ -1,4 +1,4 @@
-import { Calendar, Eye, MessageCircle, Heart, Bookmark, Clock3, GraduationCap, Briefcase, FileText } from 'lucide-react'
+import { Eye, MessageCircle, Heart, Bookmark, Clock3, GraduationCap, Briefcase, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { ForumDetailItem } from '../../api/forum.list.api'
@@ -13,7 +13,7 @@ interface RightSidebarProps {
   tags: string[]
 }
 
-export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated, onLoadRelatedPosts, tags }: RightSidebarProps) {
+export function RightSidebar({ post, authorLine, relatedPosts, isLoadingRelated, tags }: RightSidebarProps) {
   const { t } = useTranslation()
   const avatarLetter = (post.authorName || authorLine || 'U').charAt(0).toUpperCase()
 

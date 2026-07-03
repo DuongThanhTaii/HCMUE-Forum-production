@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ChevronLeft, PenSquare, Search, Filter, Loader2 } from 'lucide-react'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import { useCategoryPage } from '../hooks/useCategoryPage'
 import { ThreadCard } from './ThreadCard'
 
