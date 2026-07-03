@@ -1,4 +1,5 @@
 {
+  "user": "User",
   "title": "Messages",
   "conversations": "Conversations",
   "channels": "Channels",
@@ -164,6 +165,10 @@
   "reply": {
     "action": "Reply",
     "replyingTo": "Replying to {{name}}",
+    "youRepliedTo": "You replied to {{name}}",
+    "theyRepliedToYou": "Replied to you",
+    "theyRepliedTo": "Replied to {{name}}",
+    "youRepliedToYourself": "You replied to yourself",
     "cancel": "Cancel reply",
     "attachmentPreview": "Attachment",
     "emptyPreview": "Message"

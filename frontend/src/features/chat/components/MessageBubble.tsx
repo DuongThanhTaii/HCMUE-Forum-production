@@ -359,7 +359,19 @@ export function MessageBubble({
             }}
           >
             <span className="block font-medium opacity-90">
-              {replyParent.senderDisplayName?.trim() || t('chat.user')}
+              {(() => {
+                const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
+                const parentIsMe = replyParent.senderId === currentUserId
+                if (isSelf) {
+                  return parentIsMe
+                    ? t('chat.reply.youRepliedToYourself')
+                    : t('chat.reply.youRepliedTo', { name: parentName })
+                } else {
+                  return parentIsMe
+                    ? t('chat.reply.theyRepliedToYou')
+                    : t('chat.reply.theyRepliedTo', { name: parentName })
+                }
+              })()}
             </span>
             <span className="line-clamp-2">{replyPreviewText(replyParent, t)}</span>
           </button>

@@ -1,4 +1,5 @@
 {
+  "user": "Người dùng",
   "title": "Tin nhắn",
   "conversations": "Cuộc trò chuyện",
   "channels": "Kênh",
@@ -164,6 +165,10 @@
   "reply": {
     "action": "Trả lời",
     "replyingTo": "Trả lời {{name}}",
+    "youRepliedTo": "Bạn đã trả lời {{name}}",
+    "theyRepliedToYou": "Đã trả lời bạn",
+    "theyRepliedTo": "Đã trả lời {{name}}",
+    "youRepliedToYourself": "Bạn đã trả lời chính mình",
     "cancel": "Huỷ trả lời",
     "attachmentPreview": "Tệp đính kèm",
     "emptyPreview": "Tin nhắn"
