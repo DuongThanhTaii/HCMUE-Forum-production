@@ -1,4 +1,4 @@
-import type { FormEvent, ReactNode } from 'react'
+import type { FormEvent } from 'react'
 import type { User } from '@shared/types/auth'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
