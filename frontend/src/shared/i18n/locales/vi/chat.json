@@ -164,11 +164,12 @@
   },
   "reply": {
     "action": "Trả lời",
-    "replyingTo": "Trả lời {{name}}",
-    "youRepliedTo": "Bạn đã trả lời {{name}}",
-    "theyRepliedToYou": "Đã trả lời bạn",
-    "theyRepliedTo": "Đã trả lời {{name}}",
-    "youRepliedToYourself": "Bạn đã trả lời chính mình",
+    "replyingTo": "Đang trả lời {{name}}",
+    "youRepliedToYourself": "Bạn đã phản hồi chính mình",
+    "youRepliedTo": "Bạn đã phản hồi {{name}}",
+    "theyRepliedToYou": "{{name}} đã phản hồi bạn",
+    "theyRepliedToThemselves": "{{name}} đã phản hồi chính mình",
+    "theyRepliedTo": "{{name}} đã phản hồi {{parent}}",
     "cancel": "Huỷ trả lời",
     "attachmentPreview": "Tệp đính kèm",
     "emptyPreview": "Tin nhắn"

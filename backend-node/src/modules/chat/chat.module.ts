@@ -14,6 +14,9 @@ import { DeleteMessageHandler } from './commands/delete-message.handler';
 
 import { GetMessagesHandler } from './queries/get-messages.handler';
 import { GetConversationsHandler } from './queries/get-conversations.handler';
+import { GetAttachmentsHandler } from './queries/get-attachments.handler';
+import { GetLinksHandler } from './queries/get-links.handler';
+import { SearchMessagesHandler } from './queries/search-messages.handler';
 
 const Handlers = [
   SendMessageHandler,
@@ -23,6 +26,9 @@ const Handlers = [
   DeleteMessageHandler,
   GetMessagesHandler,
   GetConversationsHandler,
+  GetAttachmentsHandler,
+  GetLinksHandler,
+  SearchMessagesHandler,
 ];
 
 @Module({

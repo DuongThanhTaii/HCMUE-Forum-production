@@ -210,19 +210,15 @@ export function ConversationInfoDrawer({
   return (
 
     <div
-
       className="absolute inset-0 z-30 flex flex-col bg-surface"
-
       role="dialog"
-
       aria-label={t('chat.info.title')}
-
     >
-
       <div className="flex items-start gap-2 border-b border-border px-3 py-3">
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-semibold text-foreground">{t('chat.info.title')}</h3>
-          {title ? <p className="truncate text-xs text-muted">{title}</p> : null}
+          <h3 className="text-sm font-semibold text-foreground">
+            {t('chat.info.title', 'Tệp đa phương tiện & Liên kết')}
+          </h3>
         </div>
         <button
           type="button"
@@ -233,62 +229,7 @@ export function ConversationInfoDrawer({
           <X className="h-4 w-4" />
         </button>
       </div>
-
-      {/* Theme Selector */}
-      <div className="border-b border-border px-3 py-3">
-        <h4 className="mb-2 text-xs font-semibold text-foreground">Giao diện (Theme)</h4>
-        <div className="flex gap-2">
-          {(['light', 'dark', 'ocean', 'sunset', 'forest'] as const).map((tName) => {
-            // Colors for preview
-            const bgMap: Record<string, string> = {
-              light: '#f8fafc',
-              dark: '#0f172a',
-              ocean: '#0ea5e9',
-              sunset: '#f97316',
-              forest: '#16a34a',
-            }
-            return (
-              <button
-                key={tName}
-                onClick={() => {
-                  document.documentElement.classList.remove('theme-light', 'theme-dark', 'theme-ocean', 'theme-sunset', 'theme-forest')
-                  document.documentElement.classList.add(`theme-${tName}`)
-                  localStorage.setItem('app-theme', tName)
-                }}
-                className="h-6 w-6 cursor-pointer rounded-full border border-border shadow-sm transition-transform hover:scale-110"
-                style={{ backgroundColor: bgMap[tName] }}
-                title={tName.charAt(0).toUpperCase() + tName.slice(1)}
-              />
-            )
-          })}
-        </div>
-      </div>
-
-      <div className="space-y-2 border-b border-border px-3 py-3 text-xs text-muted">
-
-        {peerUserId ? (
-
-          <p>
-
-            <span className="font-medium text-foreground">{t('chat.info.peer')}: </span>
-
-            {title ?? peerUserId}
-
-          </p>
-
-        ) : null}
-
-        <p>
-
-          {isMuted ? t('chat.info.mutedOn') : t('chat.info.mutedOff')}
-
-          {isBlockedWithPeer ? ` · ${t('chat.safety.blockedBanner')}` : ''}
-
-        </p>
-
-        <p className="text-muted">{t('chat.info.shortcutsHint')}</p>
-
-      </div>
+      <div className="flex-1 overflow-y-auto">
 
 
 

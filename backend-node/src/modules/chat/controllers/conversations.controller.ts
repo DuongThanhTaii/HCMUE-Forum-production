@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Request, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { CreateConversationCommand } from '../commands/create-conversation.handler';
 import { GetConversationsQuery } from '../queries/get-conversations.handler';
+import { GetAttachmentsQuery } from '../queries/get-attachments.handler';
+import { GetLinksQuery } from '../queries/get-links.handler';
+import { SearchMessagesQuery } from '../queries/search-messages.handler';
 
 @Controller('chat/conversations')
 @UseGuards(JwtAuthGuard)
@@ -47,5 +50,26 @@ export class ConversationsController {
   async muteConversation(@Request() req: any, @Param('id') id: string) {
     // Stub
     return { success: true };
+  }
+
+  @Get(':id/attachments')
+  async getAttachments(
+    @Param('id') id: string,
+    @Query('kind') kind?: 'image' | 'video' | 'file' | 'all'
+  ) {
+    return this.queryBus.execute(new GetAttachmentsQuery(id, kind));
+  }
+
+  @Get(':id/links')
+  async getLinks(@Param('id') id: string) {
+    return this.queryBus.execute(new GetLinksQuery(id));
+  }
+
+  @Get(':id/messages/search')
+  async searchMessages(
+    @Param('id') id: string,
+    @Query('q') q: string
+  ) {
+    return this.queryBus.execute(new SearchMessagesQuery(id, q));
   }
 }
