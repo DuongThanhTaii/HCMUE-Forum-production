@@ -64,7 +64,7 @@ export function ConversationHeaderMenu({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 rounded px-2 py-1 hover:bg-slate-50 transition-colors text-left"
+        className="flex min-w-0 flex-1 items-center gap-1 rounded px-2 py-1 hover:bg-slate-50 transition-colors text-left"
         aria-label={t('chat.safety.menu')}
       >
         <div className="min-w-0">

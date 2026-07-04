@@ -344,8 +344,8 @@ export function MessageBubble({
           {replyParent && (
             <button
               type="button"
-              className={`mb-2 flex w-full flex-col items-start rounded-lg p-2 text-left text-xs transition-colors border-l-[3px] ${
-                isSelf ? 'bg-white/10 hover:bg-white/20 border-white/70' : 'bg-black/5 hover:bg-black/10 border-indigo-400'
+              className={`mb-2 flex w-full flex-col items-start rounded-xl px-3 py-2 text-left text-xs transition-colors border-l-[3px] shadow-sm ${
+                isSelf ? 'bg-black/15 hover:bg-black/20 border-white/50' : 'bg-slate-200 hover:bg-slate-300 border-indigo-500'
               }`}
               onClick={() => {
                 const target = document.querySelector(`[data-message-id="${replyParent.id}"]`)
@@ -355,16 +355,16 @@ export function MessageBubble({
                 }
               }}
             >
-              <span className="font-semibold opacity-100 mb-0.5">
+              <span className={`font-semibold mb-0.5 ${isSelf ? 'text-white' : 'text-slate-800'}`}>
                 {(() => {
                   const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
                   const parentIsMe = replyParent.senderId === currentUserId
                   return parentIsMe
-                    ? t('chat.reply.youRepliedToYourself', 'Trả lời chính mình')
-                    : t('chat.reply.youRepliedTo', { name: parentName, defaultValue: `Trả lời ${parentName}` })
+                    ? t('chat.reply.youRepliedToYourself', 'Bạn đã trả lời chính mình')
+                    : t('chat.reply.youRepliedTo', { name: parentName, defaultValue: `Bạn đã trả lời ${parentName}` })
                 })()}
               </span>
-              <span className="line-clamp-1 italic opacity-80">
+              <span className={`line-clamp-1 italic ${isSelf ? 'text-white/80' : 'text-slate-500'}`}>
                 {replyPreviewText(replyParent, t)}
               </span>
             </button>

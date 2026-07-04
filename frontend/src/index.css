@@ -55,3 +55,19 @@ body {
 .forum-topic-link {
   text-decoration: none;
 }
+
+/* Custom Scrollbar for Chat */
+.chat-scroll-area::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.chat-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+.chat-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

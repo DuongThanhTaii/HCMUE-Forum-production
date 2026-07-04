@@ -33,7 +33,7 @@ export function ChatMessageList({
         ref={containerRef}
         data-chat-scroll
         onScroll={onScroll}
-        className="h-full min-h-0 space-y-2 overflow-y-auto overscroll-contain rounded-lg border border-slate-200 bg-white p-3"
+        className="h-full min-h-0 space-y-2 overflow-y-auto overscroll-contain bg-white px-2 py-3 chat-scroll-area"
       >
         {hasMoreOlder ? (
           <div className="flex justify-center py-1">
