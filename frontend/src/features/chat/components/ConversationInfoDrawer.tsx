@@ -74,7 +74,7 @@ export function ConversationInfoDrawer({
 
   conversationId: string
 
-  title?: string | null
+  title?: React.ReactNode | null
 
   peerUserId?: string | null
 

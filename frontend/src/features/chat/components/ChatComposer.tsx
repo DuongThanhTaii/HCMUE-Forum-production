@@ -220,7 +220,7 @@ export function ChatComposer({
   };
 
   return (
-    <div className="space-y-2 border-t border-slate-200 pt-3">
+    <div className="space-y-2 pb-2 px-2">
       {outboxState.kind === "pending" && (
         <p className="text-xs text-slate-500">{t("chat.delivery.sending")}</p>
       )}

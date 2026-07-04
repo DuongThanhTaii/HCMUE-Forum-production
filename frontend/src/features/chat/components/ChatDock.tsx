@@ -293,6 +293,7 @@ export function ChatDock() {
               threadRef={activeThreadRef}
               currentUserId={currentUserId}
               conversationTitle={headerTitle}
+              conversationSubtitle={headerSubtitle}
               conversationType={activeConv?.type ?? null}
               peerUserId={activeConv?.directPeerUserId ?? null}
               isMuted={activeConv?.isMuted ?? false}
@@ -303,7 +304,7 @@ export function ChatDock() {
                   <button
                     type="button"
                     onClick={backToList}
-                    className="rounded p-1.5 text-slate-600 hover:bg-slate-100 -ml-2"
+                    className="rounded p-1.5 text-slate-600 hover:bg-slate-100 -ml-2 shrink-0"
                     aria-label={t('chat.dock.backToList')}
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -311,27 +312,14 @@ export function ChatDock() {
                   {activeConv && (
                     <ChatPeerAvatar
                       name={primaryConversationTitle(activeConv, currentUserId)}
-                      className="h-9 w-9 text-[11px]"
+                      className="h-9 w-9 text-[11px] shrink-0"
                     />
                   )}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-slate-900">{headerTitle}</p>
-                    {headerSubtitle && (
-                      <p className="truncate text-[11px] text-slate-500">{headerSubtitle}</p>
-                    )}
-                  </div>
                 </>
               }
               headerActions={
                 <>
                   <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
-                  <Link
-                    to={activeConvId ? `/chat?conversation=${activeConvId}` : '/chat'}
-                    className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
-                    aria-label={t('chat.dock.expandFull')}
-                  >
-                    <Maximize2 className="h-4 w-4" />
-                  </Link>
                   <button
                     type="button"
                     className="rounded p-1.5 text-slate-500 hover:bg-slate-100"

@@ -461,6 +461,18 @@ export function ChatPage() {
               conversationTitle={
                 selected.kind === 'conversation' ? titleForSelected() : null
               }
+              conversationSubtitle={
+                selected.kind === 'conversation' ? (
+                  <span
+                    className={`truncate mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
+                  >
+                    {selectedPeerActiveNow && (
+                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
+                    )}
+                    {subtitleForSelected()}
+                  </span>
+                ) : null
+              }
               conversationType={selectedConversation?.type ?? null}
               peerUserId={
                 selectedConversation?.directPeerUserId ?? null
@@ -475,7 +487,7 @@ export function ChatPage() {
                 <>
                   <button
                     type="button"
-                    className="p-1 md:hidden -ml-2 text-slate-500 hover:text-slate-900 transition-colors"
+                    className="p-1 md:hidden -ml-2 text-slate-500 hover:text-slate-900 transition-colors shrink-0"
                     onClick={() => {
                       setSelected(null)
                       if (narrow) setPanel('list')
@@ -491,29 +503,14 @@ export function ChatPage() {
                       return (
                         <ChatPeerAvatar
                           name={primaryConversationTitle(c, currentUserId)}
-                          className="hidden sm:inline-flex"
+                          className="hidden sm:inline-flex shrink-0"
                         />
                       )
                     })()}
-                  <div className="min-w-0 flex-1">
-                    <h2 className="truncate text-base font-bold leading-tight text-slate-900">
-                      {titleForSelected()}
-                    </h2>
-                    {subtitleForSelected() && (
-                      <p
-                        className={`truncate mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
-                      >
-                        {selectedPeerActiveNow && (
-                          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
-                        )}
-                        {subtitleForSelected()}
-                      </p>
-                    )}
-                  </div>
                 </>
               }
               headerActions={
-                <ChatCallBar threadRef={selected} conversation={selectedConversation} />
+                <ChatCallBar threadRef={selected} conversation={selectedConversation ?? null} />
               }
             />
             </div>

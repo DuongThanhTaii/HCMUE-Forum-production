@@ -16,6 +16,7 @@ export function ChatConversationPanel({
   threadRef,
   currentUserId,
   conversationTitle,
+  conversationSubtitle,
   conversationType,
   peerUserId,
   isMuted = false,
@@ -26,7 +27,8 @@ export function ChatConversationPanel({
 }: {
   threadRef: ChatThreadRef
   currentUserId: string | null
-  conversationTitle?: string | null
+  conversationTitle?: React.ReactNode | null
+  conversationSubtitle?: React.ReactNode | null
   conversationType?: string | null
   peerUserId?: string | null
   isMuted?: boolean
@@ -61,22 +63,24 @@ export function ChatConversationPanel({
   return (
     <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {conversationId ? (
-        <div className="relative z-50 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-4 py-2.5 shadow-sm backdrop-blur">
-          <div className="flex min-w-0 flex-1 items-center gap-3">
+        <div className="relative z-50 flex shrink-0 items-center justify-between bg-white/95 px-4 py-2.5 shadow-sm backdrop-blur">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
             {headerLeft}
-          </div>
-          <div className="flex shrink-0 items-center gap-1">
-            {headerActions}
             <ConversationHeaderMenu
               conversationId={conversationId}
               peerUserId={peerUserId ?? null}
               peerName={conversationTitle}
+              subtitle={conversationSubtitle}
               isMuted={isMuted}
               isBlockedWithPeer={isBlockedWithPeer}
               onBlocked={onPeerBlocked}
               onOpenInfo={() => setInfoOpen(true)}
               onOpenSearch={() => setSearchOpen(true)}
+              expandUrl={`/chat?conversation=${conversationId}`}
             />
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            {headerActions}
           </div>
         </div>
       ) : null}
