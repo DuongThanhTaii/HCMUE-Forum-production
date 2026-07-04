@@ -170,7 +170,7 @@ export function ChatPage() {
   }
 
   return (
-    <div className="flex h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)] flex-col overflow-hidden md:flex-row md:gap-4">
+    <div className="chat-theme-root flex h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)] flex-col overflow-hidden md:flex-row md:gap-4">
       <section
         className={`flex min-h-0 flex-col border-slate-200 md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
       >

@@ -111,6 +111,29 @@ export function ConversationHeaderMenu({
               {t('chat.dock.expandFull', 'Mở rộng trò chuyện')}
             </Link>
           )}
+
+          <div className="px-3 py-2">
+            <div className="mb-1.5 text-xs font-medium text-slate-500">{t('chat.theme.select', 'Giao diện')}</div>
+            <div className="flex gap-2">
+              {(['light', 'dark', 'ocean', 'sunset', 'forest'] as const).map((tName) => {
+                const bgMap: Record<string, string> = { light: '#f8fafc', dark: '#0f172a', ocean: '#0ea5e9', sunset: '#f97316', forest: '#16a34a' }
+                return (
+                  <button
+                    key={tName}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      document.documentElement.classList.remove('theme-light', 'theme-dark', 'theme-ocean', 'theme-sunset', 'theme-forest')
+                      document.documentElement.classList.add(`theme-${tName}`)
+                      localStorage.setItem('app-theme', tName)
+                    }}
+                    className="h-5 w-5 cursor-pointer rounded-full border border-slate-200 shadow-sm transition-transform hover:scale-110"
+                    style={{ backgroundColor: bgMap[tName] }}
+                    title={tName.charAt(0).toUpperCase() + tName.slice(1)}
+                  />
+                )
+              })}
+            </div>
+          </div>
           
           <div className="my-1 h-px bg-slate-100" />
           

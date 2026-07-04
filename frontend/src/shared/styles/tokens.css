@@ -21,7 +21,8 @@
   --font-body: "Inter", sans-serif;
 }
 
-:root, .theme-light {
+:root {
+  /* Default Global Theme */
   --cerulean: #124874;
   --jasper: #cf373d;
   
@@ -41,7 +42,25 @@
   --surface: #ffffff;
 }
 
-.theme-dark {
+/* Chat Specific Themes */
+:root .chat-theme-root, .theme-light .chat-theme-root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  
+  --primary: #124874;
+  --primary-hover: #1d6fa4;
+  --primary-foreground: #ffffff;
+  
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  
+  --muted: #64748b;
+  --muted-strong: #475569;
+  
+  --surface: #ffffff;
+}
+
+.theme-dark .chat-theme-root {
   --background: #0f172a;
   --foreground: #f8fafc;
   
@@ -58,7 +77,7 @@
   --surface: #1e293b;
 }
 
-.theme-ocean {
+.theme-ocean .chat-theme-root {
   --background: #f0f9ff;
   --foreground: #082f49;
   
@@ -75,7 +94,7 @@
   --surface: #e0f2fe;
 }
 
-.theme-sunset {
+.theme-sunset .chat-theme-root {
   --background: #fff7ed;
   --foreground: #431407;
   
@@ -92,7 +111,7 @@
   --surface: #ffedd5;
 }
 
-.theme-forest {
+.theme-forest .chat-theme-root {
   --background: #f0fdf4;
   --foreground: #052e16;
   

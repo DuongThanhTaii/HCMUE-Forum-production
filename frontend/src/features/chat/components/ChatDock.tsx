@@ -170,7 +170,7 @@ export function ChatDock() {
     panel === 'thread' && activeConv ? conversationSubtitle(activeConv) : null
 
   return (
-    <div className="fixed bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl">
+    <div className="chat-theme-root fixed bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl">
       {panel === 'list' && (
         <div className="flex shrink-0 items-center gap-2 border-b border-slate-200 px-2 py-2">
           <div className="min-w-0 flex-1">
