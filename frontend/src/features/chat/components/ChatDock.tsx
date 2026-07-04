@@ -304,7 +304,7 @@ export function ChatDock() {
                   <button
                     type="button"
                     onClick={backToList}
-                    className="rounded p-1.5 text-slate-600 hover:bg-slate-100 -ml-2 shrink-0"
+                    className="rounded-full p-1.5 text-slate-600 hover:bg-slate-100 -ml-2 shrink-0"
                     aria-label={t('chat.dock.backToList')}
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -322,7 +322,7 @@ export function ChatDock() {
                   <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
                   <button
                     type="button"
-                    className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+                    className="rounded-full p-1.5 text-slate-500 hover:bg-slate-100"
                     onClick={() => {
                       setMinimized(true)
                       setDockVisibility('hidden')

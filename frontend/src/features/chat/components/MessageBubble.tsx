@@ -308,13 +308,13 @@ export function MessageBubble({
           </button>
           {pickerOpen && (
             <ReactionPicker
-              className="right-0"
+              className="left-0"
               onPick={(emoji) => void toggleReaction(emoji)}
             />
           )}
           <MessageActionsMenu
             open={menuOpen}
-            className="right-0"
+            className="left-0"
             canCopy={canCopy}
             canReply={Boolean(canReply)}
             canEdit={canEdit}
@@ -508,13 +508,13 @@ export function MessageBubble({
           )}
           {pickerOpen && (
             <ReactionPicker
-              className="left-0"
+              className="right-0"
               onPick={(emoji) => void toggleReaction(emoji)}
             />
           )}
           <MessageActionsMenu
             open={menuOpen}
-            className="left-0"
+            className="right-0"
             canCopy={canCopy}
             canReply={Boolean(canReply)}
             canEdit={canEdit}
