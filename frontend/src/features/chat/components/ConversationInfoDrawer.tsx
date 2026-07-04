@@ -54,14 +54,6 @@ export function ConversationInfoDrawer({
 
   conversationId,
 
-  title,
-
-  peerUserId,
-
-  isMuted = false,
-
-  isBlockedWithPeer = false,
-
   open,
 
   onClose,
@@ -71,21 +63,9 @@ export function ConversationInfoDrawer({
   threadMessages = [],
 
 }: {
-
   conversationId: string
-
-  title?: React.ReactNode | null
-
-  peerUserId?: string | null
-
-  isMuted?: boolean
-
-  isBlockedWithPeer?: boolean
-
   open: boolean
-
   onClose: () => void
-
   onJumpToMessage?: (messageId: string) => void | Promise<void>
 
   /** Tin đang hiển thị trong thread (gồm trang cũ đã cuộn tải) — dùng bổ sung API media. */
@@ -229,10 +209,6 @@ export function ConversationInfoDrawer({
           <X className="h-4 w-4" />
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto">
-
-
-
       <div className="flex gap-1 border-b border-border px-2 py-2">
 
         {tabs.map((item) => (

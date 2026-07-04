@@ -125,10 +125,6 @@ export function ChatConversationPanel({
           />
           <ConversationInfoDrawer
             conversationId={conversationId}
-            title={conversationTitle}
-            peerUserId={peerUserId}
-            isMuted={isMuted}
-            isBlockedWithPeer={isBlockedWithPeer}
             open={infoOpen}
             onClose={() => setInfoOpen(false)}
             onJumpToMessage={onJumpToMessage}
