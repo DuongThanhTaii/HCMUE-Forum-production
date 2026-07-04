@@ -60,11 +60,11 @@ export function ConversationHeaderMenu({
   }
 
   return (
-    <div className="relative flex-1 min-w-0" ref={menuRef}>
+    <div className="relative flex flex-1 min-w-0" ref={menuRef}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex min-w-0 flex-1 items-center gap-1 rounded px-2 py-1 hover:bg-slate-50 transition-colors text-left"
+        className="flex w-full min-w-0 items-center gap-1 rounded px-2 py-1 hover:bg-slate-50 transition-colors text-left"
         aria-label={t('chat.safety.menu')}
       >
         <div className="min-w-0">

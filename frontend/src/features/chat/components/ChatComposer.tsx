@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Mic, Paperclip, SendHorizontal } from "lucide-react";
+import { Mic, Paperclip, Send } from "lucide-react";
 import {
   useSendMessageMutation,
   useSendMessageWithAttachmentsMutation,
@@ -306,67 +306,69 @@ export function ChatComposer({
           </div>
         )}
 
-      <div className="flex min-w-0 items-end gap-1.5 sm:gap-2">
-        {threadRef.kind === "conversation" && (
-          <div className="flex shrink-0 items-center gap-1 pb-0.5">
+      {voice.state === "idle" && (
+        <div className="flex min-w-0 items-end gap-1.5 sm:gap-2">
+          {threadRef.kind === "conversation" && (
+            <div className="flex shrink-0 items-center gap-1 pb-1">
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200"
+                onClick={() => fileInputRef.current?.click()}
+                aria-label={t("chat.attachFile")}
+              >
+                <Paperclip className="h-[20px] w-[20px]" strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-slate-500"
+                onClick={() => void voice.start()}
+                disabled={voice.state !== "idle"}
+                aria-label={t("chat.voice.start")}
+              >
+                <Mic className="h-[20px] w-[20px]" strokeWidth={2} />
+              </button>
+            </div>
+          )}
+          
+          <div className="min-h-[36px] min-w-0 flex-1 rounded-[20px] bg-slate-100 transition-colors focus-within:bg-slate-200/50 sm:min-h-[36px]">
+            {threadRef.kind === "conversation" && (
+              <input
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                onChange={(e) => void onPickFile(e.target.files)}
+              />
+            )}
+            <textarea
+              value={text}
+              onChange={(e) => handleChange(e.target.value)}
+              onBlur={() => flushStop()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  void submitText();
+                }
+              }}
+              placeholder={disabled ? t("chat.safety.composerDisabled") : t("chat.typeMessage")}
+              rows={1}
+              disabled={disabled}
+              className="max-h-28 min-h-[36px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[0.9375rem] leading-snug text-slate-900 outline-none ring-0 placeholder:text-slate-500 focus:ring-0 disabled:opacity-50"
+            />
+          </div>
+
+          <div className="flex shrink-0 items-center pb-1">
             <button
               type="button"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200"
-              onClick={() => fileInputRef.current?.click()}
-              aria-label={t("chat.attachFile")}
+              onClick={() => void submitText()}
+              disabled={disabled || (!text.trim() && outboxState.kind !== "pending")}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-indigo-600 transition-colors hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent"
+              aria-label={t("chat.send")}
             >
-              <Paperclip className="h-[20px] w-[20px]" strokeWidth={2} />
-            </button>
-            <button
-              type="button"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-slate-500"
-              onClick={() => void voice.start()}
-              disabled={voice.state !== "idle"}
-              aria-label={t("chat.voice.start")}
-            >
-              <Mic className="h-[20px] w-[20px]" strokeWidth={2} />
+              <Send className="h-[22px] w-[22px]" strokeWidth={2.5} />
             </button>
           </div>
-        )}
-        
-        <div className="min-h-[2.5rem] min-w-0 flex-1 rounded-[20px] bg-slate-100 transition-colors focus-within:bg-slate-200/50 sm:min-h-[2.5rem]">
-          {threadRef.kind === "conversation" && (
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              onChange={(e) => void onPickFile(e.target.files)}
-            />
-          )}
-          <textarea
-            value={text}
-            onChange={(e) => handleChange(e.target.value)}
-            onBlur={() => flushStop()}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                void submitText();
-              }
-            }}
-            placeholder={disabled ? t("chat.safety.composerDisabled") : t("chat.typeMessage")}
-            rows={1}
-            disabled={disabled}
-            className="max-h-28 min-h-[2.5rem] w-full resize-none border-0 bg-transparent px-4 py-2.5 text-[0.9375rem] leading-snug text-slate-900 outline-none ring-0 placeholder:text-slate-500 focus:ring-0 disabled:opacity-50"
-          />
         </div>
-
-        <div className="flex shrink-0 items-center pb-0.5">
-          <button
-            type="button"
-            onClick={() => void submitText()}
-            disabled={disabled || (!text.trim() && outboxState.kind !== "pending")}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-indigo-600 transition-colors hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent"
-            aria-label={t("chat.send")}
-          >
-            <SendHorizontal className="h-6 w-6" strokeWidth={2} />
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
