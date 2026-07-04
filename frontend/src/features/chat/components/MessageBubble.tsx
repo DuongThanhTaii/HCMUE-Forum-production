@@ -356,13 +356,20 @@ export function MessageBubble({
               }}
             >
               <span className={`font-semibold mb-0.5 ${isSelf ? 'text-white' : 'text-slate-800'}`}>
-                {(() => {
-                  const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
-                  const parentIsMe = replyParent.senderId === currentUserId
-                  return parentIsMe
-                    ? t('chat.reply.youRepliedToYourself', 'Bạn đã trả lời chính mình')
-                    : t('chat.reply.youRepliedTo', { name: parentName, defaultValue: `Bạn đã trả lời ${parentName}` })
-                })()}
+                  {(() => {
+                    const senderName = message.senderDisplayName?.trim() || t('chat.user')
+                    const parentName = replyParent.senderDisplayName?.trim() || t('chat.user')
+                    const parentIsMe = replyParent.senderId === currentUserId
+
+                    if (isSelf) {
+                      if (parentIsMe) return t('chat.reply.youRepliedToYourself', 'Bạn đã trả lời chính mình')
+                      return t('chat.reply.youRepliedTo', { name: parentName, defaultValue: `Bạn đã trả lời ${parentName}` })
+                    } else {
+                      if (parentIsMe) return t('chat.reply.theyRepliedToYou', { name: senderName, defaultValue: `${senderName} đã trả lời bạn` })
+                      if (replyParent.senderId === message.senderId) return t('chat.reply.theyRepliedToThemselves', { name: senderName, defaultValue: `${senderName} đã trả lời chính họ` })
+                      return t('chat.reply.theyRepliedTo', { name: senderName, parent: parentName, defaultValue: `${senderName} đã trả lời ${parentName}` })
+                    }
+                  })()}
               </span>
               <span className={`line-clamp-1 italic ${isSelf ? 'text-white/80' : 'text-slate-500'}`}>
                 {replyPreviewText(replyParent, t)}
