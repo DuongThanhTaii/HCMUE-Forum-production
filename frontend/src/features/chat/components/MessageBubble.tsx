@@ -12,7 +12,7 @@ import type { ChatMessageReportReason, MessageDto } from '../types/chat.types'
 import { resolveChatAssetUrl } from '../lib/mediaUrl'
 import { scrollElementWithinContainer } from '../lib/scrollWithinContainer'
 import { MessageActionsMenu } from './MessageActionsMenu'
-import { ReactionPicker } from './ReactionPicker'
+import { EMOJI_ASSETS, ReactionPicker } from './ReactionPicker'
 import { ReadReceiptIndicator } from './ReadReceiptIndicator'
 import { VoiceMessagePlayer } from './VoiceMessagePlayer'
 
@@ -469,7 +469,7 @@ export function MessageBubble({
                   }`}
                   onClick={() => void toggleReaction(emoji)}
                 >
-                  <span>{emoji}</span>
+                  <img src={EMOJI_ASSETS[emoji] || ''} alt={emoji} className="w-4 h-4 object-contain" />
                   {users.length > 1 && <span>{users.length}</span>}
                 </button>
               )
