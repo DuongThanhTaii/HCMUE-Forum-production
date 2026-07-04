@@ -7,6 +7,12 @@
     <title>UniHub</title>
   </head>
   <body>
+    <script>
+      (function() {
+        var savedTheme = localStorage.getItem('app-theme') || 'light';
+        document.documentElement.classList.add('theme-' + savedTheme);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

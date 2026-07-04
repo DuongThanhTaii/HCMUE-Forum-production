@@ -220,34 +220,49 @@ export function ConversationInfoDrawer({
     >
 
       <div className="flex items-start gap-2 border-b border-slate-200 px-3 py-3">
-
         <div className="min-w-0 flex-1">
-
           <h3 className="text-sm font-semibold text-slate-900">{t('chat.info.title')}</h3>
-
           {title ? <p className="truncate text-xs text-slate-500">{title}</p> : null}
-
         </div>
-
         <button
-
           type="button"
-
           onClick={onClose}
-
           className="cursor-pointer rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
-
           aria-label={t('common.cancel')}
-
         >
-
           <X className="h-4 w-4" />
-
         </button>
-
       </div>
 
-
+      {/* Theme Selector */}
+      <div className="border-b border-slate-100 px-3 py-3">
+        <h4 className="mb-2 text-xs font-semibold text-slate-800">Giao diện (Theme)</h4>
+        <div className="flex gap-2">
+          {(['light', 'dark', 'ocean', 'sunset', 'forest'] as const).map((tName) => {
+            // Colors for preview
+            const bgMap: Record<string, string> = {
+              light: '#f8fafc',
+              dark: '#0f172a',
+              ocean: '#0ea5e9',
+              sunset: '#f97316',
+              forest: '#16a34a',
+            }
+            return (
+              <button
+                key={tName}
+                onClick={() => {
+                  document.documentElement.classList.remove('theme-light', 'theme-dark', 'theme-ocean', 'theme-sunset', 'theme-forest')
+                  document.documentElement.classList.add(`theme-${tName}`)
+                  localStorage.setItem('app-theme', tName)
+                }}
+                className="h-6 w-6 cursor-pointer rounded-full border border-slate-200 shadow-sm transition-transform hover:scale-110"
+                style={{ backgroundColor: bgMap[tName] }}
+                title={tName.charAt(0).toUpperCase() + tName.slice(1)}
+              />
+            )
+          })}
+        </div>
+      </div>
 
       <div className="space-y-2 border-b border-slate-100 px-3 py-3 text-xs text-slate-600">
 

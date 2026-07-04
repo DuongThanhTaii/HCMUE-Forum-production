@@ -1,22 +1,110 @@
 @theme {
-  --color-cerulean: #124874;
-  --color-jasper: #cf373d;
+  --color-cerulean: var(--cerulean);
+  --color-jasper: var(--jasper);
 
-  --color-background: #f8fafc;
-  --color-foreground: #0f172a;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-primary: #124874;
-  --color-primary-hover: #1d6fa4;
-  --color-primary-foreground: #ffffff;
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
 
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
 
-  --color-muted: #64748b;
-  --color-muted-strong: #475569;
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
 
-  --color-surface: #ffffff;
+  --color-surface: var(--surface);
 
   --font-heading: "Poppins", sans-serif;
   --font-body: "Inter", sans-serif;
+}
+
+:root, .theme-light {
+  --cerulean: #124874;
+  --jasper: #cf373d;
+  
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  
+  --primary: #124874;
+  --primary-hover: #1d6fa4;
+  --primary-foreground: #ffffff;
+  
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  
+  --muted: #64748b;
+  --muted-strong: #475569;
+  
+  --surface: #ffffff;
+}
+
+.theme-dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-foreground: #ffffff;
+  
+  --border: #1e293b;
+  --border-strong: #334155;
+  
+  --muted: #94a3b8;
+  --muted-strong: #cbd5e1;
+  
+  --surface: #1e293b;
+}
+
+.theme-ocean {
+  --background: #f0f9ff;
+  --foreground: #082f49;
+  
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --primary-foreground: #ffffff;
+  
+  --border: #bae6fd;
+  --border-strong: #7dd3fc;
+  
+  --muted: #38bdf8;
+  --muted-strong: #0284c7;
+  
+  --surface: #e0f2fe;
+}
+
+.theme-sunset {
+  --background: #fff7ed;
+  --foreground: #431407;
+  
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-foreground: #ffffff;
+  
+  --border: #ffedd5;
+  --border-strong: #fdba74;
+  
+  --muted: #fb923c;
+  --muted-strong: #c2410c;
+  
+  --surface: #ffedd5;
+}
+
+.theme-forest {
+  --background: #f0fdf4;
+  --foreground: #052e16;
+  
+  --primary: #16a34a;
+  --primary-hover: #15803d;
+  --primary-foreground: #ffffff;
+  
+  --border: #dcfce7;
+  --border-strong: #86efac;
+  
+  --muted: #4ade80;
+  --muted-strong: #166534;
+  
+  --surface: #dcfce7;
 }
