@@ -60,7 +60,7 @@ export function ConversationHeaderMenu({
   }
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative flex-1 min-w-0" ref={menuRef}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
