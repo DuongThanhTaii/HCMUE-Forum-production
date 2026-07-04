@@ -82,12 +82,12 @@ export function ConversationSearchPanel({
 
   return (
     <div
-      className="absolute inset-0 z-20 flex flex-col bg-white/95 backdrop-blur-sm"
+      className="absolute inset-0 z-20 flex flex-col bg-surface/95 backdrop-blur-sm"
       role="dialog"
       aria-label={t('chat.search.title')}
       onKeyDown={onKeyDown}
     >
-      <div className="flex items-center gap-2 border-b border-slate-200 px-2 py-2">
+      <div className="flex items-center gap-2 border-b border-border px-2 py-2">
         <Search className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />
         <input
           ref={inputRef}
@@ -95,14 +95,14 @@ export function ConversationSearchPanel({
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={t('chat.search.placeholder')}
-          className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+          className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-slate-400"
           autoComplete="off"
           aria-controls="conversation-search-results"
         />
         <button
           type="button"
           onClick={onClose}
-          className="cursor-pointer rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+          className="cursor-pointer rounded-lg p-1.5 text-muted hover:bg-background"
           aria-label={t('common.cancel')}
         >
           <X className="h-4 w-4" />
@@ -111,13 +111,13 @@ export function ConversationSearchPanel({
 
       <div id="conversation-search-results" className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
         {!canSearch ? (
-          <p className="px-1 py-4 text-center text-sm text-slate-500">{t('chat.search.minChars')}</p>
+          <p className="px-1 py-4 text-center text-sm text-muted">{t('chat.search.minChars')}</p>
         ) : isFetching ? (
-          <p className="px-1 py-4 text-center text-sm text-slate-500">{t('common.loading')}</p>
+          <p className="px-1 py-4 text-center text-sm text-muted">{t('common.loading')}</p>
         ) : isError ? (
           <p className="px-1 py-4 text-center text-sm text-red-600">{t('chat.search.error')}</p>
         ) : results.length === 0 ? (
-          <p className="px-1 py-4 text-center text-sm text-slate-500">{t('chat.search.noResults')}</p>
+          <p className="px-1 py-4 text-center text-sm text-muted">{t('chat.search.noResults')}</p>
         ) : (
           <ul className="space-y-1">
             {results.map((hit, index) => {
@@ -131,19 +131,19 @@ export function ConversationSearchPanel({
                     type="button"
                     className={`w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                       active
-                        ? 'bg-indigo-50 ring-1 ring-indigo-200'
-                        : 'hover:bg-slate-50'
+                        ? 'bg-primary/10 ring-1 ring-indigo-200'
+                        : 'hover:bg-background'
                     }`}
                     onMouseEnter={() => setSelectedIndex(index)}
                     onClick={() => void pickHit(hit)}
                   >
                     <div className="flex items-baseline justify-between gap-2">
-                      <span className="font-medium text-slate-800">{label}</span>
+                      <span className="font-medium text-foreground">{label}</span>
                       <time className="shrink-0 text-[10px] text-slate-400">
                         {new Date(hit.sentAt).toLocaleString()}
                       </time>
                     </div>
-                    <p className="mt-0.5 line-clamp-2 text-slate-600">
+                    <p className="mt-0.5 line-clamp-2 text-muted">
                       {highlightSearchSnippet(hit.snippet, debouncedQ)}
                     </p>
                   </button>

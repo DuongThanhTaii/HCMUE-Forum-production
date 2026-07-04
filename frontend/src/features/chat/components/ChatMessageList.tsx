@@ -33,19 +33,19 @@ export function ChatMessageList({
         ref={containerRef}
         data-chat-scroll
         onScroll={onScroll}
-        className="h-full min-h-0 space-y-2 overflow-y-auto overscroll-contain bg-white px-2 py-3 chat-scroll-area"
+        className="h-full min-h-0 space-y-2 overflow-y-auto overscroll-contain bg-surface px-2 py-3 chat-scroll-area"
       >
         {hasMoreOlder ? (
           <div className="flex justify-center py-1">
             {isLoadingOlder ? (
-              <span className="text-xs text-slate-500">{t('chat.scroll.loadingOlder')}</span>
+              <span className="text-xs text-muted">{t('chat.scroll.loadingOlder')}</span>
             ) : (
               <span className="text-[10px] text-slate-400">{t('chat.scroll.pullOlderHint')}</span>
             )}
           </div>
         ) : null}
         {isInitialLoading ? (
-          <p className="text-center text-sm text-slate-500">{t('common.loading')}</p>
+          <p className="text-center text-sm text-muted">{t('common.loading')}</p>
         ) : empty ? (
           empty
         ) : (

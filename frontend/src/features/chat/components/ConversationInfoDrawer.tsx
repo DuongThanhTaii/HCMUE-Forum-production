@@ -211,7 +211,7 @@ export function ConversationInfoDrawer({
 
     <div
 
-      className="absolute inset-0 z-30 flex flex-col bg-white"
+      className="absolute inset-0 z-30 flex flex-col bg-surface"
 
       role="dialog"
 
@@ -219,15 +219,15 @@ export function ConversationInfoDrawer({
 
     >
 
-      <div className="flex items-start gap-2 border-b border-slate-200 px-3 py-3">
+      <div className="flex items-start gap-2 border-b border-border px-3 py-3">
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-semibold text-slate-900">{t('chat.info.title')}</h3>
-          {title ? <p className="truncate text-xs text-slate-500">{title}</p> : null}
+          <h3 className="text-sm font-semibold text-foreground">{t('chat.info.title')}</h3>
+          {title ? <p className="truncate text-xs text-muted">{title}</p> : null}
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="cursor-pointer rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
+          className="cursor-pointer rounded-lg p-1.5 text-muted hover:bg-background"
           aria-label={t('common.cancel')}
         >
           <X className="h-4 w-4" />
@@ -235,8 +235,8 @@ export function ConversationInfoDrawer({
       </div>
 
       {/* Theme Selector */}
-      <div className="border-b border-slate-100 px-3 py-3">
-        <h4 className="mb-2 text-xs font-semibold text-slate-800">Giao diện (Theme)</h4>
+      <div className="border-b border-border px-3 py-3">
+        <h4 className="mb-2 text-xs font-semibold text-foreground">Giao diện (Theme)</h4>
         <div className="flex gap-2">
           {(['light', 'dark', 'ocean', 'sunset', 'forest'] as const).map((tName) => {
             // Colors for preview
@@ -255,7 +255,7 @@ export function ConversationInfoDrawer({
                   document.documentElement.classList.add(`theme-${tName}`)
                   localStorage.setItem('app-theme', tName)
                 }}
-                className="h-6 w-6 cursor-pointer rounded-full border border-slate-200 shadow-sm transition-transform hover:scale-110"
+                className="h-6 w-6 cursor-pointer rounded-full border border-border shadow-sm transition-transform hover:scale-110"
                 style={{ backgroundColor: bgMap[tName] }}
                 title={tName.charAt(0).toUpperCase() + tName.slice(1)}
               />
@@ -264,13 +264,13 @@ export function ConversationInfoDrawer({
         </div>
       </div>
 
-      <div className="space-y-2 border-b border-slate-100 px-3 py-3 text-xs text-slate-600">
+      <div className="space-y-2 border-b border-border px-3 py-3 text-xs text-muted">
 
         {peerUserId ? (
 
           <p>
 
-            <span className="font-medium text-slate-800">{t('chat.info.peer')}: </span>
+            <span className="font-medium text-foreground">{t('chat.info.peer')}: </span>
 
             {title ?? peerUserId}
 
@@ -286,13 +286,13 @@ export function ConversationInfoDrawer({
 
         </p>
 
-        <p className="text-slate-500">{t('chat.info.shortcutsHint')}</p>
+        <p className="text-muted">{t('chat.info.shortcutsHint')}</p>
 
       </div>
 
 
 
-      <div className="flex gap-1 border-b border-slate-100 px-2 py-2">
+      <div className="flex gap-1 border-b border-border px-2 py-2">
 
         {tabs.map((item) => (
 
@@ -308,9 +308,9 @@ export function ConversationInfoDrawer({
 
               tab === item.id
 
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-primary text-primary-foreground'
 
-                : 'text-slate-600 hover:bg-slate-100'
+                : 'text-muted hover:bg-background'
 
             }`}
 
@@ -334,7 +334,7 @@ export function ConversationInfoDrawer({
 
             {attachmentsLoading ? (
 
-              <p className="text-center text-sm text-slate-500">{t('common.loading')}</p>
+              <p className="text-center text-sm text-muted">{t('common.loading')}</p>
 
             ) : attachmentsError && imageItems.length === 0 ? (
 
@@ -342,7 +342,7 @@ export function ConversationInfoDrawer({
 
             ) : !imageItems.length ? (
 
-              <p className="text-center text-sm text-slate-500">{t('chat.info.emptyMedia')}</p>
+              <p className="text-center text-sm text-muted">{t('chat.info.emptyMedia')}</p>
 
             ) : (
 
@@ -362,11 +362,11 @@ export function ConversationInfoDrawer({
 
             {attachmentsLoading ? (
 
-              <p className="text-center text-sm text-slate-500">{t('common.loading')}</p>
+              <p className="text-center text-sm text-muted">{t('common.loading')}</p>
 
             ) : !fileItems.length ? (
 
-              <p className="text-center text-sm text-slate-500">{t('chat.info.emptyFiles')}</p>
+              <p className="text-center text-sm text-muted">{t('chat.info.emptyFiles')}</p>
 
             ) : (
 
@@ -386,11 +386,11 @@ export function ConversationInfoDrawer({
 
             {linksLoading ? (
 
-              <p className="text-center text-sm text-slate-500">{t('common.loading')}</p>
+              <p className="text-center text-sm text-muted">{t('common.loading')}</p>
 
             ) : !(links?.items.length) ? (
 
-              <p className="text-center text-sm text-slate-500">{t('chat.info.emptyLinks')}</p>
+              <p className="text-center text-sm text-muted">{t('chat.info.emptyLinks')}</p>
 
             ) : (
 

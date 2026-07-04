@@ -172,34 +172,34 @@ export function ChatPage() {
   return (
     <div className="chat-theme-root flex h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)] flex-col overflow-hidden md:flex-row md:gap-4">
       <section
-        className={`flex min-h-0 flex-col border-slate-200 md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
+        className={`flex min-h-0 flex-col border-border md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
       >
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <h1 className="text-lg font-semibold text-slate-900">{t('chat.title')}</h1>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-slate-600">
+          <h1 className="text-lg font-semibold text-foreground">{t('chat.title')}</h1>
+          <span className="rounded-full bg-background px-2 py-0.5 text-[10px] text-muted">
             {hubLabel}
           </span>
         </div>
 
         <button
           type="button"
-          className="mb-3 rounded-lg border border-slate-300 px-3 py-2 text-left text-xs text-slate-700 hover:bg-slate-50"
+          className="mb-3 rounded-lg border border-border-strong px-3 py-2 text-left text-xs text-slate-700 hover:bg-background"
           onClick={() => void requestChatNotificationPermission()}
         >
           {t('chat.notifications.enable')}
         </button>
 
-        <div className="mb-3 flex rounded-lg bg-slate-100 p-1 text-xs font-medium">
+        <div className="mb-3 flex rounded-lg bg-background p-1 text-xs font-medium">
           <button
             type="button"
-            className={`flex-1 rounded-md px-2 py-1 ${listTab === 'conv' ? 'bg-white shadow-sm' : ''}`}
+            className={`flex-1 rounded-md px-2 py-1 ${listTab === 'conv' ? 'bg-surface shadow-sm' : ''}`}
             onClick={() => setListTab('conv')}
           >
             {t('chat.conversations')}
           </button>
           <button
             type="button"
-            className={`flex-1 rounded-md px-2 py-1 ${listTab === 'channels' ? 'bg-white shadow-sm' : ''}`}
+            className={`flex-1 rounded-md px-2 py-1 ${listTab === 'channels' ? 'bg-surface shadow-sm' : ''}`}
             onClick={() => setListTab('channels')}
           >
             {t('chat.channels')}
@@ -210,7 +210,7 @@ export function ChatPage() {
           <div className="flex min-h-0 flex-1 flex-col space-y-3">
             <button
               type="button"
-              className="w-full rounded-xl bg-indigo-600 px-3 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+              className="w-full rounded-xl bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground shadow-sm hover:bg-indigo-700"
               onClick={() => setDmPickerOpen(true)}
             >
               {t('chat.dm.newChat')}
@@ -218,9 +218,9 @@ export function ChatPage() {
 
             <div className="min-h-0 flex-1 overflow-y-auto">
               {convLoading ? (
-                <p className="text-sm text-slate-500">{t('common.loading')}</p>
+                <p className="text-sm text-muted">{t('common.loading')}</p>
               ) : !convos?.length ? (
-                <p className="text-sm text-slate-500">{t('chat.noConversations')}</p>
+                <p className="text-sm text-muted">{t('chat.noConversations')}</p>
               ) : (
                 <ul className="space-y-1">
                   {convos.map((c) => {
@@ -245,15 +245,15 @@ export function ChatPage() {
                           type="button"
                           onClick={() => selectThread(ref)}
                           className={`flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-left ${
-                            active ? 'bg-indigo-50 ring-1 ring-indigo-100' : 'hover:bg-slate-50'
+                            active ? 'bg-primary/10 ring-1 ring-indigo-100' : 'hover:bg-background'
                           }`}
                         >
                           <ChatPeerAvatar name={title} />
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-medium text-slate-900">{title}</span>
+                            <span className="block truncate font-medium text-foreground">{title}</span>
                             {sub ? (
                               <span
-                                className={`block truncate text-xs ${isActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
+                                className={`block truncate text-xs ${isActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-muted'}`}
                               >
                                 {isActiveNow && (
                                   <span
@@ -277,7 +277,7 @@ export function ChatPage() {
                               />
                             )}
                             {unread > 0 && (
-                              <span className="rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] text-white">
+                              <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
                                 {unread > 99 ? '99+' : unread}
                               </span>
                             )}
@@ -295,7 +295,7 @@ export function ChatPage() {
         {listTab === 'channels' && (
           <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
             <div>
-              <h2 className="mb-2 text-xs font-semibold uppercase text-slate-500">
+              <h2 className="mb-2 text-xs font-semibold uppercase text-muted">
                 {t('chat.channelsPage.publicChannels')}
               </h2>
               <ul className="space-y-1">
@@ -310,20 +310,20 @@ export function ChatPage() {
                       <button
                         type="button"
                         className={`flex flex-1 items-center justify-between rounded-lg px-2 py-2 text-left text-sm ${
-                          active ? 'bg-indigo-50 text-indigo-900' : 'hover:bg-slate-50'
+                          active ? 'bg-primary/10 text-primary' : 'hover:bg-background'
                         }`}
                         onClick={() => selectThread(ref)}
                       >
                         <span className="truncate">{ch.name}</span>
                         {unread > 0 && (
-                          <span className="ml-2 shrink-0 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] text-white">
+                          <span className="ml-2 shrink-0 rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
                             {unread > 99 ? '99+' : unread}
                           </span>
                         )}
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-slate-300 px-2 text-xs"
+                        className="rounded-lg border border-border-strong px-2 text-xs"
                         onClick={() =>
                           void joinChannel(ch.id)
                             .unwrap()
@@ -338,7 +338,7 @@ export function ChatPage() {
               </ul>
             </div>
             <div>
-              <h2 className="mb-2 text-xs font-semibold uppercase text-slate-500">
+              <h2 className="mb-2 text-xs font-semibold uppercase text-muted">
                 {t('chat.channelsPage.myChannels')}
               </h2>
               <ul className="space-y-1">
@@ -353,13 +353,13 @@ export function ChatPage() {
                       <button
                         type="button"
                         className={`flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm ${
-                          active ? 'bg-indigo-50 text-indigo-900' : 'hover:bg-slate-50'
+                          active ? 'bg-primary/10 text-primary' : 'hover:bg-background'
                         }`}
                         onClick={() => selectThread(ref)}
                       >
                         <span className="truncate">{ch.name}</span>
                         {unread > 0 && (
-                          <span className="ml-2 shrink-0 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] text-white">
+                          <span className="ml-2 shrink-0 rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
                             {unread > 99 ? '99+' : unread}
                           </span>
                         )}
@@ -386,32 +386,32 @@ export function ChatPage() {
             aria-label={t('chat.dm.closePicker')}
             onClick={closeDmPicker}
           />
-          <div className="relative z-10 w-full max-w-md rounded-2xl bg-white p-4 shadow-xl">
+          <div className="relative z-10 w-full max-w-md rounded-2xl bg-surface p-4 shadow-xl">
             <div className="mb-3 flex items-center justify-between gap-2">
-              <h2 id="dm-picker-title" className="text-base font-semibold text-slate-900">
+              <h2 id="dm-picker-title" className="text-base font-semibold text-foreground">
                 {t('chat.dm.newChat')}
               </h2>
               <button
                 type="button"
-                className="rounded-lg px-2 py-1 text-sm text-slate-600 hover:bg-slate-100"
+                className="rounded-lg px-2 py-1 text-sm text-muted hover:bg-background"
                 onClick={closeDmPicker}
               >
                 {t('common.close')}
               </button>
             </div>
-            <p className="mb-2 text-xs text-slate-500">{t('chat.dm.searchHint')}</p>
+            <p className="mb-2 text-xs text-muted">{t('chat.dm.searchHint')}</p>
             <input
               autoFocus
               value={userQuery}
               onChange={(e) => setUserQuery(e.target.value)}
               placeholder={t('chat.dm.searchPlaceholder')}
-              className="mb-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-indigo-500 focus:ring-2"
+              className="mb-3 w-full rounded-xl border border-border-strong px-3 py-2 text-sm outline-none ring-indigo-500 focus:ring-2"
             />
-            <ul className="max-h-56 overflow-y-auto rounded-xl border border-slate-100">
+            <ul className="max-h-56 overflow-y-auto rounded-xl border border-border">
               {searchLoading ? (
-                <li className="px-3 py-4 text-center text-sm text-slate-500">{t('common.loading')}</li>
+                <li className="px-3 py-4 text-center text-sm text-muted">{t('common.loading')}</li>
               ) : !(searchHits ?? []).filter((u) => u.id !== currentUserId).length ? (
-                <li className="px-3 py-4 text-center text-sm text-slate-500">{t('chat.dm.noResults')}</li>
+                <li className="px-3 py-4 text-center text-sm text-muted">{t('chat.dm.noResults')}</li>
               ) : (
                 (searchHits ?? [])
                   .filter((u) => u.id !== currentUserId)
@@ -419,13 +419,13 @@ export function ChatPage() {
                     <li key={u.id} className="border-b border-slate-50 last:border-0">
                       <button
                         type="button"
-                        className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-slate-50"
+                        className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-background"
                         onClick={() => void startDmWithUser(u.id)}
                       >
                         <ChatPeerAvatar name={u.fullName} className="h-10 w-10 text-[11px]" />
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate font-medium text-slate-900">{u.fullName}</span>
-                          <span className="block truncate text-xs text-slate-500">{u.email}</span>
+                          <span className="block truncate font-medium text-foreground">{u.fullName}</span>
+                          <span className="block truncate text-xs text-muted">{u.email}</span>
                         </span>
                       </button>
                     </li>
@@ -442,14 +442,14 @@ export function ChatPage() {
         {narrow && selected && (
           <button
             type="button"
-            className="mb-2 inline-flex items-center text-sm text-indigo-600 hover:underline"
+            className="mb-2 inline-flex items-center text-sm text-primary hover:underline"
             onClick={backToList}
           >
             ← {t('chat.mobile.back')}
           </button>
         )}
         {!selected ? (
-          <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">
+          <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-border p-8 text-center text-muted">
             <p className="max-w-sm text-sm">{t('chat.thread.pickConversation')}</p>
           </div>
         ) : (
@@ -464,7 +464,7 @@ export function ChatPage() {
               conversationSubtitle={
                 selected.kind === 'conversation' ? (
                   <span
-                    className={`truncate mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-slate-500'}`}
+                    className={`truncate mt-0.5 text-xs ${selectedPeerActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-muted'}`}
                   >
                     {selectedPeerActiveNow && (
                       <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
@@ -487,7 +487,7 @@ export function ChatPage() {
                 <>
                   <button
                     type="button"
-                    className="p-1 md:hidden -ml-2 text-slate-500 hover:text-slate-900 transition-colors shrink-0"
+                    className="p-1 md:hidden -ml-2 text-muted hover:text-foreground transition-colors shrink-0"
                     onClick={() => {
                       setSelected(null)
                       if (narrow) setPanel('list')

@@ -33,11 +33,11 @@ export function MessageActionsMenu({
   if (!open) return null
 
   return (
-    <div className={`absolute z-10 mt-1 min-w-[9rem] rounded-lg border border-slate-200 bg-white py-1 text-left text-sm shadow-lg ${className}`}>
+    <div className={`absolute z-10 mt-1 min-w-[9rem] rounded-lg border border-border bg-surface py-1 text-left text-sm shadow-lg ${className}`}>
       {canCopy && (
         <button
           type="button"
-          className="block w-full px-3 py-1.5 text-left text-slate-800 hover:bg-slate-50"
+          className="block w-full px-3 py-1.5 text-left text-foreground hover:bg-background"
           onClick={onCopy}
         >
           {t('chat.message.copy')}
@@ -46,7 +46,7 @@ export function MessageActionsMenu({
       {canReply && (
         <button
           type="button"
-          className="block w-full px-3 py-1.5 text-left text-slate-800 hover:bg-slate-50"
+          className="block w-full px-3 py-1.5 text-left text-foreground hover:bg-background"
           onClick={onReply}
         >
           {t('chat.reply.action')}
@@ -55,7 +55,7 @@ export function MessageActionsMenu({
       {canEdit && (
         <button
           type="button"
-          className="block w-full px-3 py-1.5 text-left text-slate-800 hover:bg-slate-50"
+          className="block w-full px-3 py-1.5 text-left text-foreground hover:bg-background"
           onClick={onEdit}
         >
           {t('chat.message.edit')}
@@ -64,7 +64,7 @@ export function MessageActionsMenu({
       {canReport && (
         <button
           type="button"
-          className="block w-full px-3 py-1.5 text-left text-slate-800 hover:bg-slate-50"
+          className="block w-full px-3 py-1.5 text-left text-foreground hover:bg-background"
           onClick={onReport}
         >
           {t('chat.safety.report')}

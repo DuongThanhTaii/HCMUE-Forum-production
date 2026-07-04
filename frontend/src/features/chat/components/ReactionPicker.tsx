@@ -20,7 +20,7 @@ export function ReactionPicker({
     <div
       role="toolbar"
       aria-label="Reactions"
-      className={`absolute bottom-full mb-1 z-50 shadow-lg bg-white rounded-full border border-slate-100 flex items-center gap-1.5 p-1.5 ${className}`}
+      className={`absolute bottom-full mb-1 z-50 shadow-lg bg-surface rounded-full border border-border flex items-center gap-1.5 p-1.5 ${className}`}
       onClick={(e) => e.stopPropagation()}
     >
       {EMOJIS.map((emoji) => (
@@ -28,7 +28,7 @@ export function ReactionPicker({
           key={emoji}
           type="button"
           onClick={() => onPick(emoji)}
-          className="hover:scale-125 transition-transform origin-bottom text-xl leading-none flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-50"
+          className="hover:scale-125 transition-transform origin-bottom text-xl leading-none flex items-center justify-center w-8 h-8 rounded-full hover:bg-background"
         >
           <img src={EMOJI_ASSETS[emoji]} alt={emoji} className="w-7 h-7 object-contain" />
         </button>

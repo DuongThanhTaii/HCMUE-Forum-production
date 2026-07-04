@@ -16,7 +16,7 @@ export function SharedMediaGrid({
           <button
             key={`${item.messageId}-${item.fileUrl}`}
             type="button"
-            className="aspect-square cursor-pointer overflow-hidden rounded-lg border border-slate-200 bg-slate-100"
+            className="aspect-square cursor-pointer overflow-hidden rounded-lg border border-border bg-background"
             onClick={() => onSelect?.(item)}
           >
             <img src={src} alt={item.fileName} className="h-full w-full object-cover" loading="lazy" />

@@ -24,14 +24,14 @@ export function SharedFilesList({ items }: { items: ConversationAttachmentDto[] 
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 hover:bg-slate-50"
+              className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 hover:bg-background"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-background text-muted">
                 {voice ? <Mic className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-slate-800">{item.fileName}</span>
-                <span className="block text-[11px] text-slate-500">
+                <span className="block truncate text-sm font-medium text-foreground">{item.fileName}</span>
+                <span className="block text-[11px] text-muted">
                   {formatBytes(item.fileSize)} · {new Date(item.sentAt).toLocaleString()}
                 </span>
               </span>

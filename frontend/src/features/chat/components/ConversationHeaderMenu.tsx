@@ -64,23 +64,23 @@ export function ConversationHeaderMenu({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full min-w-0 items-center gap-1 rounded px-2 py-1 hover:bg-slate-50 transition-colors text-left"
+        className="flex w-full min-w-0 items-center gap-1 rounded px-2 py-1 hover:bg-background transition-colors text-left"
         aria-label={t('chat.safety.menu')}
       >
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-slate-900">{peerName}</p>
+          <p className="truncate text-sm font-semibold text-foreground">{peerName}</p>
           {subtitle && (
-            <p className="truncate text-[11px] text-slate-500">{subtitle}</p>
+            <p className="truncate text-[11px] text-muted">{subtitle}</p>
           )}
         </div>
-        <ChevronDown className="h-4 w-4 text-slate-500 shrink-0" />
+        <ChevronDown className="h-4 w-4 text-muted shrink-0" />
       </button>
 
       {open && (
-        <div className="absolute left-0 z-20 mt-1 min-w-[14rem] rounded-lg border border-slate-200 bg-white py-1 text-sm shadow-lg">
+        <div className="absolute left-0 z-20 mt-1 min-w-[14rem] rounded-lg border border-border bg-surface py-1 text-sm shadow-lg">
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-slate-50"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-background"
             onClick={() => {
               setOpen(false)
               onOpenInfo?.()
@@ -91,7 +91,7 @@ export function ConversationHeaderMenu({
           </button>
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-slate-50"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-background"
             onClick={() => {
               setOpen(false)
               onOpenSearch?.()
@@ -104,7 +104,7 @@ export function ConversationHeaderMenu({
           {expandUrl && (
             <Link
               to={expandUrl}
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-slate-50"
+              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-background"
               onClick={() => setOpen(false)}
             >
               <Maximize2 className="h-4 w-4" />
@@ -113,7 +113,7 @@ export function ConversationHeaderMenu({
           )}
 
           <div className="px-3 py-2">
-            <div className="mb-1.5 text-xs font-medium text-slate-500">{t('chat.theme.select', 'Giao diện')}</div>
+            <div className="mb-1.5 text-xs font-medium text-muted">{t('chat.theme.select', 'Giao diện')}</div>
             <div className="flex gap-2">
               {(['light', 'dark', 'ocean', 'sunset', 'forest'] as const).map((tName) => {
                 const bgMap: Record<string, string> = { light: '#f8fafc', dark: '#0f172a', ocean: '#0ea5e9', sunset: '#f97316', forest: '#16a34a' }
@@ -126,7 +126,7 @@ export function ConversationHeaderMenu({
                       document.documentElement.classList.add(`theme-${tName}`)
                       localStorage.setItem('app-theme', tName)
                     }}
-                    className="h-5 w-5 cursor-pointer rounded-full border border-slate-200 shadow-sm transition-transform hover:scale-110"
+                    className="h-5 w-5 cursor-pointer rounded-full border border-border shadow-sm transition-transform hover:scale-110"
                     style={{ backgroundColor: bgMap[tName] }}
                     title={tName.charAt(0).toUpperCase() + tName.slice(1)}
                   />
@@ -135,11 +135,11 @@ export function ConversationHeaderMenu({
             </div>
           </div>
           
-          <div className="my-1 h-px bg-slate-100" />
+          <div className="my-1 h-px bg-background" />
           
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-slate-50"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left hover:bg-background"
             disabled={muting}
             onClick={() => void toggleMute()}
           >

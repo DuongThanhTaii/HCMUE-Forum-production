@@ -115,7 +115,7 @@ export function VoiceMessagePlayer({
   return (
     <div
       className={`flex max-w-[min(100%,280px)] items-center gap-2 rounded-full px-2 py-1.5 pl-2 ${
-        isSelf ? 'bg-indigo-700/95 text-white' : 'bg-slate-200 text-slate-900'
+        isSelf ? 'bg-indigo-700/95 text-white' : 'bg-slate-200 text-foreground'
       }`}
     >
       <audio ref={audioRef} src={src} preload="auto" className="hidden" />
@@ -125,8 +125,8 @@ export function VoiceMessagePlayer({
         aria-label={playing ? t('chat.voice.pause') : t('chat.voice.play')}
         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-sm transition ${
           isSelf
-            ? 'bg-white text-indigo-700 hover:bg-indigo-50'
-            : 'bg-white text-slate-800 hover:bg-slate-50'
+            ? 'bg-surface text-indigo-700 hover:bg-primary/10'
+            : 'bg-surface text-foreground hover:bg-background'
         }`}
       >
         {playing ? (
@@ -148,16 +148,16 @@ export function VoiceMessagePlayer({
         >
           <div
             className={`h-full rounded-full transition-[width] duration-150 ${
-              isSelf ? 'bg-white' : 'bg-indigo-500'
+              isSelf ? 'bg-surface' : 'bg-primary/100'
             }`}
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="flex items-center justify-between gap-2 text-[10px] tabular-nums leading-none">
-          <span className={isSelf ? 'text-indigo-100' : 'text-slate-600'}>
+          <span className={isSelf ? 'text-indigo-100' : 'text-muted'}>
             {loadError ? t('chat.voice.loadError') : t('chat.voice.messageBubble')}
           </span>
-          <span className={isSelf ? 'text-indigo-100' : 'text-slate-500'}>
+          <span className={isSelf ? 'text-indigo-100' : 'text-muted'}>
             {formatMmSs(current)} · {totalLabel}
           </span>
         </div>

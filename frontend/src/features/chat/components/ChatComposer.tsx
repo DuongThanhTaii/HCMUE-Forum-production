@@ -222,7 +222,7 @@ export function ChatComposer({
   return (
     <div className="space-y-2 pb-2 px-2">
       {outboxState.kind === "pending" && (
-        <p className="text-xs text-slate-500">{t("chat.delivery.sending")}</p>
+        <p className="text-xs text-muted">{t("chat.delivery.sending")}</p>
       )}
       {outboxState.kind === "failed" && (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-900">
@@ -237,7 +237,7 @@ export function ChatComposer({
             </button>
             <button
               type="button"
-              className="text-slate-600 hover:underline"
+              className="text-muted hover:underline"
               onClick={() => void dismissFailed()}
             >
               {t("chat.delivery.dismiss")}
@@ -255,14 +255,14 @@ export function ChatComposer({
       )}
 
       {voice.state === "recording" && (
-        <div className="flex items-center justify-between rounded-lg bg-slate-100 px-3 py-2 text-sm">
+        <div className="flex items-center justify-between rounded-lg bg-background px-3 py-2 text-sm">
           <span>
             {t("chat.voice.recording")} · {voice.seconds}s
           </span>
           <div className="flex gap-2">
             <button
               type="button"
-              className="rounded-md border border-slate-300 px-2 py-1 text-xs"
+              className="rounded-md border border-border-strong px-2 py-1 text-xs"
               onClick={() => {
                 voice.cancelRecording();
               }}
@@ -271,7 +271,7 @@ export function ChatComposer({
             </button>
             <button
               type="button"
-              className="rounded-md bg-indigo-600 px-2 py-1 text-xs text-white"
+              className="rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground"
               onClick={() => {
                 voice.finishRecording();
               }}
@@ -285,19 +285,19 @@ export function ChatComposer({
       {voice.state === "stopped" &&
         voice.blob &&
         threadRef.kind === "conversation" && (
-          <div className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm">
+          <div className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm">
             <span>{t("chat.voice.preview")}</span>
             <div className="flex gap-2">
               <button
                 type="button"
-                className="rounded-md border border-slate-300 px-2 py-1 text-xs"
+                className="rounded-md border border-border-strong px-2 py-1 text-xs"
                 onClick={() => voice.reset()}
               >
                 {t("chat.voice.discard")}
               </button>
               <button
                 type="button"
-                className="rounded-md bg-indigo-600 px-2 py-1 text-xs text-white"
+                className="rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground"
                 onClick={() => void sendVoiceIfReady()}
               >
                 {t("chat.voice.send")}
@@ -312,7 +312,7 @@ export function ChatComposer({
             <div className="flex shrink-0 items-center gap-1 pb-1">
               <button
                 type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-background hover:text-primary active:bg-slate-200"
                 onClick={() => fileInputRef.current?.click()}
                 aria-label={t("chat.attachFile")}
               >
@@ -320,7 +320,7 @@ export function ChatComposer({
               </button>
               <button
                 type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-indigo-600 active:bg-slate-200 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-slate-500"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-background hover:text-primary active:bg-slate-200 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted"
                 onClick={() => void voice.start()}
                 disabled={voice.state !== "idle"}
                 aria-label={t("chat.voice.start")}
@@ -330,7 +330,7 @@ export function ChatComposer({
             </div>
           )}
           
-          <div className="min-h-[36px] min-w-0 flex-1 rounded-[20px] bg-slate-100 transition-colors focus-within:bg-slate-200/50 sm:min-h-[36px]">
+          <div className="min-h-[36px] min-w-0 flex-1 rounded-[20px] bg-background transition-colors focus-within:bg-slate-200/50 sm:min-h-[36px]">
             {threadRef.kind === "conversation" && (
               <input
                 ref={fileInputRef}
@@ -352,7 +352,7 @@ export function ChatComposer({
               placeholder={disabled ? t("chat.safety.composerDisabled") : t("chat.typeMessage")}
               rows={1}
               disabled={disabled}
-              className="max-h-28 min-h-[36px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[0.9375rem] leading-snug text-slate-900 outline-none ring-0 placeholder:text-slate-500 focus:ring-0 disabled:opacity-50"
+              className="max-h-28 min-h-[36px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[0.9375rem] leading-snug text-foreground outline-none ring-0 placeholder:text-muted focus:ring-0 disabled:opacity-50"
             />
           </div>
 
@@ -361,7 +361,7 @@ export function ChatComposer({
               type="button"
               onClick={() => void submitText()}
               disabled={disabled || (!text.trim() && outboxState.kind !== "pending")}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-indigo-600 transition-colors hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-primary transition-colors hover:bg-background disabled:opacity-50 disabled:hover:bg-transparent"
               aria-label={t("chat.send")}
             >
               <Send className="h-[22px] w-[22px]" strokeWidth={2.5} />

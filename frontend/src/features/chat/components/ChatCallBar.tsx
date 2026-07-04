@@ -54,7 +54,7 @@ export function ChatCallBar({ threadRef, conversation }: Props) {
         }}
         className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
           canPressCall
-            ? 'text-blue-500 hover:bg-slate-100 hover:text-blue-600'
+            ? 'text-blue-500 hover:bg-background hover:text-blue-600'
             : 'text-slate-300'
         }`}
         aria-label={t('chat.calls.voice')}
@@ -71,7 +71,7 @@ export function ChatCallBar({ threadRef, conversation }: Props) {
         }}
         className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
           canPressCall
-            ? 'text-blue-500 hover:bg-slate-100 hover:text-blue-600'
+            ? 'text-blue-500 hover:bg-background hover:text-blue-600'
             : 'text-slate-300'
         }`}
         aria-label={t('chat.calls.video')}

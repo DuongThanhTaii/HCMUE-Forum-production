@@ -63,7 +63,7 @@ export function ChatConversationPanel({
   return (
     <div className="relative flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {conversationId ? (
-        <div className="relative z-50 flex shrink-0 items-center justify-between bg-white/95 px-4 py-2 backdrop-blur">
+        <div className="relative z-50 flex shrink-0 items-center justify-between bg-surface/95 px-4 py-2 backdrop-blur">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             {headerLeft}
             <ConversationHeaderMenu

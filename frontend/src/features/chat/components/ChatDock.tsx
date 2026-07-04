@@ -143,13 +143,13 @@ export function ChatDock() {
           setMinimized(false)
           setDockVisibility('visible')
         }}
-        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 shadow-lg hover:bg-slate-50"
+        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground shadow-lg hover:bg-background"
         aria-label={t('chat.dock.open')}
       >
         <MessageCircle className="h-4 w-4" />
         <span>{t('chat.title')}</span>
         {totalUnread > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1.5 text-[11px] text-white">
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] text-primary-foreground">
             {totalUnread > 99 ? '99+' : totalUnread}
           </span>
         )}
@@ -170,18 +170,18 @@ export function ChatDock() {
     panel === 'thread' && activeConv ? conversationSubtitle(activeConv) : null
 
   return (
-    <div className="chat-theme-root fixed bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl">
+    <div className="chat-theme-root fixed bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-border bg-surface shadow-2xl">
       {panel === 'list' && (
-        <div className="flex shrink-0 items-center gap-2 border-b border-slate-200 px-2 py-2">
+        <div className="flex shrink-0 items-center gap-2 border-b border-border px-2 py-2">
           <div className="min-w-0 flex-1">
             <Link
               to="/chat"
-              className="flex items-center gap-2 text-sm font-semibold text-slate-900 hover:text-indigo-600"
+              className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary"
             >
               <MessageCircle className="h-4 w-4 shrink-0" />
               <span className="truncate">{headerTitle}</span>
               {totalUnread > 0 && (
-                <span className="shrink-0 rounded-full bg-indigo-600 px-2 py-0.5 text-[10px] text-white">
+                <span className="shrink-0 rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
                   {totalUnread > 99 ? '99+' : totalUnread}
                 </span>
               )}
@@ -190,14 +190,14 @@ export function ChatDock() {
           <div className="flex shrink-0 items-center gap-0.5">
             <Link
               to={activeConvId ? `/chat?conversation=${activeConvId}` : '/chat'}
-              className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+              className="rounded p-1.5 text-muted hover:bg-background"
               aria-label={t('chat.dock.expandFull')}
             >
               <Maximize2 className="h-4 w-4" />
             </Link>
             <button
               type="button"
-              className="rounded p-1.5 text-slate-500 hover:bg-slate-100"
+              className="rounded p-1.5 text-muted hover:bg-background"
               onClick={() => {
                 setMinimized(true)
                 setDockVisibility('hidden')
@@ -215,15 +215,15 @@ export function ChatDock() {
           <>
             <div className="min-h-0 flex-1 overflow-y-auto px-1 py-1">
               {convLoading ? (
-                <p className="px-2 py-4 text-center text-sm text-slate-500">
+                <p className="px-2 py-4 text-center text-sm text-muted">
                   {t('common.loading')}
                 </p>
               ) : sortedConvos.length === 0 ? (
                 <div className="px-2 py-4 text-center">
-                  <p className="text-sm text-slate-600">{t('chat.dock.emptyConversations')}</p>
+                  <p className="text-sm text-muted">{t('chat.dock.emptyConversations')}</p>
                   <Link
                     to="/chat"
-                    className="mt-2 inline-block text-sm font-medium text-indigo-600 hover:underline"
+                    className="mt-2 inline-block text-sm font-medium text-primary hover:underline"
                   >
                     {t('chat.dock.openFullCta')}
                   </Link>
@@ -242,15 +242,15 @@ export function ChatDock() {
                         <button
                           type="button"
                           onClick={() => openConversation(c)}
-                          className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left hover:bg-slate-50"
+                          className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left hover:bg-background"
                         >
                           <ChatPeerAvatar name={title} className="h-10 w-10 text-[11px]" />
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-sm font-medium text-slate-900">
+                            <span className="block truncate text-sm font-medium text-foreground">
                               {title}
                             </span>
                             {sub && (
-                              <span className="block truncate text-[11px] text-slate-500">{sub}</span>
+                              <span className="block truncate text-[11px] text-muted">{sub}</span>
                             )}
                           </span>
                           <span className="flex shrink-0 items-center gap-1">
@@ -261,7 +261,7 @@ export function ChatDock() {
                               />
                             )}
                             {unread > 0 && (
-                              <span className="rounded-full bg-indigo-600 px-1.5 text-[10px] text-white">
+                              <span className="rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">
                                 {unread > 9 ? '9+' : unread}
                               </span>
                             )}
@@ -273,14 +273,14 @@ export function ChatDock() {
                 </ul>
               )}
             </div>
-            <div className="shrink-0 border-t border-slate-100 px-3 py-2">
+            <div className="shrink-0 border-t border-border px-3 py-2">
               <Link
                 to="/chat"
-                className="block w-full rounded-lg bg-indigo-600 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-500"
+                className="block w-full rounded-lg bg-primary py-2 text-center text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
               >
                 {t('chat.dock.openFullCta')}
               </Link>
-              <p className="mt-1.5 text-center text-[11px] leading-snug text-slate-500">
+              <p className="mt-1.5 text-center text-[11px] leading-snug text-muted">
                 {t('chat.dock.hintShort')}
               </p>
             </div>
@@ -304,7 +304,7 @@ export function ChatDock() {
                   <button
                     type="button"
                     onClick={backToList}
-                    className="rounded-full p-1.5 text-slate-600 hover:bg-slate-100 -ml-2 shrink-0"
+                    className="rounded-full p-1.5 text-muted hover:bg-background -ml-2 shrink-0"
                     aria-label={t('chat.dock.backToList')}
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -322,7 +322,7 @@ export function ChatDock() {
                   <ChatCallBar threadRef={activeThreadRef} conversation={activeConv ?? null} />
                   <button
                     type="button"
-                    className="rounded-full p-1.5 text-slate-500 hover:bg-slate-100"
+                    className="rounded-full p-1.5 text-muted hover:bg-background"
                     onClick={() => {
                       setMinimized(true)
                       setDockVisibility('hidden')

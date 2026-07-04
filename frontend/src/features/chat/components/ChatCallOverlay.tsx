@@ -161,7 +161,7 @@ export function ChatCallOverlay({
             <button
               type="button"
               onClick={() => void toggleFullscreen()}
-              className="shrink-0 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+              className="shrink-0 rounded-full bg-surface/10 p-2 text-white hover:bg-surface/20"
               title={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
               aria-label={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
             >
@@ -185,7 +185,7 @@ export function ChatCallOverlay({
               </button>
               <button
                 type="button"
-                className="flex-1 rounded-2xl bg-white/10 py-3 text-sm font-semibold text-white hover:bg-white/20"
+                className="flex-1 rounded-2xl bg-surface/10 py-3 text-sm font-semibold text-white hover:bg-surface/20"
                 onClick={onReject}
               >
                 {t('chat.calls.decline')}
@@ -243,12 +243,12 @@ export function ChatCallOverlay({
                   {remoteDisplayName.slice(0, 1).toUpperCase()}
                 </div>
                 <p className="text-center text-sm text-slate-200">{remoteDisplayName}</p>
-                <p className="text-center text-xs text-slate-500">
+                <p className="text-center text-xs text-muted">
                   {phase === 'outgoing' ? t('chat.calls.connecting') : t('chat.calls.voiceInProgress')}
                 </p>
                 {phase === 'outgoing' && (
                   <span className="mt-1 h-1 w-20 overflow-hidden rounded-full bg-slate-800">
-                    <span className="block h-full w-1/2 animate-pulse rounded-full bg-indigo-500" />
+                    <span className="block h-full w-1/2 animate-pulse rounded-full bg-primary/100" />
                   </span>
                 )}
               </div>
@@ -260,7 +260,7 @@ export function ChatCallOverlay({
                   type="button"
                   onClick={onToggleMute}
                   className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full shadow-lg transition ${
-                    muted ? 'bg-white text-slate-900' : 'bg-white/15 text-white hover:bg-white/25'
+                    muted ? 'bg-surface text-foreground' : 'bg-surface/15 text-white hover:bg-surface/25'
                   }`}
                   title={muted ? t('chat.calls.unmute') : t('chat.calls.mute')}
                   aria-label={muted ? t('chat.calls.unmute') : t('chat.calls.mute')}
@@ -281,7 +281,7 @@ export function ChatCallOverlay({
                   <button
                     type="button"
                     onClick={() => void onShareScreen()}
-                    className="flex h-14 min-w-[7.5rem] shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500"
+                    className="flex h-14 min-w-[7.5rem] shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-lg hover:bg-primary-hover"
                   >
                     <MonitorUp className="h-5 w-5" />
                     {t('chat.calls.shareScreen')}
@@ -314,7 +314,7 @@ export function ChatCallOverlay({
               </div>
             )}
 
-            <p className="border-t border-white/10 px-4 py-2 text-center text-[10px] leading-snug text-slate-500">
+            <p className="border-t border-white/10 px-4 py-2 text-center text-[10px] leading-snug text-muted">
               {callMode === 'voice' && <VideoOff className="mr-0.5 inline h-3 w-3 align-middle" />}
               {callMode === 'video' && <Video className="mr-0.5 inline h-3 w-3 align-middle" />}
               {callMode === 'screen' && <MonitorUp className="mr-0.5 inline h-3 w-3 align-middle" />}
