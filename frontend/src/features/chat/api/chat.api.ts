@@ -479,9 +479,9 @@ export const chatApi = baseApi.injectEndpoints({
       { messageId: string; conversationId: string; emoji: string }
     >({
       query: ({ messageId, emoji, conversationId }) => ({
-        url: `/api/v1/chat/messages/${messageId}/reactions`,
+        url: `/api/v1/chat/messages/${messageId}/reactions/${encodeURIComponent(emoji)}`,
         method: 'POST',
-        body: { emoji, conversationId },
+        body: { conversationId },
       }),
       invalidatesTags: (_r, _e, arg) => [
         { type: 'ChatMessage', id: arg.conversationId },
