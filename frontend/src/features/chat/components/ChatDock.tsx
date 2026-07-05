@@ -210,7 +210,7 @@ export function ChatDock() {
         </div>
       )}
 
-      <div className="flex h-[min(520px,82vh)] min-h-[320px] max-h-[85vh] flex-col overflow-hidden">
+      <div className="flex h-[min(650px,90vh)] min-h-[400px] max-h-[90vh] flex-col overflow-hidden">
         {panel === 'list' && (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto px-1 py-1">

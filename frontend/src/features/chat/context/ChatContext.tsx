@@ -296,7 +296,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const joinThread = useCallback(async (ref: ChatThreadRef | null) => {
     const conn = connectionRef.current
-    if (!conn || !conn.connected) return
+    if (!conn) return
 
     const prev = lastJoinedRef.current
 
