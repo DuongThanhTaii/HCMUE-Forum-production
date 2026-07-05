@@ -263,13 +263,14 @@ export const learningApi = baseApi.injectEndpoints({
     }),
     uploadDocument: builder.mutation<
       unknown,
-      { title: string; description?: string; file: File; documentType: number; courseId?: string }
+      { title: string; description?: string; file?: File | null; driveUrl?: string; documentType: number; courseId?: string }
     >({
-      query: ({ title, description, file, documentType, courseId }) => {
+      query: ({ title, description, file, driveUrl, documentType, courseId }) => {
         const formData = new FormData()
         formData.append('title', title)
         if (description?.trim()) formData.append('description', description.trim())
-        formData.append('file', file)
+        if (file) formData.append('file', file)
+        if (driveUrl?.trim()) formData.append('driveUrl', driveUrl.trim())
         formData.append('documentType', String(documentType))
         if (courseId?.trim()) formData.append('courseId', courseId.trim())
         return {

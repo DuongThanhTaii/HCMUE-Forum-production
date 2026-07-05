@@ -16,6 +16,7 @@ export function LearningDocumentsPage() {
   const [uploadCourseId, setUploadCourseId] = useState('')
   const [uploadType, setUploadType] = useState(4)
   const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [uploadDriveUrl, setUploadDriveUrl] = useState('')
   const [uploadFeedback, setUploadFeedback] = useState<string | null>(null)
   const [showContributeForm, setShowContributeForm] = useState(false)
   const contributeRef = useRef<HTMLDivElement | null>(null)
@@ -47,7 +48,7 @@ export function LearningDocumentsPage() {
   async function onSubmitUpload(e: FormEvent) {
     e.preventDefault()
     setUploadFeedback(null)
-    if (!userId || !uploadTitle.trim() || !uploadFile) {
+    if (!userId || !uploadTitle.trim() || (!uploadFile && !uploadDriveUrl.trim())) {
       setUploadFeedback(t('learning.messages.fillAllFields'))
       return
     }
@@ -56,6 +57,7 @@ export function LearningDocumentsPage() {
         title: uploadTitle.trim(),
         description: uploadDescription.trim() || undefined,
         file: uploadFile,
+        driveUrl: uploadDriveUrl.trim() || undefined,
         documentType: uploadType,
         courseId: uploadCourseId || undefined,
       }).unwrap()
@@ -65,8 +67,9 @@ export function LearningDocumentsPage() {
       setUploadCourseId('')
       setUploadType(4)
       setUploadFile(null)
-    } catch {
-      setUploadFeedback(t('learning.uploadPage.uploadError'))
+      setUploadDriveUrl('')
+    } catch (err: any) {
+      setUploadFeedback(err?.data?.message || t('learning.uploadPage.uploadError'))
     }
   }
 
@@ -181,6 +184,12 @@ export function LearningDocumentsPage() {
                 <option value={5}>{t('learning.documentTypes.other')}</option>
               </select>
             </div>
+            <input
+              value={uploadDriveUrl}
+              onChange={(e) => setUploadDriveUrl(e.target.value)}
+              placeholder="Google Drive URL"
+              className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
+            />
             <input
               type="file"
               onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
