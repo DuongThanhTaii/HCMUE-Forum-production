@@ -74,10 +74,12 @@ type ConfirmState =
 function CategoryEditor({
   draft,
   fieldLabels,
+  parentOptions,
   onChange,
 }: {
   draft: UpsertCategoryRequest
   fieldLabels: Record<string, string>
+  parentOptions: ForumCategoryOption[]
   onChange: <K extends keyof UpsertCategoryRequest>(key: K, value: UpsertCategoryRequest[K]) => void
 }) {
   return (
@@ -101,7 +103,16 @@ function CategoryEditor({
       </label>
       <label className="flex flex-col gap-1 text-xs font-medium text-slate-600">
         {fieldLabels.parentCategoryId}
-        <input value={draft.parentCategoryId || ''} onChange={(e) => onChange('parentCategoryId', e.target.value || null)} placeholder="ID danh mục cha (tuỳ chọn)" className="rounded border border-slate-300 px-2 py-1.5 text-sm" />
+        <select
+          value={draft.parentCategoryId || ''}
+          onChange={(e) => onChange('parentCategoryId', e.target.value || null)}
+          className="rounded border border-slate-300 px-2 py-1.5 text-sm"
+        >
+          <option value="">(Không có - Nhóm gốc)</option>
+          {parentOptions.map((p: ForumCategoryOption) => (
+            <option key={p.id} value={p.id}>{p.name}</option>
+          ))}
+        </select>
       </label>
       <label className="col-span-full flex flex-col gap-1 text-xs font-medium text-slate-600 md:col-span-2">
         {fieldLabels.description}
@@ -136,10 +147,33 @@ export function AdminCategoriesPage() {
       description: t('admin.categoriesPage.fields.description', 'Mô tả'),
       displayOrder: t('admin.categoriesPage.fields.displayOrder', 'Thứ tự hiển thị'),
       isActive: t('admin.categoriesPage.fields.isActive', 'Kích hoạt'),
-      parentCategoryId: t('admin.categoriesPage.fields.parentCategoryId', 'ID Danh mục cha'),
+      parentCategoryId: t('admin.categoriesPage.fields.parentCategoryId', 'Nhóm / Khu vực'),
     }),
     [t],
   )
+
+  const orderedCategories = useMemo(() => {
+    const parents = categories.filter((c: ForumCategoryOption) => !c.parentCategoryId).sort((a: ForumCategoryOption, b: ForumCategoryOption) => a.displayOrder - b.displayOrder || a.name.localeCompare(b.name, 'vi'))
+    
+    const result: { category: ForumCategoryOption; isChild: boolean; parentName?: string }[] = []
+    
+    parents.forEach(parent => {
+      result.push({ category: parent, isChild: false })
+      const children = categories.filter(c => c.parentCategoryId === parent.id).sort((a,b) => a.displayOrder - b.displayOrder || a.name.localeCompare(b.name, 'vi'))
+      children.forEach(child => {
+        result.push({ category: child, isChild: true, parentName: parent.name })
+      })
+    })
+
+    // Orphans
+    const assignedIds = new Set(result.map(r => r.category.id))
+    const orphans = categories.filter(c => !assignedIds.has(c.id)).sort((a,b) => a.displayOrder - b.displayOrder || a.name.localeCompare(b.name, 'vi'))
+    orphans.forEach(orphan => {
+      result.push({ category: orphan, isChild: false })
+    })
+
+    return result
+  }, [categories])
 
   const getMerged = useCallback(
     (category: ForumCategoryOption): UpsertCategoryRequest => ({
@@ -262,7 +296,7 @@ export function AdminCategoriesPage() {
                 {t('admin.categoriesPage.fields.slug', 'Slug')}
               </th>
               <th className="border-b border-slate-200 px-4 py-3 align-bottom">
-                {t('admin.categoriesPage.fields.parentCategoryId', 'ID Danh mục cha')}
+                {t('admin.categoriesPage.fields.parentCategoryId', 'Khu vực / Nhóm')}
               </th>
               <th className="border-b border-slate-200 px-4 py-3 align-bottom">
                 Số bài
@@ -273,20 +307,46 @@ export function AdminCategoriesPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {categories.map((category: ForumCategoryOption) => {
+            {orderedCategories.map(({ category, isChild, parentName }) => {
               const draft = getMerged(category)
               const dirty = isCategoryDirty(category)
               const isOpen = editingId === category.id
+              // valid parents for this category are all categories EXCEPT itself
+              const parentOptions = categories.filter((c: ForumCategoryOption) => c.id !== category.id && !c.parentCategoryId)
+
               return (
                 <Fragment key={category.id}>
                   <tr className={dirty ? 'bg-amber-50/50' : undefined}>
                     <td className="px-4 py-3 tabular-nums text-slate-700">{draft.displayOrder}</td>
-                    <td className="px-4 py-3 font-medium text-slate-900">
-                      {draft.name}
-                      <p className="mt-0.5 text-[11px] font-normal text-slate-500">{category.id}</p>
+                    <td className={`px-4 py-3 font-medium text-slate-900 ${isChild ? 'pl-8' : ''}`}>
+                      {isChild ? (
+                         <div className="flex items-start gap-2">
+                           <span className="text-slate-300 mt-0.5">↳</span>
+                           <div>
+                             {draft.name}
+                             <p className="mt-0.5 font-mono text-[11px] font-normal text-slate-400">{category.id}</p>
+                           </div>
+                         </div>
+                      ) : (
+                         <div>
+                           {draft.name}
+                           <p className="mt-0.5 font-mono text-[11px] font-normal text-slate-400">{category.id}</p>
+                         </div>
+                      )}
                     </td>
                     <td className="px-4 py-3 font-mono text-xs text-slate-600">{draft.slug}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-600">{draft.parentCategoryId || '—'}</td>
+                    <td className="px-4 py-3 text-xs text-slate-600">
+                      {isChild ? (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 font-medium text-slate-700">
+                          {parentName}
+                        </span>
+                      ) : (
+                         <span className="text-slate-400">—</span>
+                      )}
+                      {draft.parentCategoryId && !parentName ? (
+                         <span className="mt-1 block font-mono text-[10px] text-rose-500" title="Danh mục cha không hợp lệ">{draft.parentCategoryId}</span>
+                      ) : null}
+                    </td>
                     <td className="px-4 py-3 text-slate-600">{category.postCount}</td>
                     <td className="px-4 py-3 text-right">
                       <button
@@ -323,6 +383,7 @@ export function AdminCategoriesPage() {
                         <CategoryEditor
                           draft={draft}
                           fieldLabels={fieldLabels}
+                          parentOptions={parentOptions}
                           onChange={(key, value) => setOverride(category.id, key, value)}
                         />
                       </td>
@@ -343,6 +404,7 @@ export function AdminCategoriesPage() {
           <CategoryEditor
             draft={createDraft}
             fieldLabels={fieldLabels}
+            parentOptions={categories.filter((c: ForumCategoryOption) => !c.parentCategoryId)}
             onChange={(key, value) => setCreateDraft((p) => ({ ...p, [key]: value }))}
           />
           <div className="flex justify-end border-t border-slate-100 px-4 py-3">
