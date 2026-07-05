@@ -163,3 +163,10 @@ src/UniHub.API/wwwroot/uploads/
 
 src/UniHub.API/appsettings.json
 src/UniHub.API/appsettings.*.json
+
+# Exclude C# related files for Node/React deployment
+src/
+tests/
+UniHub.sln
+Directory.Build.props
+Directory.Packages.props

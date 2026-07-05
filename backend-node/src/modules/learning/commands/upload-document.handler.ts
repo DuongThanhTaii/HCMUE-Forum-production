@@ -10,8 +10,9 @@ export class UploadDocumentCommand {
     public readonly type: number,
     public readonly status: number,
     public readonly uploaderId: string,
-    public readonly file: Express.Multer.File,
+    public readonly file?: Express.Multer.File,
     public readonly courseId?: string,
+    public readonly driveUrl?: string,
   ) {}
 }
 
@@ -23,18 +24,37 @@ export class UploadDocumentHandler implements ICommandHandler<UploadDocumentComm
   ) {}
 
   async execute(command: UploadDocumentCommand) {
-    const fileUrl = await this.s3Service.uploadDocument(command.file);
-    const fileExtension = command.file.originalname.split('.').pop();
+    let fileUrl = '';
+    let fileName = '';
+    let fileSize = BigInt(0);
+    let contentType = '';
+    let fileExtension = '';
+
+    if (command.driveUrl) {
+      fileUrl = command.driveUrl;
+      fileName = command.title;
+      fileSize = BigInt(0);
+      contentType = 'link/drive';
+      fileExtension = 'link';
+    } else if (command.file) {
+      fileUrl = await this.s3Service.uploadDocument(command.file);
+      fileName = command.file.originalname;
+      fileSize = BigInt(command.file.size);
+      contentType = command.file.mimetype;
+      fileExtension = command.file.originalname.split('.').pop() || '';
+    } else {
+      throw new Error('Either file or driveUrl must be provided');
+    }
 
     const document = await this.prisma.documents.create({
       data: {
         id: crypto.randomUUID(),
         title: command.title,
         description: command.description,
-        file_name: command.file.originalname,
+        file_name: fileName,
         file_path: fileUrl,
-        file_size: BigInt(command.file.size),
-        content_type: command.file.mimetype,
+        file_size: fileSize,
+        content_type: contentType,
         file_extension: fileExtension,
         type: command.type,
         status: command.status,
@@ -57,3 +77,4 @@ export class UploadDocumentHandler implements ICommandHandler<UploadDocumentComm
     };
   }
 }
+

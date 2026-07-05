@@ -34,7 +34,14 @@ import { AcceptAnswerHandler } from './commands/accept-answer.handler';
 import { PinCommentHandler } from './commands/pin-comment.handler';
 import { DeleteCommentHandler } from './commands/delete-comment.handler';
 import { GetBookmarkedPostsHandler } from './queries/get-bookmarked-posts.handler';
-
+import { RejectPostHandler } from './commands/reject-post.handler';
+import { ApproveBulkPostsHandler } from './commands/approve-bulk-posts.handler';
+import { CreateCategoryHandler } from './commands/create-category.handler';
+import { UpdateCategoryHandler } from './commands/update-category.handler';
+import { DeleteCategoryHandler } from './commands/delete-category.handler';
+import { CreateThreadChannelHandler } from './commands/create-thread-channel.handler';
+import { UpdateThreadChannelHandler } from './commands/update-thread-channel.handler';
+import { DeleteThreadChannelHandler } from './commands/delete-thread-channel.handler';
 const CommandHandlers = [
   CreatePostHandler,
   UpdatePostHandler,
@@ -49,6 +56,14 @@ const CommandHandlers = [
   AcceptAnswerHandler,
   PinCommentHandler,
   DeleteCommentHandler,
+  RejectPostHandler,
+  ApproveBulkPostsHandler,
+  CreateCategoryHandler,
+  UpdateCategoryHandler,
+  DeleteCategoryHandler,
+  CreateThreadChannelHandler,
+  UpdateThreadChannelHandler,
+  DeleteThreadChannelHandler,
 ];
 
 const QueryHandlers = [

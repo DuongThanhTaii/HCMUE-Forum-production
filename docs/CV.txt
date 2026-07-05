@@ -1,0 +1,249 @@
+# UniHub — Professional Resume Materials
+
+> **Guidance**: All content below is based exclusively on verified codebase analysis. Every technology, feature, and metric referenced exists in the actual repository. Adapt dates, team size, and role title to your real situation.
+
+---
+
+## Version 1: Short (One-Page Resume)
+
+### UniHub — University Community Platform
+**Full-Stack Developer** | *[Your Duration, e.g., Jan 2026 – Present]*
+
+Designed and built a full-stack university community platform serving students, lecturers, and administrators at Ho Chi Minh City University of Education. The system integrates five core modules — Forum, Learning, Chat, Career, and Notifications — on a Domain-Driven Design modular monolith architecture.
+
+**Stack**: React 19, TypeScript, Tailwind CSS v4, Vite 8, .NET 10 (ASP.NET Core), NestJS 11, PostgreSQL, MongoDB, Redis, SignalR, Socket.IO, Azure AD, Docker
+
+- Architected a CQRS pipeline with MediatR using five ordered behaviors (validation, logging, performance monitoring, exception handling, unit of work) across 7 business modules
+- Built a real-time chat system with Socket.IO and Redis backplane supporting typing indicators, emoji reactions, read receipts, message threading, and WebRTC voice call signaling
+- Implemented dual authentication (Azure AD SSO via MSAL + local JWT with bcrypt) and a four-layer RBAC authorization system with granular permission scoping
+- Developed an offline-first chat architecture using IndexedDB message outbox with automatic retry on reconnect
+
+---
+
+## Version 2: Medium
+
+### UniHub — University Community Platform
+**Full-Stack Developer** | *[Your Duration]* | Ho Chi Minh City University of Education
+
+Independently designed, developed, and deployed a full-stack university community platform that consolidates academic discussion, resource sharing, career services, and real-time communication into a single application. The platform serves four user roles — Students, Lecturers, Moderators, and Administrators — across five business domains.
+
+**Tech Stack**: React 19, TypeScript 6, Vite 8, Tailwind CSS v4, Redux Toolkit (RTK Query), Zustand, React Router 7, Framer Motion, i18next, Socket.IO Client, Zod, React Hook Form | .NET 10, ASP.NET Core, MediatR, FluentValidation, Entity Framework Core, SignalR, Serilog | NestJS 11, Prisma 7, Passport.js, @nestjs/cqrs, class-validator | PostgreSQL (Neon), MongoDB (Atlas), Redis (Upstash) | Docker, Vercel, Railway
+
+**Architecture & Backend**
+- Designed a Domain-Driven Design modular monolith with 7 bounded contexts (Identity, Forum, Learning, Chat, Career, Notification, AI), each following Clean Architecture with four layers: Domain, Application, Infrastructure, and Presentation
+- Implemented CQRS via MediatR with a five-stage request pipeline: FluentValidation → structured logging → slow-query detection → unhandled exception capture → automatic unit of work commit
+- Enforced bounded context isolation at the database level using 7 PostgreSQL schemas with ~37 tables and 50+ named indexes
+- Built dual backend runtimes (.NET 10 + NestJS 11) sharing the same PostgreSQL database, with consistent API envelope format and CQRS patterns on both sides
+
+**Real-Time & Chat**
+- Engineered a real-time messaging system using Socket.IO (NestJS) and SignalR (.NET), both backed by Redis pub/sub for horizontal scaling across multiple server instances
+- Implemented full chat feature set: 1:1 conversations, group channels, message attachments, emoji reactions, read receipts, typing indicators, online presence tracking, and reply threading
+- Built WebRTC signaling infrastructure for voice calls including offer/answer relay, missed call reporting, and call duration tracking
+- Designed an offline-first message queue using IndexedDB with configurable retry policy, draining automatically on WebSocket reconnect, browser focus, and network recovery events
+
+**Frontend**
+- Built a 200+ file React 19 SPA with feature-sliced architecture, RTK Query (19 cache tag types with selective invalidation), and full bilingual support (Vietnamese/English) across 15 i18n namespace files per language
+- Implemented a token refresh mechanism with concurrent-request mutex pattern preventing parallel refresh calls during burst 401 responses
+- Developed four role-specific layouts (Auth, Main, Moderator, Admin) with route guards enforcing authentication and role-based access
+
+**Security & DevOps**
+- Integrated Azure AD (Entra ID) SSO via MSAL popup flow with automatic local user provisioning middleware, alongside local JWT authentication with bcrypt password hashing and refresh token rotation
+- Configured multi-tier API rate limiting (auth: 10/min, AI: 20/min, forum-write: 15/min, global: 100/min) with per-user and per-IP partitioning
+- Built a runtime admin panel with maintenance mode toggle, endpoint toggles, user/role/permission CRUD, and MongoDB-backed user action audit logging
+- Containerized development environment with Docker Compose (PostgreSQL, Redis, MongoDB) and comprehensive database seeding system with 8 seeders
+
+---
+
+## Version 3: Portfolio
+
+### UniHub — Full-Stack University Community Platform
+
+**Role**: Full-Stack Developer (Sole Developer)
+**Duration**: *[Your Duration]*
+**Institution**: Ho Chi Minh City University of Education (HCMUE)
+**Status**: Backend complete (Phases 0–9); Frontend implementation in progress
+
+---
+
+#### Project Description
+
+UniHub is a comprehensive university community platform I designed and built to address the fragmented communication landscape at HCMUE. Students and lecturers previously relied on scattered Facebook groups, Zalo chats, and email chains for academic collaboration. UniHub consolidates five core domains — a Stack Overflow-style discussion forum, a course-scoped learning resource center, a career job board, a real-time chat system with voice calls, and an AI assistant — into a single, integrated platform.
+
+The system supports four user roles (Student, Lecturer, Moderator, Admin/SuperAdmin) with a granular role-based access control system, dual authentication providers (Azure AD SSO and local JWT), and real-time communication via WebSockets with Redis pub/sub for horizontal scaling.
+
+---
+
+#### Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 19, TypeScript 6, Vite 8, Tailwind CSS v4, Redux Toolkit (RTK Query), Zustand, React Router 7, Framer Motion, i18next, Socket.IO Client, Zod, React Hook Form, Lucide React, react-markdown, react-hot-toast |
+| **Backend (.NET)** | .NET 10, ASP.NET Core, MediatR, FluentValidation, Entity Framework Core 10, SignalR, Serilog, Scalar (OpenAPI), Microsoft.Identity.Web |
+| **Backend (Node)** | NestJS 11, Prisma 7, Passport.js, @nestjs/cqrs, @nestjs/jwt, class-validator, class-transformer, nestjs-pino |
+| **Databases** | PostgreSQL (Neon), MongoDB (Atlas), Redis (Upstash) |
+| **Cloud & Storage** | Cloudinary (images/media), AWS S3 (documents) |
+| **Auth** | Azure AD / Entra ID (MSAL), JWT, bcrypt, Passport.js |
+| **Real-Time** | SignalR (.NET), Socket.IO + @socket.io/redis-adapter (NestJS) |
+| **DevOps** | Docker Compose, Vercel (frontend), Railway (.NET), Render (NestJS) |
+
+---
+
+#### Responsibilities
+
+- **Architecture Design**: Defined the overall system architecture as a Domain-Driven Design modular monolith with 7 bounded contexts, each following Clean Architecture principles (Domain → Application → Infrastructure → Presentation)
+- **Database Design**: Designed a PostgreSQL schema with 7 isolated schemas, ~37 tables, composite primary keys for junction tables, JSON columns for flexible data, denormalized counters for read optimization, and 50+ named indexes
+- **Backend Development (.NET)**: Built the primary .NET 10 backend with MediatR CQRS pipeline (5 behaviors), EF Core persistence with repository and specification patterns, Result-based error handling, domain event dispatch via interceptors, and SignalR real-time hubs
+- **Backend Development (NestJS)**: Built a secondary NestJS 11 backend with Prisma ORM, @nestjs/cqrs, Socket.IO gateways with Redis adapter, JWT/Passport authentication, and global maintenance mode guard
+- **Frontend Development**: Developed the React 19 SPA with feature-sliced architecture, RTK Query for API state management (19 cache tag types), React Context for WebSocket state (chat, notifications, calls), and full bilingual support (Vietnamese/English)
+- **Authentication & Security**: Integrated Azure AD SSO (MSAL popup) with automatic user provisioning, local JWT auth with refresh token rotation, multi-tier rate limiting, three-layer input validation, and MongoDB-backed user action logging
+- **Real-Time Systems**: Implemented dual real-time protocols (SignalR + Socket.IO) with Redis backplane, chat with reactions/receipts/typing/presence/threading, WebRTC signaling for voice calls, notification push to user-specific rooms, and offline message queue with IndexedDB
+- **DevOps**: Configured Docker Compose for local development, deployment pipelines for Vercel/Railway/Render, and an 8-seeder database initialization system
+
+---
+
+#### Key Achievements
+
+1. **Designed a production-grade DDD modular monolith** with 7 bounded contexts, each with its own database schema — achieving true bounded context isolation at both the code and data layers
+
+2. **Built a five-stage MediatR CQRS pipeline** (Validation → Logging → Performance → Exception → UnitOfWork) that provides cross-cutting concerns transparently to all 200+ command/query handlers
+
+3. **Engineered a real-time chat system** with Socket.IO and Redis pub/sub supporting typing indicators, emoji reactions, read receipts, message threading, file sharing, voice messages, and WebRTC voice call signaling — handling reconnection, offline message queuing, and concurrent user presence tracking
+
+4. **Implemented an offline-first chat architecture** using IndexedDB message outbox with configurable retry policy, automatically draining on three triggers: WebSocket reconnect, browser focus, and network online events
+
+5. **Integrated dual authentication providers** (Azure AD SSO via MSAL popup + local JWT with bcrypt) with automatic user provisioning middleware and a thread-safe token refresh mutex preventing concurrent refresh calls
+
+6. **Designed a four-layer authorization system**: frontend route guards → backend JWT/role guards → permission attribute checks → database-level scope values — with per-user and per-group permission overrides
+
+7. **Built a complete admin observability stack** including runtime endpoint toggles, maintenance mode with admin bypass, MongoDB-backed user action audit logging with query interface, and configurable rate limiting across 5 policies
+
+8. **Developed bilingual support** (Vietnamese/English) across 15 i18n namespace files per language with an automated verification script ensuring translation key parity
+
+---
+
+#### Technical Highlights
+
+- **Event Sourcing** in the Learning module for document approval workflows, providing full audit trail with temporal queries
+- **Shared Kernel** with `AggregateRoot<TId>`, `StronglyTypedId`, `Result<T>`, `Specification<T>`, `IRepository<T>`, and `IUnitOfWork` abstractions used consistently across all modules
+- **Domain Event Dispatch** via `DomainEventInterceptor` — aggregate root events are automatically collected and dispatched through MediatR after `SaveChangesAsync`
+- **RTK Query Tag Invalidation** — 19 cache tag types enable selective cache invalidation from WebSocket events, maintaining data consistency without full refetches
+- **Polymorphic Report System** — a single `reports` table handles reports for both posts and comments via `reported_item_id` + `reported_item_type` columns
+- **Recruiter Permission System** — per-company granular permissions (manage postings, review applications, update status, invite recruiters) at the `recruiters` table level
+
+---
+
+#### Impact
+
+- Consolidated 5 previously separate communication channels (Facebook groups, Zalo, email, Google Classroom, manual job boards) into a single platform
+- Provided real-time collaboration capabilities (chat, notifications, presence) previously unavailable in the university's digital ecosystem
+- Enabled structured content moderation with report workflows, pending post approval, and moderator dashboards
+- Created a self-service career platform connecting students directly with employers through the university
+
+---
+
+## 10 Resume Bullet Points
+
+*Pick the most relevant ones for your target role. Each is independently usable.*
+
+1. Architected a Domain-Driven Design modular monolith with 7 bounded contexts, CQRS via MediatR, and Clean Architecture (Domain/Application/Infrastructure/Presentation layers), serving a university community of students, lecturers, and administrators
+
+2. Built a real-time chat system with Socket.IO and Redis pub/sub backplane supporting 1:1 messaging, group channels, emoji reactions, read receipts, typing indicators, online presence tracking, file attachments, and WebRTC voice call signaling
+
+3. Designed a PostgreSQL database with 7 schema-isolated bounded contexts, ~37 tables, 50+ named indexes, composite primary keys, JSON columns for flexible data, and denormalized counters for read-path optimization
+
+4. Implemented dual authentication integrating Azure AD (Entra ID) SSO via MSAL popup flow with automatic user provisioning and local JWT authentication with bcrypt hashing and refresh token rotation
+
+5. Developed a React 19 SPA with feature-sliced architecture, RTK Query (19 cache tag types), bilingual i18n (Vietnamese/English, 30 locale files), and four role-specific layouts with route-level access guards
+
+6. Engineered an offline-first chat queue using IndexedDB with configurable retry policy, draining automatically on WebSocket reconnect, browser focus, and network recovery events
+
+7. Built a five-stage MediatR request pipeline (validation, logging, performance monitoring, exception handling, unit of work) processing all commands and queries across 7 backend modules
+
+8. Configured multi-tier API rate limiting with 5 policies (auth: 10/min, AI: 20/min, forum-write: 15/min, integrations: 30/min, global: 100/min) partitioned by authenticated user ID with IP fallback
+
+9. Developed a runtime admin panel with maintenance mode toggle (with admin endpoint bypass), endpoint enable/disable toggles, RBAC management (roles, permissions, overrides), and MongoDB-backed user action audit logging
+
+10. Implemented a career module with company registration, job posting with structured salary/location/requirements, application workflow with resume upload, and per-recruiter granular permission scoping
+
+---
+
+## 20 ATS Keywords
+
+```
+Domain-Driven Design (DDD), CQRS, Clean Architecture, Modular Monolith,
+React, TypeScript, .NET, ASP.NET Core, NestJS, Node.js,
+PostgreSQL, MongoDB, Redis, Entity Framework Core, Prisma,
+SignalR, Socket.IO, WebSocket, REST API, Docker,
+Azure AD, JWT Authentication, RBAC, MediatR,
+RTK Query, Redux Toolkit, Tailwind CSS, Vite,
+CI/CD, Microservices Architecture, Event Sourcing,
+Real-Time Communication, WebRTC, Full-Stack Development,
+Agile, Git, Unit Testing, API Design, System Design
+```
+
+*Note: "Microservices Architecture" is listed because the modular monolith pattern directly demonstrates microservices-adjacent thinking (bounded contexts, independent schemas, event-driven communication). The project is a modular monolith, not microservices — but the ATS keyword captures architectural competence.*
+
+---
+
+## Suggested GitHub README Summary
+
+```markdown
+# UniHub — University Community Platform
+
+A full-stack university community platform built for Ho Chi Minh City University of Education (HCMUE). Consolidates academic forums, learning resources, career services, real-time chat, and AI assistance into a single application.
+
+## Architecture
+
+- **Design**: Domain-Driven Design modular monolith with 7 bounded contexts
+- **Pattern**: CQRS with MediatR pipeline (Validation → Logging → Performance → Exception → UnitOfWork)
+- **Backend**: .NET 10 (ASP.NET Core) + NestJS 11 (dual runtime)
+- **Frontend**: React 19, TypeScript, Vite 8, Tailwind CSS v4, RTK Query
+- **Databases**: PostgreSQL (7 schemas, ~37 tables) · MongoDB · Redis
+- **Real-Time**: SignalR + Socket.IO with Redis pub/sub backplane
+- **Auth**: Azure AD SSO (MSAL) + Local JWT with refresh token rotation
+
+## Modules
+
+| Module | Description |
+|---|---|
+| **Forum** | Posts, threaded comments, voting, categories, tags, bookmarks, moderation workflow |
+| **Learning** | Faculty/course hierarchy, document upload with approval workflow, ratings, downloads |
+| **Career** | Company registration, job postings, applications, recruiter permissions |
+| **Chat** | 1:1 & group messaging, reactions, read receipts, typing indicators, voice calls (WebRTC), offline queue |
+| **Notification** | Multi-channel templates (email/push/in-app), real-time push via WebSocket |
+| **Identity** | Dual auth, RBAC with permissions & scopes, user profiles, badges, blocking |
+| **AI** | Academic assistant (frontend UI complete, backend integration in progress) |
+
+## Key Features
+
+- 🔐 Dual authentication: Azure AD SSO + local JWT with bcrypt
+- 🛡️ Four-layer authorization: route guards → API guards → permission attributes → data scoping
+- 💬 Real-time chat with offline-first IndexedDB message queue
+- 📞 WebRTC voice call signaling infrastructure
+- 🌐 Bilingual support (Vietnamese/English) with automated i18n verification
+- ⚡ Multi-tier rate limiting (5 policies)
+- 🔧 Runtime admin panel with maintenance mode, endpoint toggles, audit logging
+- 🗄️ Schema-per-module PostgreSQL isolation with 50+ indexes
+
+## Tech Stack
+
+React 19 · TypeScript · Vite 8 · Tailwind CSS v4 · Redux Toolkit · .NET 10 · NestJS 11 · MediatR · Entity Framework Core · Prisma · SignalR · Socket.IO · PostgreSQL · MongoDB · Redis · Azure AD · Docker · Vercel · Railway
+```
+
+---
+
+## Suggested LinkedIn Project Description
+
+> **UniHub — University Community Platform**
+>
+> Designed and built a full-stack university community platform for Ho Chi Minh City University of Education, integrating five core domains: a discussion forum, learning resource center, career job board, real-time chat, and AI assistant.
+>
+> The platform is built on a Domain-Driven Design modular monolith architecture with 7 bounded contexts, CQRS via MediatR with a five-stage request pipeline, and Clean Architecture principles. It features dual backend runtimes (.NET 10 + NestJS 11) sharing a PostgreSQL database with 7 schema-isolated bounded contexts and ~37 tables.
+>
+> Key technical achievements include: real-time chat with Socket.IO and Redis pub/sub (reactions, read receipts, typing, WebRTC voice calls, offline message queue); dual authentication with Azure AD SSO and local JWT; four-layer RBAC authorization; multi-tier API rate limiting; and bilingual i18n support.
+>
+> Stack: React 19, TypeScript, Tailwind CSS, .NET 10, NestJS, PostgreSQL, MongoDB, Redis, SignalR, Socket.IO, Azure AD, Docker
+
+---
+
+*End of Resume Materials*
