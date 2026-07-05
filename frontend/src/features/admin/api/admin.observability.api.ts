@@ -13,6 +13,16 @@ import type {
 } from '../types/admin.types'
 import { unwrapApiData, unwrapApiList } from './admin.api'
 
+export interface SystemSettingDto {
+  key: string;
+  value: string;
+}
+
+export interface UpdateSystemSettingRequest {
+  value: string;
+  description: string;
+}
+
 type QueryPrimitive = string | number | boolean
 type QueryParams = Record<string, QueryPrimitive>
 
@@ -47,6 +57,10 @@ export function getMaintenanceModePath(): string {
 
 export function getAdminThreadChannelsPath(): string {
   return '/api/v1/thread-channels/admin'
+}
+
+export function getSystemSettingPath(key: string): string {
+  return `/api/v1/admin/settings/${encodeURIComponent(key)}`
 }
 
 export function buildAuditLogsParams(params?: AuditLogsFilterParams): QueryParams {
@@ -227,6 +241,25 @@ export const adminObservabilityApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    getSystemSetting: builder.query<SystemSettingDto, string>({
+      query: (key) => getSystemSettingPath(key),
+      transformResponse: (response: unknown) => {
+        const payload = unwrapApiData<SystemSettingDto>(response);
+        if (!payload) throw new Error('MISSING_SYSTEM_SETTING');
+        return payload;
+      },
+      providesTags: (_result, _error, key) => [{ type: 'SystemSetting' as const, id: key }],
+    }),
+
+    setSystemSetting: builder.mutation<void, { key: string; body: UpdateSystemSettingRequest }>({
+      query: ({ key, body }) => ({
+        url: getSystemSettingPath(key),
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (_result, _error, arg) => [{ type: 'SystemSetting' as const, id: arg.key }],
+    }),
   }),
 })
 
@@ -242,4 +275,6 @@ export const {
   useDeleteThreadChannelMutation,
   useGetAuditLogsQuery,
   useGetUserActionLogsQuery,
+  useGetSystemSettingQuery,
+  useSetSystemSettingMutation,
 } = adminObservabilityApi

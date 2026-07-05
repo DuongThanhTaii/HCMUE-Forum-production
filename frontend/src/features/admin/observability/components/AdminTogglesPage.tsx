@@ -16,6 +16,11 @@ export function AdminTogglesPage() {
     isMaintenanceModeLoading,
     isSetMaintenanceModeLoading,
     submitMaintenanceMode,
+
+    isFileUploadEnabled,
+    isFileUploadSettingLoading,
+    isSetSystemSettingLoading,
+    submitFileUploadSetting,
   } = useAdminLogsPage()
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const [maintenanceReason, setMaintenanceReason] = useState('')
@@ -127,6 +132,35 @@ export function AdminTogglesPage() {
             className="mt-3 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:border-primary"
           />
         ) : null}
+      </section>
+
+      <section className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-900">Cho phép Upload File (Tài liệu học tập)</h2>
+            <p className="mt-1 text-xs text-slate-600">
+              Bật để cho phép sinh viên upload trực tiếp file tài liệu học tập (lưu trữ trên server). Nếu tắt, sinh viên chỉ có thể gửi link Google Drive.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isFileUploadEnabled}
+            disabled={isFileUploadSettingLoading || isSetSystemSettingLoading}
+            onClick={() => {
+              void submitFileUploadSetting(!isFileUploadEnabled)
+            }}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+              isFileUploadEnabled ? 'bg-emerald-600' : 'bg-slate-300'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                isFileUploadEnabled ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
       </section>
 
       <section

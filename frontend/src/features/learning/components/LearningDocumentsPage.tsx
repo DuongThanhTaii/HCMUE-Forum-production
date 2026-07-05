@@ -184,17 +184,23 @@ export function LearningDocumentsPage() {
                 <option value={5}>{t('learning.documentTypes.other')}</option>
               </select>
             </div>
-            <input
-              value={uploadDriveUrl}
-              onChange={(e) => setUploadDriveUrl(e.target.value)}
-              placeholder="Google Drive URL"
-              className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
-            />
-            <input
-              type="file"
-              onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
-              className="w-full rounded border border-slate-300 px-3 py-2 text-sm file:mr-2 file:rounded file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-xs"
-            />
+            <div className="space-y-1">
+              <label className="text-[13px] font-medium text-slate-700">Tải lên File (Tối đa 25MB):</label>
+              <input
+                type="file"
+                onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                className="w-full rounded border border-slate-300 px-3 py-2 text-sm file:mr-2 file:rounded file:border-0 file:bg-slate-100 file:px-2 file:py-1 file:text-xs"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[13px] font-medium text-slate-700">Hoặc dán Link chia sẻ Google Drive:</label>
+              <input
+                value={uploadDriveUrl}
+                onChange={(e) => setUploadDriveUrl(e.target.value)}
+                placeholder="https://drive.google.com/file/d/... (Mở quyền truy cập cho tất cả)"
+                className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
+              />
+            </div>
             <button
               type="submit"
               disabled={isUploading}

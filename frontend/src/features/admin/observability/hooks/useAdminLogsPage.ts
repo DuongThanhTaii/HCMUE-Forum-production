@@ -8,6 +8,8 @@ import {
   useGetUserActionLogsQuery,
   useSetMaintenanceModeMutation,
   useSetToggleMutation,
+  useGetSystemSettingQuery,
+  useSetSystemSettingMutation,
 } from '../../api/admin.observability.api'
 import type { SetEndpointToggleRequest, UserActionLogsViewType } from '../../types/admin.types'
 import { getActionLogPathFilter } from '../lib/action-log-features'
@@ -24,8 +26,14 @@ export function useAdminLogsPage() {
     isLoading: isMaintenanceModeLoading,
     isError: isMaintenanceModeError,
   } = useGetMaintenanceModeQuery()
+  const {
+    data: fileUploadSettingData,
+    isLoading: isFileUploadSettingLoading,
+  } = useGetSystemSettingQuery('MAINTAIN_FILE_UPLOAD')
+
   const [setToggleMutation, { isLoading: isSetToggleLoading }] = useSetToggleMutation()
   const [setMaintenanceModeMutation, { isLoading: isSetMaintenanceModeLoading }] = useSetMaintenanceModeMutation()
+  const [setSystemSettingMutation, { isLoading: isSetSystemSettingLoading }] = useSetSystemSettingMutation()
 
   const [auditUserId, setAuditUserId] = useState('')
   const [auditEndpointKey, setAuditEndpointKey] = useState('')
@@ -144,6 +152,13 @@ export function useAdminLogsPage() {
     }).unwrap()
   }
 
+  const submitFileUploadSetting = async (isEnabled: boolean) => {
+    await setSystemSettingMutation({
+      key: 'MAINTAIN_FILE_UPLOAD',
+      body: { value: isEnabled ? 'true' : 'false', description: 'Enable file upload for learning documents' },
+    }).unwrap()
+  }
+
   return {
     t,
     toggles: togglesData ?? [],
@@ -156,6 +171,11 @@ export function useAdminLogsPage() {
     isMaintenanceModeError,
     isSetMaintenanceModeLoading,
     submitMaintenanceMode,
+
+    isFileUploadEnabled: fileUploadSettingData?.value === 'true',
+    isFileUploadSettingLoading,
+    isSetSystemSettingLoading,
+    submitFileUploadSetting,
 
     auditLogs: auditLogsData ?? [],
     isAuditLogsLoading,

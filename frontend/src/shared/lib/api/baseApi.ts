@@ -26,6 +26,7 @@ export const baseApi = createApi({
     'AdminToggle',
     'MaintenanceMode',
     'AdminThreadChannel',
+    'SystemSetting',
   ],
   endpoints: () => ({}),
 })
