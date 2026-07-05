@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useMemo, useState } from 'react'
-import { Pencil, Plus } from 'lucide-react'
+import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { useAdminThreadChannelsPage } from '../hooks/useAdminThreadChannelsPage'
 import type { ThreadChannelDto, UpsertThreadChannelRequest } from '../../types/admin.types'
 
@@ -72,6 +72,7 @@ type ConfirmState =
   | { mode: 'idle' }
   | { mode: 'update'; id: string; name: string; before: UpsertThreadChannelRequest; after: UpsertThreadChannelRequest; diffs: DiffRow[] }
   | { mode: 'create'; after: UpsertThreadChannelRequest; diffs: DiffRow[] }
+  | { mode: 'delete'; id: string; name: string }
 
 function PolicyStatusBadge({
   on,
@@ -151,7 +152,7 @@ function ChannelEditor({
 }
 
 export function AdminThreadChannelsPage() {
-  const { t, channels, isLoading, isError, submitCreate, submitUpdate, isCreating, isUpdating } =
+  const { t, channels, isLoading, isError, submitCreate, submitUpdate, submitDelete, isCreating, isUpdating, isDeleting } =
     useAdminThreadChannelsPage()
   const [overrides, setOverrides] = useState<Record<string, DraftOverrides>>({})
   const [createDraft, setCreateDraft] = useState<UpsertThreadChannelRequest>(emptyCreate)
@@ -210,6 +211,10 @@ export function AdminThreadChannelsPage() {
     setConfirm({ mode: 'create', after, diffs: buildCreatePreview(after, fieldLabels) })
   }
 
+  const openDeleteConfirm = (channel: ThreadChannelDto) => {
+    setConfirm({ mode: 'delete', id: channel.id, name: channel.name })
+  }
+
   const runConfirmed = async () => {
     if (confirm.mode === 'idle') return
     setFeedback(null)
@@ -219,11 +224,15 @@ export function AdminThreadChannelsPage() {
         setOverrides((prev) => ({ ...prev, [confirm.id]: {} }))
         setEditingId(null)
         setFeedback(t('admin.threadChannelsPage.messages.saved', { name: confirm.after.name }))
-      } else {
+      } else if (confirm.mode === 'create') {
         await submitCreate(confirm.after)
         setCreateDraft(emptyCreate)
         setEditingId(null)
         setFeedback(t('admin.threadChannelsPage.messages.created'))
+      } else if (confirm.mode === 'delete') {
+        await submitDelete(confirm.id)
+        setEditingId(null)
+        setFeedback(t('admin.threadChannelsPage.messages.deleted', 'Đã xóa kênh chủ đề thành công.'))
       }
       setConfirm({ mode: 'idle' })
     } catch {
@@ -360,6 +369,14 @@ export function AdminThreadChannelsPage() {
                         <Pencil className="h-3.5 w-3.5" aria-hidden />
                         {isOpen ? t('common.close') : t('admin.threadChannelsPage.actions.edit')}
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => openDeleteConfirm(channel)}
+                        className="ml-2 inline-flex cursor-pointer items-center gap-1 rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 hover:bg-rose-100"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                        Xóa
+                      </button>
                       {dirty ? (
                         <button
                           type="button"
@@ -418,31 +435,38 @@ export function AdminThreadChannelsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true">
           <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-slate-200 bg-white p-5 shadow-xl">
             <h2 className="text-lg font-semibold text-slate-900">
-              {confirm.mode === 'update'
+              {confirm.mode === 'delete' ? 'Xác nhận xóa kênh chủ đề' : 
+               confirm.mode === 'update'
                 ? t('admin.threadChannelsPage.confirm.updateTitle', { name: confirm.name })
                 : t('admin.threadChannelsPage.confirm.createTitle')}
             </h2>
-            <p className="mt-1 text-sm text-slate-600">{t('admin.threadChannelsPage.confirm.subtitle')}</p>
-            <div className="mt-4 overflow-hidden rounded-lg border border-slate-200">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 text-xs font-semibold uppercase text-slate-500">
-                  <tr>
-                    <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.field')}</th>
-                    <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.before')}</th>
-                    <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.after')}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {confirm.diffs.map((row) => (
-                    <tr key={row.field}>
-                      <td className="px-3 py-2 font-medium text-slate-800">{row.field}</td>
-                      <td className="px-3 py-2 text-slate-500">{row.before || '—'}</td>
-                      <td className="px-3 py-2 font-medium text-slate-900">{row.after || '—'}</td>
+            <p className="mt-1 text-sm text-slate-600">
+              {confirm.mode === 'delete' ? 'Bạn có chắc chắn muốn xóa kênh chủ đề này? Hành động này không thể hoàn tác.' :
+               t('admin.threadChannelsPage.confirm.subtitle')}
+            </p>
+            
+            {confirm.mode !== 'delete' && (
+              <div className="mt-4 overflow-hidden rounded-lg border border-slate-200">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-slate-50 text-xs font-semibold uppercase text-slate-500">
+                    <tr>
+                      <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.field')}</th>
+                      <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.before')}</th>
+                      <th className="px-3 py-2">{t('admin.threadChannelsPage.confirm.after')}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {confirm.diffs.map((row) => (
+                      <tr key={row.field}>
+                        <td className="px-3 py-2 font-medium text-slate-800">{row.field}</td>
+                        <td className="px-3 py-2 text-slate-500">{row.before || '—'}</td>
+                        <td className="px-3 py-2 font-medium text-slate-900">{row.after || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <div className="mt-5 flex justify-end gap-2">
               <button
                 type="button"
@@ -453,11 +477,11 @@ export function AdminThreadChannelsPage() {
               </button>
               <button
                 type="button"
-                disabled={isCreating || isUpdating}
+                disabled={isCreating || isUpdating || isDeleting}
                 onClick={() => void runConfirmed()}
-                className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-white disabled:opacity-50 ${confirm.mode === 'delete' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-slate-900 hover:bg-slate-800'}`}
               >
-                {t('admin.threadChannelsPage.confirm.apply')}
+                {confirm.mode === 'delete' ? 'Xác nhận xóa' : t('admin.threadChannelsPage.confirm.apply')}
               </button>
             </div>
           </div>

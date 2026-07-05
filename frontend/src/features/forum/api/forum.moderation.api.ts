@@ -99,6 +99,28 @@ export const forumModerationApi = baseApi.injectEndpoints({
             ]
           : [{ type: 'ModerationPost' as const, id: 'LIST' }],
     }),
+    rejectModerationPost: builder.mutation<void, { postId: string; reason: string }>({
+      query: ({ postId, reason }) => ({
+        url: `/api/v1/mod/posts/${postId}/reject`,
+        method: 'PATCH',
+        body: { reason },
+      }),
+      invalidatesTags: [
+        { type: 'ModerationPost', id: 'LIST' },
+        { type: 'ForumPost', id: 'LIST' },
+      ],
+    }),
+    approveBulkModerationPosts: builder.mutation<void, { postIds: string[] }>({
+      query: ({ postIds }) => ({
+        url: `/api/v1/mod/posts/approve-bulk`,
+        method: 'POST',
+        body: { postIds },
+      }),
+      invalidatesTags: [
+        { type: 'ModerationPost', id: 'LIST' },
+        { type: 'ForumPost', id: 'LIST' },
+      ],
+    }),
   }),
 })
 
@@ -106,4 +128,6 @@ export const {
   useGetModerationReportsQuery,
   useResolveModerationReportMutation,
   useGetModerationPendingPostsQuery,
+  useRejectModerationPostMutation,
+  useApproveBulkModerationPostsMutation,
 } = forumModerationApi

@@ -33,6 +33,7 @@ import { AdminTogglesPage } from '@features/admin/observability/components/Admin
 import { AdminThreadChannelsPage } from '@features/admin/observability/components/AdminThreadChannelsPage';
 import { AdminActionLogsPage } from '@features/admin/observability/components/AdminActionLogsPage';
 import { AdminAuditLogsPage } from '@features/admin/observability/components/AdminAuditLogsPage';
+import { AdminCategoriesPage } from '@features/admin/observability/components/AdminCategoriesPage';
 import { AdminDashboardPage } from '@features/admin/components/AdminDashboardPage';
 import { ChatPage } from '@features/chat/components/ChatPage';
 import { AssistantPage } from '@features/assistant/components/AssistantPage';
@@ -118,6 +119,7 @@ export const appRoutes = [
           { path: 'dashboard', element: <ModDashboardPage /> },
           { path: 'reports', element: <ModReportsPage /> },
           { path: 'posts', element: <ModPostsPage /> },
+          { path: 'categories', element: <AdminCategoriesPage /> },
           { path: 'thread-channels', element: <AdminThreadChannelsPage /> },
           { path: 'learning', element: <ModLearningApprovalsPage /> },
         ],
@@ -139,6 +141,7 @@ export const appRoutes = [
           { path: 'permissions', element: <Navigate to="/admin/roles" replace /> },
           { path: 'overrides/users', element: <AdminOverridesPage /> },
           { path: 'overrides/groups', element: <AdminOverridesPage /> },
+          { path: 'forum/categories', element: <AdminCategoriesPage /> },
           { path: 'forum/thread-channels', element: <AdminThreadChannelsPage /> },
           { path: 'toggles', element: <AdminTogglesPage /> },
           { path: 'logs/actions', element: <AdminActionLogsPage /> },

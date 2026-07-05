@@ -36,6 +36,11 @@ const adminNavGroups: AdminNavGroup[] = [
     fallbackTitle: 'Forum',
     items: [
       {
+        to: '/admin/forum/categories',
+        labelKey: 'admin.categories',
+        fallbackLabel: 'Categories',
+      },
+      {
         to: '/admin/forum/thread-channels',
         labelKey: 'admin.threadChannels',
         fallbackLabel: 'Thread channels',

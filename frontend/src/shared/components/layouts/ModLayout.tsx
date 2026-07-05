@@ -31,6 +31,9 @@ export function ModLayout() {
           <Link to="/mod/posts" className={navLinkClass}>
             {t('mod.layout.pendingPosts')}
           </Link>
+          <Link to="/mod/categories" className={navLinkClass}>
+            {t('mod.layout.categories', 'Danh mục')}
+          </Link>
           <Link to="/mod/thread-channels" className={navLinkClass}>
             {t('mod.layout.threadChannels')}
           </Link>

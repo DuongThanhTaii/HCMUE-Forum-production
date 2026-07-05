@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePublishForumPostMutation } from '../api/forum.list.api'
-import { useGetModerationPendingPostsQuery } from '../api/forum.moderation.api'
+import {
+  useGetModerationPendingPostsQuery,
+  useRejectModerationPostMutation,
+  useApproveBulkModerationPostsMutation,
+} from '../api/forum.moderation.api'
 
 function readApiErrorMessage(err: unknown): string | null {
   if (!err || typeof err !== 'object') return null
@@ -18,7 +22,10 @@ export function useModPostsPage() {
   const { t } = useTranslation()
   const { data = [], isLoading, isError } = useGetModerationPendingPostsQuery({ pageNumber: 1, pageSize: 30 })
   const [publishPost, { isLoading: isPublishing }] = usePublishForumPostMutation()
+  const [rejectPost, { isLoading: isRejecting }] = useRejectModerationPostMutation()
+  const [approveBulk, { isLoading: isApprovingBulk }] = useApproveBulkModerationPostsMutation()
   const [feedback, setFeedback] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
 
   const onApprove = useCallback(
     async (postId: string) => {
@@ -34,6 +41,49 @@ export function useModPostsPage() {
     [publishPost, t],
   )
 
+  const onReject = useCallback(
+    async (postId: string, reason: string) => {
+      setFeedback(null)
+      try {
+        await rejectPost({ postId, reason }).unwrap()
+        setFeedback(t('forum.mod.feedback.rejectSuccess', 'Đã từ chối bài viết'))
+        setSelectedIds((prev) => prev.filter((id) => id !== postId))
+      } catch (err) {
+        const apiMessage = readApiErrorMessage(err)
+        setFeedback(apiMessage ?? t('forum.mod.feedback.rejectFailed', 'Không thể từ chối bài viết'))
+      }
+    },
+    [rejectPost, t],
+  )
+
+  const onApproveBulk = useCallback(
+    async () => {
+      if (selectedIds.length === 0) return
+      setFeedback(null)
+      try {
+        await approveBulk({ postIds: selectedIds }).unwrap()
+        setFeedback(t('forum.mod.feedback.approveBulkSuccess', `Đã duyệt ${selectedIds.length} bài viết`))
+        setSelectedIds([])
+      } catch (err) {
+        const apiMessage = readApiErrorMessage(err)
+        setFeedback(apiMessage ?? t('forum.mod.feedback.approveBulkFailed', 'Không thể duyệt hàng loạt'))
+      }
+    },
+    [approveBulk, selectedIds, t],
+  )
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]))
+  }
+
+  const toggleAll = () => {
+    if (selectedIds.length === data.length) {
+      setSelectedIds([])
+    } else {
+      setSelectedIds(data.map((p) => p.id))
+    }
+  }
+
   return {
     t,
     posts: data,
@@ -41,7 +91,12 @@ export function useModPostsPage() {
     isError,
     isEmpty: !isLoading && !isError && data.length === 0,
     onApprove,
-    isPublishing,
+    onReject,
+    onApproveBulk,
+    isPublishing: isPublishing || isRejecting || isApprovingBulk,
     feedback,
+    selectedIds,
+    toggleSelection,
+    toggleAll,
   }
 }

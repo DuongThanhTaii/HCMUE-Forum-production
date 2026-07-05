@@ -191,6 +191,14 @@ export const adminObservabilityApi = baseApi.injectEndpoints({
       ],
     }),
 
+    deleteThreadChannel: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/api/v1/thread-channels/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'AdminThreadChannel', id: 'LIST' }],
+    }),
+
     getAuditLogs: builder.query<AuditLogDto[], AuditLogsFilterParams | undefined>({
       query: (params) => ({
         url: getAuditLogsPath(),
@@ -231,6 +239,7 @@ export const {
   useGetAdminThreadChannelsQuery,
   useCreateThreadChannelMutation,
   useUpdateThreadChannelMutation,
+  useDeleteThreadChannelMutation,
   useGetAuditLogsQuery,
   useGetUserActionLogsQuery,
 } = adminObservabilityApi
