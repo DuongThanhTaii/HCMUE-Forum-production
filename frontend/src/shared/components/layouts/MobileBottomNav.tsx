@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, LayoutGrid, Bot, MessageSquare, Menu } from 'lucide-react';
+import { Home, LayoutGrid, Bot, MessageSquare } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/home', icon: Home, labelKey: 'nav.home' },
