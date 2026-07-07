@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hcmue-forum-pwa-cache-v1';
+const CACHE_NAME = 'hcmue-forum-pwa-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -17,14 +17,26 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  
+  // Ngoại trừ các request từ chrome-extension, API
+  if (!event.request.url.startsWith('http')) return;
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
+        // Cache the latest version of everything dynamically
+        if (response && response.status === 200) {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        return fetch(event.request);
+        return response;
+      })
+      .catch(() => {
+        // Fallback to cache if offline
+        return caches.match(event.request);
       })
   );
 });
