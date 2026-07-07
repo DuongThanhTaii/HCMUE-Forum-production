@@ -1,0 +1,23 @@
+{
+  "name": "HCMUE Forum PWA",
+  "short_name": "Forum",
+  "description": "HCMUE Forum application",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logohcmue-forum.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logohcmue-forum.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

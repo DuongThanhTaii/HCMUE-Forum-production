@@ -6,6 +6,7 @@ import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 import { NotificationBell } from '@features/notifications/components/NotificationBell';
 import { UserProfileDropdown } from './UserProfileDropdown';
+import { InstallAppButton } from './InstallAppButton';
 
 const MAIN_NAV = [
   { to: '/home', prefix: '/home' },
@@ -74,6 +75,7 @@ export function ForumTopbar() {
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+            <InstallAppButton />
             {!isAuthenticated && (
               <div className="hidden sm:block">
                 <LanguageSwitcher />
