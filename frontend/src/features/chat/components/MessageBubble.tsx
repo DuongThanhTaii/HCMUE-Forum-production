@@ -260,7 +260,7 @@ export function MessageBubble({
         className={`flex ${isSelf ? 'justify-end' : 'justify-start'} ${highlightClass}`}
       >
         <div
-          className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm italic border ${
+          className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm italic border ${
             isSelf ? 'border-indigo-200 text-indigo-400' : 'border-border text-slate-400'
           }`}
         >
@@ -337,7 +337,7 @@ export function MessageBubble({
         </div>
       )}
 
-      <div className={`flex flex-col max-w-[85%] ${isSelf ? 'items-end' : 'items-start'}`}>
+      <div className={`flex flex-col max-w-[75%] ${isSelf ? 'items-end' : 'items-start'}`}>
         <div
           className={`relative w-full rounded-2xl px-3 py-2 text-sm ${isSelf ? 'bg-[#5b3af5] text-white' : 'bg-background text-foreground'}`}
         >

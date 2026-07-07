@@ -87,7 +87,7 @@ export function ForumTopbar() {
 
           <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
             {isAuthenticated && (showModerationLink || showAdminLink) ? (
-              <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5">
+              <div className="hidden items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 sm:flex">
                 {showModerationLink ? (
                   <Link
                     to="/mod/reports"
@@ -110,9 +110,11 @@ export function ForumTopbar() {
                 ) : null}
               </div>
             ) : null}
-            <LanguageSwitcher />
+            <div className="hidden sm:block">
+              <LanguageSwitcher />
+            </div>
             {isAuthenticated && <NotificationBell />}
-            <label className="flex h-8 items-center gap-2 rounded-md border border-slate-300 bg-white px-2 text-slate-500">
+            <label className="hidden h-8 items-center gap-2 rounded-md border border-slate-300 bg-white px-2 text-slate-500 sm:flex">
               <Search className="h-3.5 w-3.5" />
               <input
                 type="search"

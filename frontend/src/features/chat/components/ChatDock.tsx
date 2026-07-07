@@ -143,7 +143,7 @@ export function ChatDock() {
           setMinimized(false)
           setDockVisibility('visible')
         }}
-        className="fixed bottom-20 lg:bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground shadow-lg hover:bg-background"
+        className="hidden lg:flex fixed bottom-4 right-4 z-50 items-center gap-2 rounded-full border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground shadow-lg hover:bg-background"
         aria-label={t('chat.dock.open')}
       >
         <MessageCircle className="h-4 w-4" />
@@ -170,7 +170,7 @@ export function ChatDock() {
     panel === 'thread' && activeConv ? conversationSubtitle(activeConv) : null
 
   return (
-    <div className="chat-theme-root fixed bottom-14 lg:bottom-0 right-4 z-50 flex w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-border bg-surface shadow-2xl">
+    <div className="chat-theme-root hidden lg:flex fixed bottom-0 right-4 z-50 w-full max-w-sm flex-col rounded-t-xl border border-b-0 border-border bg-surface shadow-2xl">
       {panel === 'list' && (
         <div className="flex shrink-0 items-center gap-2 border-b border-border px-2 py-2">
           <div className="min-w-0 flex-1">

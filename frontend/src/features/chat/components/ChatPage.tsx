@@ -79,19 +79,13 @@ export function ChatPage() {
   useEffect(() => {
     const cid = conversationFromUrl?.trim()
     if (!cid || !convos?.some((c) => c.id === cid)) return
-    startTransition(() => {
-      setSelected({ kind: 'conversation', conversationId: cid })
-      if (narrow) setPanel('thread')
-    })
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev)
-        next.delete('conversation')
-        return next
-      },
-      { replace: true }
-    )
-  }, [conversationFromUrl, convos, narrow, setSearchParams])
+    if (selected?.kind !== 'conversation' || selected.conversationId !== cid) {
+      startTransition(() => {
+        setSelected({ kind: 'conversation', conversationId: cid })
+        if (narrow) setPanel('thread')
+      })
+    }
+  }, [conversationFromUrl, convos, narrow, selected])
   const { data: publicChannels } = useGetPublicChannelsQuery()
   const { data: myChannels } = useGetMyChannelsQuery()
   const qTrim = userQuery.trim()
@@ -116,9 +110,15 @@ export function ChatPage() {
   const selectThread = (ref: ChatThreadRef) => {
     setSelected(ref)
     if (narrow) setPanel('thread')
+    if (ref.kind === 'conversation') {
+      setSearchParams({ conversation: ref.conversationId }, { replace: true })
+    }
   }
 
-  const backToList = () => setPanel('list')
+  const backToList = () => {
+    setPanel('list')
+    setSearchParams({}, { replace: true })
+  }
 
   const showList = !narrow || panel === 'list'
   const showThread = !narrow || panel === 'thread'
@@ -488,10 +488,7 @@ export function ChatPage() {
                   <button
                     type="button"
                     className="p-1 md:hidden -ml-2 text-muted hover:text-foreground transition-colors shrink-0"
-                    onClick={() => {
-                      setSelected(null)
-                      if (narrow) setPanel('list')
-                    }}
+                    onClick={backToList}
                     aria-label={t('common.back')}
                   >
                     <ArrowLeft className="h-5 w-5" />
