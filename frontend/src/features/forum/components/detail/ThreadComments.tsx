@@ -293,13 +293,14 @@ function CommentBranch({
                   <CommentBranch key={ch.id} node={ch} depth={depth + 1} actions={actions} />
                 ))}
               </div>
-              <div className="mt-3 flex items-center gap-4 border-t border-slate-100 pt-3">
+              <div className="relative mt-1 pl-[48px] pb-1">
+                <div className={`absolute top-0 left-[15px] w-[33px] h-[18px] rounded-bl-xl border-b-2 border-l-2 pointer-events-none transition-colors ${actions.isLineHovered(node) ? 'border-slate-300' : 'border-slate-100'}`} />
                 <button
                   onClick={() => actions.onToggleCollapse(node.id)}
-                  className="flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                  className="relative z-10 flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
                 >
                   <ChevronUp className="h-4 w-4" />
-                  {actions.t('forum.commentSection.hideReplies', 'Ẩn bình luận')}
+                  {actions.t('forum.commentSection.hideReplies', 'Ẩn phản hồi')}
                 </button>
               </div>
             </div>
