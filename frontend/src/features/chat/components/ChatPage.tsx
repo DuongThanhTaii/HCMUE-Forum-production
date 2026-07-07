@@ -169,8 +169,15 @@ export function ChatPage() {
     }
   }
 
+  // We adjust the height dynamically:
+  // On mobile, if a thread is open, the BottomNav is hidden (pb-0), so the chat page can take up more space (100dvh - 3.5rem for Topbar).
+  // Otherwise, it takes 100dvh - 7rem (Topbar + BottomNav).
+  // On desktop (md:), it's always 100dvh - 7rem (Topbar + padding).
+  const isChatThreadOpen = location.pathname.startsWith('/chat') && new URLSearchParams(location.search).has('conversation');
+  const heightClass = narrow && isChatThreadOpen ? 'h-[calc(100dvh-3.5rem)] max-h-[calc(100dvh-3.5rem)]' : 'h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)]';
+
   return (
-    <div className="chat-theme-root flex h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)] flex-col overflow-hidden md:flex-row md:gap-4">
+    <div className={`chat-theme-root flex ${heightClass} flex-col overflow-hidden md:flex-row md:gap-4`}>
       <section
         className={`flex min-h-0 flex-col border-border md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
       >
@@ -439,15 +446,6 @@ export function ChatPage() {
       <section
         className={`flex min-h-0 flex-1 flex-col overflow-hidden ${showThread ? 'flex' : 'hidden'} md:flex`}
       >
-        {narrow && selected && (
-          <button
-            type="button"
-            className="mb-2 inline-flex items-center text-sm text-primary hover:underline"
-            onClick={backToList}
-          >
-            ← {t('chat.mobile.back')}
-          </button>
-        )}
         {!selected ? (
           <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-border p-8 text-center text-muted">
             <p className="max-w-sm text-sm">{t('chat.thread.pickConversation')}</p>

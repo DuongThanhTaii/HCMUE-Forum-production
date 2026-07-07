@@ -16,6 +16,7 @@ export function MainLayout() {
   const { isAuthenticated } = useAuth();
   const includeChatShell = isAuthenticated || AUTH_BYPASS_IN_DEV;
   const location = useLocation();
+  const isChatPage = location.pathname.startsWith('/chat');
   
   const isFullWidthPage = location.pathname.includes('/assistant') || location.pathname.includes('/chat/ai');
   const isChatThreadOpen = location.pathname.startsWith('/chat') && new URLSearchParams(location.search).has('conversation');
@@ -26,7 +27,7 @@ export function MainLayout() {
       <ForumSidebar />
       {!isChatThreadOpen && <MobileBottomNav />}
       <div className={`pt-14 ${isChatThreadOpen ? 'pb-0' : 'pb-14'} lg:pb-0 lg:pl-64 ${isFullWidthPage ? 'h-[100dvh] flex flex-col' : ''}`}>
-        <main className={isFullWidthPage ? 'w-full h-full flex-1 flex flex-col' : 'mx-auto w-full max-w-7xl px-4 py-5 md:px-6 md:py-6'}>
+        <main className={isFullWidthPage ? 'w-full h-full flex-1 flex flex-col' : `mx-auto w-full max-w-7xl ${isChatPage ? 'p-0 md:px-6 md:py-6' : 'px-4 py-5 md:px-6 md:py-6'}`}>
           <Outlet />
         </main>
       </div>
