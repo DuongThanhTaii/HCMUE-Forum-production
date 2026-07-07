@@ -63,16 +63,16 @@ export function ForumTopbar() {
 
         <Link
           to="/home"
-          className="flex h-full shrink-0 items-center gap-2 px-4 text-primary no-underline hover:bg-slate-50 lg:hidden"
+          className="flex h-full shrink-0 items-center gap-1 px-3 sm:px-4 text-primary no-underline hover:bg-slate-50 lg:hidden"
         >
           <img src="/logohcmue-forum.png" alt="" className="h-7 w-auto shrink-0" />
-          <span className="max-w-[9rem] truncate text-xs font-semibold leading-none sm:max-w-none">
+          <span className="hidden max-w-[9rem] truncate text-xs font-semibold leading-none sm:block sm:max-w-none">
             {t('forum.topbar.brand')}
           </span>
         </Link>
 
         <div className="flex min-h-0 min-w-0 flex-1 items-center justify-end gap-2 px-3 sm:px-4 md:justify-between md:px-6">
-          <nav className="hidden min-w-0 flex-wrap items-center gap-1 xl:flex">
+          <nav className="hidden min-w-0 overflow-x-auto items-center gap-1 xl:flex [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {MAIN_NAV.map(({ to, prefix }) => {
               const active = navLinkActive(pathname, prefix);
               const labelKey =
@@ -103,7 +103,7 @@ export function ForumTopbar() {
             })}
           </nav>
 
-          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
             {isAuthenticated && (showModerationLink || showAdminLink) ? (
               <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5">
                 {showModerationLink ? (
