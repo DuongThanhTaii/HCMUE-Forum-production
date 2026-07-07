@@ -1,5 +1,4 @@
 import { X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { ForumSidebarContent } from './ForumSidebar';
 
 interface MobileMenuDrawerProps {
@@ -8,8 +7,6 @@ interface MobileMenuDrawerProps {
 }
 
 export function MobileMenuDrawer({ isOpen, onClose }: MobileMenuDrawerProps) {
-  const { t } = useTranslation();
-
   if (!isOpen) return null;
 
   return (

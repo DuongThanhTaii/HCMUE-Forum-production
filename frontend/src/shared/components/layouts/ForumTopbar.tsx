@@ -70,20 +70,7 @@ export function ForumTopbar() {
           <nav className="hidden min-w-0 overflow-x-auto items-center gap-1 xl:flex [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {MAIN_NAV.map(({ to, prefix }) => {
               const active = navLinkActive(pathname, prefix);
-              const labelKey =
-                prefix === '/home'
-                  ? 'nav.home'
-                  : prefix === '/explore'
-                    ? 'nav.explore'
-                    : prefix === '/forum/saved'
-                      ? 'forum.topbar.saved'
-                    : prefix === '/learning'
-                      ? 'nav.learning'
-                      : prefix === '/career'
-                        ? 'nav.career'
-                        : prefix === '/assistant'
-                          ? 'forum.topbar.assistant'
-                          : 'nav.chat';
+              const labelKey = prefix === '/home' ? 'nav.home' : 'nav.chat';
               return (
                 <Link
                   key={to}
