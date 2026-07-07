@@ -51,12 +51,14 @@ export function usePWAInstall() {
 
   const promptInstall = async () => {
     if (deferredPrompt) {
-      await deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') {
-        setDeferredPrompt(null);
-        setIsInstallable(false);
+      try {
+        await deferredPrompt.prompt();
+      } catch (error) {
+        console.error("Install prompt error:", error);
       }
+      // Note: We don't manually clear the state here.
+      // 1. If accepted, the 'appinstalled' event will fire and hide the button.
+      // 2. If dismissed, the button remains (though clicking again might require a reload, it prevents the UI from abruptly changing).
     }
   };
 
