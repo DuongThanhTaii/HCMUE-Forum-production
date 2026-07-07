@@ -1,41 +1,72 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, LayoutGrid, Bot, MessageSquare } from 'lucide-react';
+import { Home, LayoutGrid, Bot, MessageSquare, Menu } from 'lucide-react';
+import { MobileMenuDrawer } from './MobileMenuDrawer';
 
 const NAV_ITEMS = [
   { to: '/home', icon: Home, labelKey: 'nav.home' },
   { to: '/explore', icon: LayoutGrid, labelKey: 'nav.explore' },
   { to: '/assistant', icon: Bot, labelKey: 'forum.topbar.assistant' },
   { to: '/chat', icon: MessageSquare, labelKey: 'nav.chat' },
+  { to: '#menu', icon: Menu, labelKey: 'Menu' },
 ] as const;
 
 export function MobileBottomNav() {
   const { pathname } = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
+    <>
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-14 items-center justify-around border-t border-slate-200 bg-white pb-safe lg:hidden shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
       {NAV_ITEMS.map(({ to, icon: Icon }) => {
         const isActive = pathname.startsWith(to) && (to !== '/home' || pathname === '/home');
+
+        const isMenu = to === '#menu';
+        const active = isMenu ? isMenuOpen : isActive;
+
+        if (isMenu) {
+          return (
+            <button
+              key={to}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
+                active ? 'text-primary' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <div className={`relative flex items-center justify-center p-1 rounded-full ${active ? 'bg-primary/10' : ''}`}>
+                <Icon
+                  className={`h-6 w-6 transition-transform ${active ? 'scale-110' : ''}`}
+                  strokeWidth={active ? 2.5 : 2}
+                  fill={active ? 'currentColor' : 'none'}
+                />
+              </div>
+            </button>
+          );
+        }
 
         return (
           <Link
             key={to}
             to={to}
+            onClick={() => setIsMenuOpen(false)}
             className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-              isActive ? 'text-primary' : 'text-slate-500 hover:text-slate-800'
+              active ? 'text-primary' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            <div className={`relative flex items-center justify-center p-1 rounded-full ${isActive ? 'bg-primary/10' : ''}`}>
+            <div className={`relative flex items-center justify-center p-1 rounded-full ${active ? 'bg-primary/10' : ''}`}>
               <Icon
                 className={`h-6 w-6 transition-transform ${
-                  isActive ? 'scale-110' : ''
+                  active ? 'scale-110' : ''
                 }`}
-                strokeWidth={isActive ? 2.5 : 2}
-                fill={isActive ? 'currentColor' : 'none'}
+                strokeWidth={active ? 2.5 : 2}
+                fill={active ? 'currentColor' : 'none'}
               />
             </div>
           </Link>
         );
       })}
     </nav>
+    <MobileMenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    </>
   );
 }

@@ -9,11 +9,6 @@ import { NotificationBell } from '@features/notifications/components/Notificatio
 
 const MAIN_NAV = [
   { to: '/home', prefix: '/home' },
-  { to: '/explore', prefix: '/explore' },
-  { to: '/forum/saved', prefix: '/forum/saved' },
-  { to: '/learning/documents', prefix: '/learning' },
-  { to: '/career/jobs', prefix: '/career' },
-  { to: '/assistant', prefix: '/assistant' },
   { to: '/chat', prefix: '/chat' },
 ] as const;
 
@@ -29,10 +24,10 @@ function BrandLink({ className = '' }: { className?: string }) {
   return (
     <Link
       to="/home"
-      className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-primary no-underline hover:bg-slate-100 ${className}`.trim()}
+      className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-1 text-primary no-underline hover:bg-slate-100 ${className}`.trim()}
     >
-      <img src="/logohcmue-forum.png" alt="" className="h-7 w-auto shrink-0" />
-      <span className="truncate text-xs font-semibold leading-none">{t('forum.topbar.brand')}</span>
+      <img src="/logohcmue-forum.png" alt="" className="h-9 w-auto shrink-0" />
+      <span className="truncate text-sm font-bold leading-none">{t('forum.topbar.brand')}</span>
     </Link>
   );
 }
@@ -63,10 +58,10 @@ export function ForumTopbar() {
 
         <Link
           to="/home"
-          className="flex h-full shrink-0 items-center gap-1 px-3 sm:px-4 text-primary no-underline hover:bg-slate-50 lg:hidden"
+          className="flex h-full shrink-0 items-center gap-1.5 px-3 sm:px-4 text-primary no-underline hover:bg-slate-50 lg:hidden"
         >
-          <img src="/logohcmue-forum.png" alt="" className="h-7 w-auto shrink-0" />
-          <span className="hidden max-w-[9rem] truncate text-xs font-semibold leading-none sm:block sm:max-w-none">
+          <img src="/logohcmue-forum.png" alt="" className="h-9 w-auto shrink-0" />
+          <span className="hidden max-w-[9rem] truncate text-sm font-bold leading-none sm:block sm:max-w-none">
             {t('forum.topbar.brand')}
           </span>
         </Link>

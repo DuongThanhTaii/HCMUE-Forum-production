@@ -71,11 +71,13 @@ function SidebarSection({
   items,
   pathname,
   search,
+  onClickItem,
 }: {
   title: string;
   items: SidebarItem[];
   pathname: string;
   search: string;
+  onClickItem?: () => void;
 }) {
   const { t } = useTranslation();
 
@@ -91,6 +93,7 @@ function SidebarSection({
             <Link
               key={item.to}
               to={item.to}
+              onClick={onClickItem}
               className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-[13px] transition-colors ${
                 active ? 'bg-primary/10 font-medium text-primary' : 'text-slate-700 hover:bg-slate-100'
               }`}
@@ -105,51 +108,58 @@ function SidebarSection({
   );
 }
 
-export function ForumSidebar() {
+export function ForumSidebarContent({ onClickItem }: { onClickItem?: () => void }) {
   const { pathname, search } = useLocation();
   const { t } = useTranslation();
   const { data: categories = [] } = useGetForumCategoriesQuery();
   const groups = buildCategoryGroups(categories);
 
   return (
-    <aside className="fixed left-0 top-14 z-30 hidden h-[calc(100dvh-3.5rem)] w-64 border-r border-slate-200 bg-white lg:block">
-      <div className="h-full space-y-4 overflow-y-auto p-3">
-        <SidebarSection title={t('forum.sidebar.sections.main')} items={MAIN_ITEMS} pathname={pathname} search={search} />
-        {TOPIC_ITEMS.length > 0 && (
-          <SidebarSection title={t('forum.sidebar.sections.topics')} items={TOPIC_ITEMS} pathname={pathname} search={search} />
-        )}
+    <div className="h-full space-y-4 overflow-y-auto p-3">
+      <SidebarSection title={t('forum.sidebar.sections.main')} items={MAIN_ITEMS} pathname={pathname} search={search} onClickItem={onClickItem} />
+      {TOPIC_ITEMS.length > 0 && (
+        <SidebarSection title={t('forum.sidebar.sections.topics')} items={TOPIC_ITEMS} pathname={pathname} search={search} onClickItem={onClickItem} />
+      )}
 
+      {groups.map(({ parent, children }) => {
+        const items: SidebarItem[] = children.map((cat) => ({
+          to: `/discussions/${cat.slug || cat.id}`,
+          labelKey: '',
+          label: cat.name,
+          icon: MessageSquare,
+        }));
+        return (
+          <SidebarSection
+            key={parent.id}
+            title={parent.name}
+            items={items}
+            pathname={pathname}
+            search={search}
+            onClickItem={onClickItem}
+          />
+        );
+      })}
 
-        {groups.map(({ parent, children }) => {
-          const items: SidebarItem[] = children.map((cat) => ({
-            to: `/discussions/${cat.slug || cat.id}`,
-            labelKey: '',
-            label: cat.name,
-            icon: MessageSquare,
-          }));
-          return (
-            <SidebarSection
-              key={parent.id}
-              title={parent.name}
-              items={items}
-              pathname={pathname}
-              search={search}
-            />
-          );
-        })}
+      <SidebarSection
+        title={t('forum.sidebar.sections.learningCareer')}
+        items={LEARNING_ITEMS}
+        pathname={pathname}
+        search={search}
+        onClickItem={onClickItem}
+      />
+      <SidebarSection title={t('forum.sidebar.sections.tags')} items={TAG_ITEMS} pathname={pathname} search={search} onClickItem={onClickItem} />
 
-        <SidebarSection
-          title={t('forum.sidebar.sections.learningCareer')}
-          items={LEARNING_ITEMS}
-          pathname={pathname}
-          search={search}
-        />
-        <SidebarSection title={t('forum.sidebar.sections.tags')} items={TAG_ITEMS} pathname={pathname} search={search} />
-
-        <div className="rounded-md border border-jasper/20 bg-jasper/5 px-2 py-1.5 text-[11px] text-jasper">
-          {t('forum.sidebar.notice')}
-        </div>
+      <div className="rounded-md border border-jasper/20 bg-jasper/5 px-2 py-1.5 text-[11px] text-jasper">
+        {t('forum.sidebar.notice')}
       </div>
+    </div>
+  );
+}
+
+export function ForumSidebar() {
+  return (
+    <aside className="fixed left-0 top-14 z-30 hidden h-[calc(100dvh-3.5rem)] w-64 border-r border-slate-200 bg-white lg:block">
+      <ForumSidebarContent />
     </aside>
   );
 }
