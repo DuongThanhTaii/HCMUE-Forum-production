@@ -10,6 +10,8 @@ import { NotificationProvider } from '@features/notifications/context/Notificati
 import { CallProvider } from '@features/chat/context/CallContext';
 import { GlobalCallOverlay } from '@features/chat/components/GlobalCallOverlay';
 
+import { MobileBottomNav } from './MobileBottomNav';
+
 export function MainLayout() {
   const { isAuthenticated } = useAuth();
   const includeChatShell = isAuthenticated || AUTH_BYPASS_IN_DEV;
@@ -22,7 +24,8 @@ export function MainLayout() {
     <>
       <ForumTopbar />
       <ForumSidebar />
-      <div className={`pt-14 lg:pl-64 ${isFullWidthPage ? 'h-[100dvh] flex flex-col' : ''}`}>
+      <MobileBottomNav />
+      <div className={`pt-14 pb-14 lg:pb-0 lg:pl-64 ${isFullWidthPage ? 'h-[100dvh] flex flex-col' : ''}`}>
         <main className={isFullWidthPage ? 'w-full h-full flex-1 flex flex-col' : 'mx-auto w-full max-w-7xl px-4 py-5 md:px-6 md:py-6'}>
           <Outlet />
         </main>
