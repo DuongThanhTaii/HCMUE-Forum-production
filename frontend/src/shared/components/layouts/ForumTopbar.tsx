@@ -1,11 +1,11 @@
-import { Search, LogOut } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { logout, selectAuth, selectIsAuthenticated } from '@features/auth/model/auth.slice';
-import { useAppDispatch } from '@shared/hooks/useAppDispatch';
+import { selectIsAuthenticated } from '@features/auth/model/auth.slice';
 import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 import { NotificationBell } from '@features/notifications/components/NotificationBell';
+import { UserProfileDropdown } from './UserProfileDropdown';
 
 const MAIN_NAV = [
   { to: '/home', prefix: '/home' },
@@ -35,19 +35,7 @@ function BrandLink({ className = '' }: { className?: string }) {
 export function ForumTopbar() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const auth = useAppSelector(selectAuth);
-
-  const displayName = auth.user?.fullName || auth.user?.email || 'User';
-
-  const normalizedRoles = (auth.user?.roles ?? []).map((r) => r.toLowerCase());
-  const showModerationLink = normalizedRoles.some((r) => r === 'moderator');
-  const showAdminLink = normalizedRoles.some((r) => r === 'admin');
-
-  const onLogout = () => {
-    dispatch(logout());
-  };
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 h-14 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -86,33 +74,11 @@ export function ForumTopbar() {
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
-            {isAuthenticated && (showModerationLink || showAdminLink) ? (
-              <div className="hidden items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 sm:flex">
-                {showModerationLink ? (
-                  <Link
-                    to="/mod/reports"
-                    className={`rounded px-2 py-1 text-[11px] font-semibold ${
-                      pathname.startsWith('/mod') ? 'bg-amber-100 text-amber-900' : 'text-amber-800 hover:bg-amber-50'
-                    }`}
-                  >
-                    {t('forum.topbar.moderation')}
-                  </Link>
-                ) : null}
-                {showAdminLink ? (
-                  <Link
-                    to="/admin/users"
-                    className={`rounded px-2 py-1 text-[11px] font-semibold ${
-                      pathname.startsWith('/admin') ? 'bg-rose-100 text-rose-900' : 'text-slate-700 hover:bg-white'
-                    }`}
-                  >
-                    {t('forum.topbar.admin')}
-                  </Link>
-                ) : null}
+            {!isAuthenticated && (
+              <div className="hidden sm:block">
+                <LanguageSwitcher />
               </div>
-            ) : null}
-            <div className="hidden sm:block">
-              <LanguageSwitcher />
-            </div>
+            )}
             {isAuthenticated && <NotificationBell />}
             <label className="hidden h-8 items-center gap-2 rounded-md border border-slate-300 bg-white px-2 text-slate-500 sm:flex">
               <Search className="h-3.5 w-3.5" />
@@ -123,20 +89,7 @@ export function ForumTopbar() {
               />
             </label>
             {isAuthenticated ? (
-              <>
-                <span className="hidden max-w-40 truncate text-xs font-medium text-slate-700 sm:inline">
-                  {displayName}
-                </span>
-                <button
-                  type="button"
-                  onClick={onLogout}
-                  className="inline-flex h-8 items-center justify-center rounded-md border border-slate-300 px-2 sm:px-3 text-xs font-medium text-slate-700 hover:bg-slate-100"
-                  title={t('auth.logout')}
-                >
-                  <span className="hidden sm:inline">{t('auth.logout')}</span>
-                  <LogOut className="h-4 w-4 sm:hidden" />
-                </button>
-              </>
+              <UserProfileDropdown />
             ) : (
               <Link
                 to="/login"
