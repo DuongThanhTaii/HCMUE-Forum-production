@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Home, LayoutGrid, Bot, MessageSquare, Menu } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 const NAV_ITEMS = [
   { to: '/home', icon: Home, labelKey: 'nav.home' },
@@ -13,11 +12,10 @@ const NAV_ITEMS = [
 
 export function MobileBottomNav() {
   const { pathname } = useLocation();
-  const { t } = useTranslation();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-14 items-center justify-around border-t border-slate-200 bg-white pb-safe lg:hidden shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
-      {NAV_ITEMS.map(({ to, icon: Icon, labelKey }) => {
+      {NAV_ITEMS.map(({ to, icon: Icon }) => {
         const isActive = pathname.startsWith(to) && (to !== '/home' || pathname === '/home');
         // Đối với 'Menu', tạm thời không active hoặc so sánh /menu
         const isMenu = to === '/menu';
