@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Download, Share, PlusSquare, X } from 'lucide-react';
 import { usePWAInstall } from '../../hooks/usePWAInstall';
-import { useTranslation } from 'react-i18next';
 
 export function InstallAppButton() {
-  const { t } = useTranslation();
   const { isInstallable, isIOS, isStandalone, promptInstall } = usePWAInstall();
   const [showIOSModal, setShowIOSModal] = useState(false);
 
