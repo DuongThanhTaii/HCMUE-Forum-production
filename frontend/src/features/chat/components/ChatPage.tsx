@@ -179,7 +179,7 @@ export function ChatPage() {
   return (
     <div className={`chat-theme-root flex ${heightClass} flex-col overflow-hidden md:flex-row md:gap-4`}>
       <section
-        className={`flex min-h-0 flex-col border-border md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
+        className={`flex min-h-0 flex-col border-border px-4 pt-5 md:p-0 md:w-80 md:border-r md:pr-4 ${showList ? 'flex' : 'hidden'} md:flex`}
       >
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-lg font-semibold text-foreground">{t('chat.title')}</h1>
