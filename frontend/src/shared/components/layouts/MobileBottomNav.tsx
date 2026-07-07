@@ -6,8 +6,6 @@ const NAV_ITEMS = [
   { to: '/explore', icon: LayoutGrid, labelKey: 'nav.explore' },
   { to: '/assistant', icon: Bot, labelKey: 'forum.topbar.assistant' },
   { to: '/chat', icon: MessageSquare, labelKey: 'nav.chat' },
-  // Menu có thể mở một drawer hoặc navigate tới trang menu riêng. Tạm thời map tới /menu hoặc /home.
-  { to: '/menu', icon: Menu, labelKey: 'Menu' }, // Cần xử lý drawer ở bước sau
 ] as const;
 
 export function MobileBottomNav() {
@@ -17,8 +15,6 @@ export function MobileBottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-14 items-center justify-around border-t border-slate-200 bg-white pb-safe lg:hidden shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
       {NAV_ITEMS.map(({ to, icon: Icon }) => {
         const isActive = pathname.startsWith(to) && (to !== '/home' || pathname === '/home');
-        // Đối với 'Menu', tạm thời không active hoặc so sánh /menu
-        const isMenu = to === '/menu';
 
         return (
           <Link
@@ -34,7 +30,7 @@ export function MobileBottomNav() {
                   isActive ? 'scale-110' : ''
                 }`}
                 strokeWidth={isActive ? 2.5 : 2}
-                fill={isActive && !isMenu ? 'currentColor' : 'none'}
+                fill={isActive ? 'currentColor' : 'none'}
               />
             </div>
           </Link>

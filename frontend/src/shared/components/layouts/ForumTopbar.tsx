@@ -7,6 +7,20 @@ import { useAppSelector } from '@shared/hooks/useAppSelector';
 import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 import { NotificationBell } from '@features/notifications/components/NotificationBell';
 
+const MAIN_NAV = [
+  { to: '/home', prefix: '/home' },
+  { to: '/explore', prefix: '/explore' },
+  { to: '/forum/saved', prefix: '/forum/saved' },
+  { to: '/learning/documents', prefix: '/learning' },
+  { to: '/career/jobs', prefix: '/career' },
+  { to: '/assistant', prefix: '/assistant' },
+  { to: '/chat', prefix: '/chat' },
+] as const;
+
+function navLinkActive(pathname: string, prefix: string) {
+  if (prefix === '/home') return pathname === '/home';
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
 
 
 /** Same link padding as `ForumSidebar` items (`px-2 py-1.5`) inside `p-3` aside. */
@@ -58,7 +72,36 @@ export function ForumTopbar() {
         </Link>
 
         <div className="flex min-h-0 min-w-0 flex-1 items-center justify-end gap-2 px-3 sm:px-4 md:justify-between md:px-6">
-
+          <nav className="hidden min-w-0 flex-wrap items-center gap-1 xl:flex">
+            {MAIN_NAV.map(({ to, prefix }) => {
+              const active = navLinkActive(pathname, prefix);
+              const labelKey =
+                prefix === '/home'
+                  ? 'nav.home'
+                  : prefix === '/explore'
+                    ? 'nav.explore'
+                    : prefix === '/forum/saved'
+                      ? 'forum.topbar.saved'
+                    : prefix === '/learning'
+                      ? 'nav.learning'
+                      : prefix === '/career'
+                        ? 'nav.career'
+                        : prefix === '/assistant'
+                          ? 'forum.topbar.assistant'
+                          : 'nav.chat';
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  className={`rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                    active ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  {t(labelKey)}
+                </Link>
+              );
+            })}
+          </nav>
 
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
             {isAuthenticated && (showModerationLink || showAdminLink) ? (
