@@ -1,7 +1,8 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 import { ChatGateway } from '../gateways/chat.gateway';
 import * as crypto from 'crypto';
+import { UpsertChatNotificationCommand } from '../../notification/commands/upsert-chat-notification.handler';
 
 export class SendMessageCommand {
   constructor(
@@ -18,6 +19,7 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
   constructor(
     private readonly prisma: PrismaService,
     private readonly gateway: ChatGateway,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async execute(command: SendMessageCommand) {
@@ -62,6 +64,24 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
     };
 
     this.gateway.broadcastNewMessage(command.conversationId, messageDto);
+    
+    // Dispatch system notifications for other participants
+    const conversation = await this.prisma.conversations.findUnique({
+      where: { id: command.conversationId },
+      select: { participants: true },
+    });
+    
+    if (conversation && conversation.participants) {
+      const participants = conversation.participants as string[];
+      for (const participantId of participants) {
+        if (participantId !== command.senderId) {
+          this.commandBus.execute(
+            new UpsertChatNotificationCommand(participantId, command.conversationId, senderName)
+          ).catch(e => console.error('Failed to create chat notification', e));
+        }
+      }
+    }
+
     return {
       messageId: message.id,
       sentAt: message.sent_at,

@@ -18,6 +18,16 @@ export function notifyInboundChatMessage(opts: {
     duration: 4000,
   })
 
+  // Play notification sound
+  try {
+    const audio = new Audio('/assets/sounds/message.mp3')
+    audio.play().catch(() => {
+      // Ignore autoplay errors if user hasn't interacted with the document
+    })
+  } catch (err) {
+    // Ignore environments where Audio is not defined
+  }
+
   if (typeof Notification === 'undefined') return
   if (Notification.permission !== 'granted') return
   if (typeof document !== 'undefined' && document.visibilityState === 'visible') return

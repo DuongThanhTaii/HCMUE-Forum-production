@@ -423,10 +423,12 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
 /** Colocated with ChatProvider — Fast Refresh requires hook in separate file otherwise. */
 // eslint-disable-next-line react-refresh/only-export-components -- intentional hook + provider pair
-export function useChatContext(): ChatContextValue {
+export function useChatContextSafe() {
+  return useContext(ChatContext)
+}
+
+export function useChatContext() {
   const ctx = useContext(ChatContext)
-  if (!ctx) {
-    throw new Error('useChatContext must be used within ChatProvider')
-  }
+  if (!ctx) throw new Error('useChatContext must be used within a ChatProvider')
   return ctx
 }

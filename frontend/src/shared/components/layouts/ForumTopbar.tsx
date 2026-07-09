@@ -7,6 +7,7 @@ import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 import { NotificationBell } from '@features/notifications/components/NotificationBell';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { InstallAppButton } from './InstallAppButton';
+import { useChatContextSafe } from '@features/chat/context/ChatContext';
 
 const MAIN_NAV = [
   { to: '/home', prefix: '/home' },
@@ -17,7 +18,6 @@ function navLinkActive(pathname: string, prefix: string) {
   if (prefix === '/home') return pathname === '/home';
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
-
 
 /** Same link padding as `ForumSidebar` items (`px-2 py-1.5`) inside `p-3` aside. */
 function BrandLink({ className = '' }: { className?: string }) {
@@ -37,6 +37,7 @@ export function ForumTopbar() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const chatContext = useChatContextSafe();
 
   return (
     <header className="fixed left-0 right-0 top-0 z-40 h-14 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -60,15 +61,31 @@ export function ForumTopbar() {
             {MAIN_NAV.map(({ to, prefix }) => {
               const active = navLinkActive(pathname, prefix);
               const labelKey = prefix === '/home' ? 'nav.home' : 'nav.chat';
+              const isChat = prefix === '/chat';
+              
+              let badge = null;
+              if (isChat && isAuthenticated) {
+                // Safely render chat unread count if authenticated
+                const unreadCount = chatContext?.totalUnreadCount ?? 0;
+                if (unreadCount > 0) {
+                  badge = (
+                    <span className="ml-1.5 inline-flex items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-none">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  );
+                }
+              }
+
               return (
                 <Link
                   key={to}
                   to={to}
-                  className={`rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                  className={`flex items-center rounded-md px-2 py-1 text-xs font-medium transition-colors ${
                     active ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
                   {t(labelKey)}
+                  {badge}
                 </Link>
               );
             })}

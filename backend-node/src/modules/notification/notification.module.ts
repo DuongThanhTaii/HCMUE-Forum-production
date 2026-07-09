@@ -6,6 +6,7 @@ import { NotificationsController } from './controllers/notifications.controller'
 import { CreateNotificationHandler } from './commands/create-notification.handler';
 import { MarkNotificationReadHandler } from './commands/mark-notification-read.handler';
 import { MarkAllReadHandler } from './commands/mark-all-read.handler';
+import { UpsertChatNotificationHandler } from './commands/upsert-chat-notification.handler';
 import { GetUserNotificationsHandler } from './queries/get-user-notifications.handler';
 import { GetUnreadCountHandler } from './queries/get-unread-count.handler';
 
@@ -13,6 +14,7 @@ const CommandHandlers = [
   CreateNotificationHandler,
   MarkNotificationReadHandler,
   MarkAllReadHandler,
+  UpsertChatNotificationHandler,
 ];
 
 const QueryHandlers = [
