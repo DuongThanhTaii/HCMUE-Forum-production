@@ -1,10 +1,10 @@
 export const EMOJI_ASSETS: Record<string, string> = {
-  '❤️': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png',
-  '😆': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Grinning%20Squinting%20Face.png',
-  '😲': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Astonished%20Face.png',
-  '😢': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Crying%20Face.png',
-  '😡': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Enraged%20Face.png',
-  '👍': 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Thumbs%20Up.png',
+  '❤️': '/emojis/Red Heart.png',
+  '😆': '/emojis/Grinning Squinting Face.png',
+  '😲': '/emojis/Astonished Face.png',
+  '😢': '/emojis/Crying Face.png',
+  '😡': '/emojis/Enraged Face.png',
+  '👍': '/emojis/Thumbs Up.png',
 }
 
 export const EMOJIS = Object.keys(EMOJI_ASSETS)
