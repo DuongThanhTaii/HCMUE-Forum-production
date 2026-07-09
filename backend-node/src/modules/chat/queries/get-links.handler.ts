@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 
 export class GetLinksQuery {
   constructor(
@@ -9,7 +9,7 @@ export class GetLinksQuery {
 
 @QueryHandler(GetLinksQuery)
 export class GetLinksHandler implements IQueryHandler<GetLinksQuery> {
-  private prisma = new PrismaClient();
+  constructor(private readonly prisma: PrismaService) {}
 
   async execute(query: GetLinksQuery) {
     const { conversationId } = query;

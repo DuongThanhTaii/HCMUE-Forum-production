@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 
 export class GetAttachmentsQuery {
   constructor(
@@ -10,7 +10,7 @@ export class GetAttachmentsQuery {
 
 @QueryHandler(GetAttachmentsQuery)
 export class GetAttachmentsHandler implements IQueryHandler<GetAttachmentsQuery> {
-  private prisma = new PrismaClient();
+  constructor(private readonly prisma: PrismaService) {}
 
   async execute(query: GetAttachmentsQuery) {
     const { conversationId, type } = query;
