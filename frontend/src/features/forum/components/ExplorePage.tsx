@@ -30,10 +30,11 @@ export function ExplorePage() {
               <h2 className="text-2xl font-bold text-slate-900">{t('forum.explore.featuredCategories')}</h2>
               <Link 
                 to="/forum/new" 
-                className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
+                className="inline-flex shrink-0 items-center justify-center gap-2 bg-primary text-white p-2.5 sm:px-4 sm:py-2.5 rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors"
+                title={t('forum.createPost.title', 'Đăng bài mới')}
               >
-                <MessageSquarePlus className="h-5 w-5" />
-                {t('forum.createPost.title', 'Đăng bài mới')}
+                <MessageSquarePlus className="h-5 w-5 shrink-0" />
+                <span className="hidden sm:inline">{t('forum.createPost.title', 'Đăng bài mới')}</span>
               </Link>
             </div>
             {isLoadingCategories ? (
