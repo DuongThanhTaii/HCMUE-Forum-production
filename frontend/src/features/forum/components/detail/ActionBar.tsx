@@ -43,7 +43,7 @@ export function ActionBar({
         }`}
       >
         <Heart className={`h-3.5 w-3.5 ${isUpvoted ? 'fill-current' : ''}`} />
-        <span>{t('forum.detail.like', 'Thích')}</span>
+        <span className="hidden sm:inline">{t('forum.detail.like', 'Thích')}</span>
         {voteScore > 0 && <span className="ml-0.5 rounded px-1 py-0.5 text-[11px] font-bold bg-slate-100 text-slate-700">{voteScore}</span>}
       </button>
 
@@ -58,7 +58,7 @@ export function ActionBar({
         }`}
       >
         <Bookmark className={`h-3.5 w-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
-        <span>{isBookmarked ? t('forum.detail.saved', 'Đã lưu') : t('forum.detail.save', 'Lưu')}</span>
+        <span className="hidden sm:inline">{isBookmarked ? t('forum.detail.saved', 'Đã lưu') : t('forum.detail.save', 'Lưu')}</span>
       </button>
 
       {/* Secondary Actions */}
@@ -69,7 +69,7 @@ export function ActionBar({
         title={t('forum.detail.share', 'Chia sẻ')}
       >
         <Share2 className="h-3.5 w-3.5" />
-        <span>{t('forum.detail.share', 'Chia sẻ')}</span>
+        <span className="hidden sm:inline">{t('forum.detail.share', 'Chia sẻ')}</span>
       </button>
 
       <button
