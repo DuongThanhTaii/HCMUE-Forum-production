@@ -46,22 +46,25 @@ export function ForumCreatePostPage() {
   } = useForumCreatePostPage()
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-lg font-semibold text-slate-900">{t('forum.createPost.title')}</h1>
-          <p className="mt-1 text-sm text-slate-600">{t('forum.createPost.subtitle')}</p>
-        </div>
+    <div className="mx-auto max-w-4xl">
+      {/* Breadcrumb */}
+      <nav className="flex items-center text-[13px] font-medium text-slate-500 mb-6" aria-label="Breadcrumb">
         <Link
-          to="/forum"
-          className="text-sm font-medium text-primary hover:underline"
+          to="/explore"
+          className="hover:text-primary transition-colors"
         >
           ← {t('forum.createPost.backToList')}
         </Link>
-      </div>
+      </nav>
 
-      <form onSubmit={onSubmit} className="forum-compact-card space-y-4 p-4 md:p-5">
-        <label className="flex flex-col gap-1.5">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-6">
+        <div className="p-6 md:p-8 border-b border-slate-100">
+          <h1 className="text-xl font-bold text-slate-900">{t('forum.createPost.title')}</h1>
+          <p className="mt-1.5 text-sm text-slate-500">{t('forum.createPost.subtitle')}</p>
+        </div>
+
+        <form onSubmit={onSubmit} className="space-y-6 p-6 md:p-8">
+          <label className="flex flex-col gap-2">
           <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
             {t('forum.createPost.fields.title')}
           </span>
@@ -277,23 +280,24 @@ export function ForumCreatePostPage() {
 
         <p className="text-[13px] leading-relaxed text-slate-500">{t('forum.createPost.pendingNote')}</p>
 
-        <div className="flex flex-wrap items-center gap-2 pt-1">
+        <div className="flex flex-wrap items-center gap-2 pt-2">
           <button
             type="submit"
             disabled={isSubmitting || loadingCategories || loadingThreadChannels}
-            className="inline-flex items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <PenSquare className="h-4 w-4" aria-hidden />
             {isSubmitting || isUploadingAttachments ? t('common.loading') : t('forum.createPost.submit')}
           </button>
           <Link
-            to="/forum"
-            className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            to="/explore"
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-colors"
           >
             {t('common.cancel')}
           </Link>
         </div>
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
