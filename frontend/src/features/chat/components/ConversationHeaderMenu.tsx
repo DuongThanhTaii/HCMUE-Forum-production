@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BellOff, BellRing, ShieldBan, Info, Search, Maximize2, ChevronDown, Archive } from 'lucide-react'
+import { BellOff, BellRing, ShieldBan, Info, Search, Maximize2, ChevronDown } from 'lucide-react'
 import { useBlockUserMutation, useSetConversationMuteMutation, useArchiveConversationMutation } from '../api/chat.api'
 import { Link, useNavigate } from 'react-router-dom'
 
