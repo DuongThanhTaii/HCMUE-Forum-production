@@ -17,7 +17,7 @@ export class MarkConversationReadHandler implements ICommandHandler<MarkConversa
     const notification = await this.prisma.notifications.findFirst({
       where: {
         recipient_id: command.userId,
-        content_action_url: \/chat?conversation=\\,
+        content_action_url: `/chat?conversation=${command.conversationId}`,
         read_at: null,
       }
     });
