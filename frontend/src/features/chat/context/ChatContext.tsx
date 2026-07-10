@@ -91,7 +91,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   >({})
   const [onlineByUserId, setOnlineByUserId] = useState<Record<string, boolean>>({})
 
-  const { data: conversations } = useGetConversationsQuery({ skip: 0, take: 50 }, { skip: !accessToken })
+  const { data: conversations } = useGetConversationsQuery(undefined, { skip: !accessToken })
 
   const webRtcSubscribersRef = useRef(new Set<(payload: WebRtcSignalPayload) => void>())
 
