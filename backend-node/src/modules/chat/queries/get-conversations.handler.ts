@@ -19,6 +19,7 @@ export class GetConversationsHandler implements IQueryHandler<GetConversationsQu
     const convos = await this.prisma.$queryRaw<any[]>`
       SELECT * FROM chat.conversations 
       WHERE participants @> ${`"${query.userId}"`}::jsonb 
+      AND is_archived = false
       ORDER BY last_message_at DESC 
       LIMIT ${take} OFFSET ${skip}
     `;
@@ -35,7 +36,20 @@ export class GetConversationsHandler implements IQueryHandler<GetConversationsQu
         title: c.title,
         isMuted: false, // Stub
         isBlockedWithPeer: false, // Stub
+        unreadCount: 0,
       };
+
+      const notification = await this.prisma.notifications.findFirst({
+        where: {
+          recipient_id: query.userId,
+          content_action_url: `/chat?conversation=${c.id}`,
+          read_at: null,
+        }
+      });
+      if (notification && notification.metadata) {
+        const meta = notification.metadata as any;
+        result.unreadCount = meta.unreadCount || 1;
+      }
 
       if (c.type === 1 && Array.isArray(c.participants)) {
         const otherId = c.participants.find((p: string) => p !== query.userId);

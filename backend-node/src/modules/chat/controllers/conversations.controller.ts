@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Param, UseGuards, Request, Query } from '@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { CreateConversationCommand } from '../commands/create-conversation.handler';
+import { MarkConversationReadCommand } from '../commands/mark-conversation-read.handler';
+import { ArchiveConversationCommand } from '../commands/archive-conversation.handler';
 import { GetConversationsQuery } from '../queries/get-conversations.handler';
 import { GetAttachmentsQuery } from '../queries/get-attachments.handler';
 import { GetLinksQuery } from '../queries/get-links.handler';
@@ -50,6 +52,16 @@ export class ConversationsController {
   async muteConversation(@Request() req: any, @Param('id') id: string) {
     // Stub
     return { success: true };
+  }
+
+  @Post(':id/read')
+  async markRead(@Request() req: any, @Param('id') id: string) {
+    return this.commandBus.execute(new MarkConversationReadCommand(req.user.userId, id));
+  }
+
+  @Post(':id/archive')
+  async archiveConversation(@Request() req: any, @Param('id') id: string) {
+    return this.commandBus.execute(new ArchiveConversationCommand(req.user.userId, id));
   }
 
   @Get(':id/attachments')

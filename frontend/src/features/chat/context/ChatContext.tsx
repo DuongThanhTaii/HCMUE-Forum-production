@@ -11,7 +11,7 @@ import {
 import { Socket } from 'socket.io-client'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
-import { chatApi } from '../api/chat.api'
+import { chatApi, useGetConversationsQuery, useMarkConversationReadMutation } from '../api/chat.api'
 import { attachChatHubHandlers, createChatConnection, detachChatHubHandlers } from '../lib/chatHub'
 import { notifyInboundChatMessage } from '../lib/chatNotifications'
 import { drainChatOutbox } from '../lib/processOutbox'
@@ -91,6 +91,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   >({})
   const [onlineByUserId, setOnlineByUserId] = useState<Record<string, boolean>>({})
 
+  const { data: conversations } = useGetConversationsQuery({ skip: 0, take: 50 }, { skip: !accessToken })
+
   const webRtcSubscribersRef = useRef(new Set<(payload: WebRtcSignalPayload) => void>())
 
   useEffect(() => {
@@ -100,6 +102,21 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     currentUserIdRef.current = currentUserId
   }, [currentUserId])
+
+  useEffect(() => {
+    if (conversations) {
+      setUnreadByThread((prev) => {
+        const next = { ...prev }
+        conversations.forEach((c) => {
+          const key = threadKeyOf({ kind: 'conversation', conversationId: c.id })
+          if (c.unreadCount) {
+            next[key] = Math.max(next[key] || 0, c.unreadCount)
+          }
+        })
+        return next
+      })
+    }
+  }, [conversations])
 
   const subscribeWebRtcSignal = useCallback((handler: (payload: WebRtcSignalPayload) => void) => {
     webRtcSubscribersRef.current.add(handler)
@@ -139,14 +156,22 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const [markConversationRead] = useMarkConversationReadMutation()
+
   const clearUnread = useCallback((key: string) => {
+    if (key.startsWith('conversation:')) {
+      const convId = key.split(':')[1]
+      if (convId) {
+        markConversationRead(convId).catch(() => {})
+      }
+    }
     setUnreadByThread((prev) => {
       if (!(key in prev)) return prev
       const next = { ...prev }
       delete next[key]
       return next
     })
-  }, [])
+  }, [markConversationRead])
 
   const onReceiveMessage = useCallback((msg: HubMessageNotification) => {
     const key = inboundThreadKey(msg)

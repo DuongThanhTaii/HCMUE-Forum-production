@@ -257,10 +257,10 @@ export function ChatPage() {
                         >
                           <ChatPeerAvatar name={title} />
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-medium text-foreground">{title}</span>
+                            <span className={`block truncate ${unread > 0 ? 'font-bold' : 'font-medium'} text-foreground`}>{title}</span>
                             {sub ? (
                               <span
-                                className={`block truncate text-xs ${isActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : 'text-muted'}`}
+                                className={`block truncate text-xs ${isActiveNow ? 'inline-flex items-center gap-1 text-emerald-600' : (unread > 0 ? 'font-semibold text-foreground' : 'text-muted')}`}
                               >
                                 {isActiveNow && (
                                   <span

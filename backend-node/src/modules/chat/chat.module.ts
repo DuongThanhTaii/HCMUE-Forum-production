@@ -11,6 +11,8 @@ import { CreateConversationHandler } from './commands/create-conversation.handle
 import { AddReactionHandler } from './commands/add-reaction.handler';
 import { RemoveReactionHandler } from './commands/remove-reaction.handler';
 import { DeleteMessageHandler } from './commands/delete-message.handler';
+import { MarkConversationReadHandler } from './commands/mark-conversation-read.handler';
+import { ArchiveConversationHandler } from './commands/archive-conversation.handler';
 
 import { GetMessagesHandler } from './queries/get-messages.handler';
 import { GetConversationsHandler } from './queries/get-conversations.handler';
@@ -24,6 +26,8 @@ const Handlers = [
   AddReactionHandler,
   RemoveReactionHandler,
   DeleteMessageHandler,
+  MarkConversationReadHandler,
+  ArchiveConversationHandler,
   GetMessagesHandler,
   GetConversationsHandler,
   GetAttachmentsHandler,

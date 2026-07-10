@@ -518,6 +518,201 @@ export const chatApi = baseApi.injectEndpoints({
         const inner = unwrapApiList<Record<string, unknown>>(response)
         return inner.map((raw) => ({
           userId: String(raw.userId ?? ''),
+      query: (formData) => ({
+        url: '/api/v1/chat/messages/upload',
+        method: 'POST',
+        body: formData,
+      }),
+      transformResponse: (response: unknown) => {
+        const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
+        return {
+          fileName: String(raw.fileName ?? ''),
+          fileUrl: String(raw.fileUrl ?? ''),
+          fileSize: Number(raw.fileSize ?? 0),
+          contentType: String(raw.contentType ?? ''),
+        }
+      },
+    }),
+
+    sendMessageWithAttachments: build.mutation<
+      SendMessageResultDto,
+      SendWithAttachmentsPayload
+    >({
+      query: (body) => ({
+        url: '/api/v1/chat/messages/with-attachments',
+        method: 'POST',
+        body: {
+          conversationId: body.conversationId,
+          content: body.content ?? null,
+          attachments: body.attachments,
+          replyToMessageId: body.replyToMessageId ?? null,
+        },
+      }),
+      transformResponse: (response: unknown) => {
+        const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
+        return {
+          messageId: String(raw.messageId ?? ''),
+          sentAt: String(raw.sentAt ?? ''),
+        }
+      },
+      invalidatesTags: (_result, _err, arg) => [
+        { type: 'ChatMessage', id: arg.conversationId },
+        { type: 'ChatConversation', id: CHAT_LIST },
+      ],
+    }),
+
+    getPublicChannels: build.query<ChannelDto[], void>({
+      query: () => ({ url: '/api/v1/chat/channels/public' }),
+      transformResponse: (response: unknown) => {
+        const inner = unwrapApiList<Record<string, unknown>>(response)
+        return inner.map((x) => mapChannel(x))
+      },
+      providesTags: [{ type: 'ChatChannel', id: CHAT_LIST }],
+    }),
+
+    getMyChannels: build.query<ChannelDto[], void>({
+      query: () => ({ url: '/api/v1/chat/channels/my-channels' }),
+      transformResponse: (response: unknown) => {
+        const inner = unwrapApiList<Record<string, unknown>>(response)
+        return inner.map((x) => mapChannel(x))
+      },
+      providesTags: [{ type: 'ChatChannel', id: CHAT_LIST }],
+    }),
+
+    joinChannel: build.mutation<void, string>({
+      query: (channelId) => ({
+        url: `/api/v1/chat/channels/${channelId}/join`,
+        method: 'POST',
+      }),
+      invalidatesTags: [{ type: 'ChatChannel', id: CHAT_LIST }],
+    }),
+
+    leaveChannel: build.mutation<void, string>({
+      query: (channelId) => ({
+        url: `/api/v1/chat/channels/${channelId}/leave`,
+        method: 'POST',
+      }),
+      invalidatesTags: [{ type: 'ChatChannel', id: CHAT_LIST }],
+    }),
+
+    createDirectConversation: build.mutation<{ conversationId: string }, { otherUserId: string }>(
+      {
+        query: (body) => ({
+          url: '/api/v1/chat/conversations/direct',
+          method: 'POST',
+          body: { participantIds: [body.otherUserId] },
+        }),
+        transformResponse: (response: unknown) => {
+          const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
+          return { conversationId: String(raw.id ?? raw.conversationId ?? '') }
+        },
+        invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+      }
+    ),
+
+    createGroupConversation: build.mutation<
+      { conversationId: string },
+      { title: string; participantIds: string[] }
+    >({
+      query: (body) => ({
+        url: '/api/v1/chat/conversations/group',
+        method: 'POST',
+        body: {
+          title: body.title,
+          participantIds: body.participantIds,
+        },
+      }),
+      transformResponse: (response: unknown) => {
+        const raw = unwrapApiData<Record<string, unknown>>(response) ?? {}
+        return { conversationId: String(raw.id ?? raw.conversationId ?? '') }
+      },
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+    }),
+
+    /**
+     * User directory search for DM picker (`search` + `take` query params).
+     * Named differently from admin `getUsers` to avoid RTK Query endpoint collision / override.
+     */
+    blockUser: build.mutation<void, string>({
+      query: (userId) => ({
+        url: `/api/v1/users/${userId}/block`,
+        method: 'POST',
+      }),
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+    }),
+
+    unblockUser: build.mutation<void, string>({
+      query: (userId) => ({
+        url: `/api/v1/users/${userId}/block`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+    }),
+
+    setConversationMute: build.mutation<void, { conversationId: string; muted: boolean }>({
+      query: ({ conversationId, muted }) => ({
+        url: `/api/v1/chat/conversations/${conversationId}/mute`,
+        method: 'POST',
+        body: { muted },
+      }),
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+    }),
+
+    reportMessage: build.mutation<
+      void,
+      { messageId: string; reason: string; description?: string | null }
+    >({
+      query: ({ messageId, reason, description }) => ({
+        url: `/api/v1/chat/messages/${messageId}/report`,
+        method: 'POST',
+        body: { reason, description: description ?? null },
+      }),
+    }),
+
+    addMessageReaction: build.mutation<
+      void,
+      { messageId: string; conversationId: string; emoji: string }
+    >({
+      query: ({ messageId, emoji, conversationId }) => ({
+        url: `/api/v1/chat/messages/${messageId}/reactions/${encodeURIComponent(emoji)}`,
+        method: 'POST',
+        body: { conversationId },
+      }),
+      invalidatesTags: (_r, _e, arg) => [
+        { type: 'ChatMessage', id: arg.conversationId },
+      ],
+    }),
+
+    removeMessageReaction: build.mutation<
+      void,
+      { messageId: string; conversationId: string; emoji: string }
+    >({
+      query: ({ messageId, emoji, conversationId }) => ({
+        url: `/api/v1/chat/messages/${messageId}/reactions/${encodeURIComponent(emoji)}`,
+        method: 'DELETE',
+        body: { conversationId },
+      }),
+      invalidatesTags: (_r, _e, arg) => [
+        { type: 'ChatMessage', id: arg.conversationId },
+      ],
+    }),
+
+    markMessageAsRead: build.mutation<void, { messageId: string; conversationId: string }>({
+      query: ({ messageId }) => ({
+        url: `/api/v1/chat/messages/${messageId}/read`,
+        method: 'POST',
+      }),
+      // Avoid refetching the whole thread on every read receipt (scroll stability).
+    }),
+
+    getMessageReadReceipts: build.query<ReadReceiptDto[], string>({
+      query: (messageId) => ({
+        url: `/api/v1/chat/messages/${messageId}/read-receipts`,
+      }),
+      transformResponse: (response: unknown) => {
+        const inner = unwrapApiList<Record<string, unknown>>(response)
+        return inner.map((raw) => ({
+          userId: String(raw.userId ?? ''),
           readAt: String(raw.readAt ?? ''),
         }))
       },
@@ -532,6 +727,16 @@ export const chatApi = baseApi.injectEndpoints({
         const inner = unwrapApiList<Record<string, unknown>>(response)
         return inner.map((x) => mapUser(x))
       },
+    }),
+
+    archiveConversation: build.mutation<void, string>({
+      query: (id) => ({ url: `/api/v1/chat/conversations/${id}/archive`, method: 'POST' }),
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }],
+    }),
+
+    markConversationRead: build.mutation<void, string>({
+      query: (id) => ({ url: `/api/v1/chat/conversations/${id}/read`, method: 'POST' }),
+      invalidatesTags: [{ type: 'ChatConversation', id: CHAT_LIST }, { type: 'Notification', id: 'UNREAD_COUNT' }, { type: 'Notification', id: 'LIST' }],
     }),
   }),
 })
@@ -564,4 +769,6 @@ export const {
   useMarkMessageAsReadMutation,
   useGetMessageReadReceiptsQuery,
   useLazyGetMessageReadReceiptsQuery,
+  useArchiveConversationMutation,
+  useMarkConversationReadMutation,
 } = chatApi

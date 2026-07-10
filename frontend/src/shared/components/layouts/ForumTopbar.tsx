@@ -66,7 +66,7 @@ export function ForumTopbar() {
               let badge = null;
               if (isChat && isAuthenticated) {
                 // Safely render chat unread count if authenticated
-                const unreadCount = chatContext?.totalUnreadCount ?? 0;
+                const unreadCount = chatContext?.totalUnread ?? 0;
                 if (unreadCount > 0) {
                   badge = (
                     <span className="ml-1.5 inline-flex items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-none">

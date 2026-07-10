@@ -20,7 +20,7 @@ export function notifyInboundChatMessage(opts: {
 
   // Play notification sound
   try {
-    const audio = new Audio('/assets/sounds/message.mp3')
+    const audio = new Audio('/assets/sounds/message.ogg')
     audio.play().catch(() => {
       // Ignore autoplay errors if user hasn't interacted with the document
     })

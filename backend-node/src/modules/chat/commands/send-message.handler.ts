@@ -37,7 +37,10 @@ export class SendMessageHandler implements ICommandHandler<SendMessageCommand> {
 
     await this.prisma.conversations.update({
       where: { id: command.conversationId },
-      data: { last_message_at: new Date() },
+      data: { 
+        last_message_at: new Date(),
+        is_archived: false,
+      },
     });
 
     const sender = await this.prisma.users.findUnique({

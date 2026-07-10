@@ -246,11 +246,11 @@ export function ChatDock() {
                         >
                           <ChatPeerAvatar name={title} className="h-10 w-10 text-[11px]" />
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-sm font-medium text-foreground">
+                            <span className={`block truncate text-sm text-foreground ${unread > 0 ? 'font-bold' : 'font-medium'}`}>
                               {title}
                             </span>
                             {sub && (
-                              <span className="block truncate text-[11px] text-muted">{sub}</span>
+                              <span className={`block truncate text-[11px] ${unread > 0 ? 'font-semibold text-foreground' : 'text-muted'}`}>{sub}</span>
                             )}
                           </span>
                           <span className="flex shrink-0 items-center gap-1">

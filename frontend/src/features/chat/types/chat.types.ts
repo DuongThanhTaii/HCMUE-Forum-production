@@ -17,6 +17,22 @@ export function threadKey(ref: ChatThreadRef): string {
     : `channel:${ref.channelId}`
 }
 
+export type ChatConversation = {
+  id: string
+  type: number
+  participantIds: string[]
+  lastMessageAt?: string
+  createdAt: string
+  isArchived: boolean
+  title?: string
+  isMuted?: boolean
+  isBlockedWithPeer?: boolean
+  directPeerUserId?: string
+  directPeerFullName?: string
+  directPeerEmail?: string
+  unreadCount?: number
+}
+
 export type ConversationDto = {
   id: string
   type: string
@@ -32,6 +48,7 @@ export type ConversationDto = {
   directPeerEmail: string | null
   isMuted: boolean
   isBlockedWithPeer: boolean
+  unreadCount: number
 }
 
 export type ChatMessageReportReason =

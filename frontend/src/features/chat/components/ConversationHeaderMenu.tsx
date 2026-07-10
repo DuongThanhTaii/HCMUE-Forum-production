@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BellOff, BellRing, ShieldBan, Info, Search, Maximize2, ChevronDown } from 'lucide-react'
-import { useBlockUserMutation, useSetConversationMuteMutation } from '../api/chat.api'
-import { Link } from 'react-router-dom'
+import { BellOff, BellRing, ShieldBan, Info, Search, Maximize2, ChevronDown, Archive } from 'lucide-react'
+import { useBlockUserMutation, useSetConversationMuteMutation, useArchiveConversationMutation } from '../api/chat.api'
+import { Link, useNavigate } from 'react-router-dom'
 
 export function ConversationHeaderMenu({
   conversationId,
@@ -28,11 +28,13 @@ export function ConversationHeaderMenu({
   expandUrl?: string
 }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
 
   const [setMute, { isLoading: muting }] = useSetConversationMuteMutation()
   const [blockUser, { isLoading: blocking }] = useBlockUserMutation()
+  const [archiveConversation, { isLoading: archiving }] = useArchiveConversationMutation()
 
   useEffect(() => {
     if (!open) return
@@ -57,6 +59,14 @@ export function ConversationHeaderMenu({
     await blockUser(peerUserId).unwrap()
     setOpen(false)
     onBlocked?.()
+  }
+
+  const confirmArchive = async () => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa/lưu trữ cuộc trò chuyện này?')) {
+      await archiveConversation(conversationId).unwrap()
+      setOpen(false)
+      navigate('/chat', { replace: true })
+    }
   }
 
   return (
@@ -157,6 +167,16 @@ export function ConversationHeaderMenu({
               {t('chat.safety.block')}
             </button>
           ) : null}
+          <div className="my-1 h-px bg-background" />
+          <button
+            type="button"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-red-600 hover:bg-red-50"
+            disabled={archiving}
+            onClick={() => void confirmArchive()}
+          >
+            <ShieldBan className="h-4 w-4" /> {/* You could change to Trash2 or Archive icon if available */}
+            Xóa/Lưu trữ đoạn chat
+          </button>
         </div>
       )}
     </div>
