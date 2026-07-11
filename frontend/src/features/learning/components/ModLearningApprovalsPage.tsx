@@ -6,6 +6,8 @@ import {
   useGetDocumentsQuery,
   useRejectDocumentMutation,
   useRequestRevisionDocumentMutation,
+  useBulkApproveDocumentsMutation,
+  useBulkRejectDocumentsMutation,
 } from '../api/learning.api'
 
 const btnSecondary =
@@ -21,10 +23,13 @@ export function ModLearningApprovalsPage() {
   const [approveDocument, { isLoading: approving }] = useApproveDocumentMutation()
   const [rejectDocument, { isLoading: rejecting }] = useRejectDocumentMutation()
   const [requestRevision, { isLoading: requesting }] = useRequestRevisionDocumentMutation()
+  const [bulkApproveDocuments, { isLoading: bulkApproving }] = useBulkApproveDocumentsMutation()
+  const [bulkRejectDocuments, { isLoading: bulkRejecting }] = useBulkRejectDocumentsMutation()
   const docs = data?.documents ?? []
-  const busy = approving || rejecting || requesting
+  const busy = approving || rejecting || requesting || bulkApproving || bulkRejecting
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
-  const [reasonDialog, setReasonDialog] = useState<{ mode: 'reject' | 'revision'; documentId: string } | null>(null)
+  const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set())
+  const [reasonDialog, setReasonDialog] = useState<{ mode: 'reject' | 'revision' | 'bulk-reject'; documentId: string } | null>(null)
   const [reasonInput, setReasonInput] = useState('')
   const [actionError, setActionError] = useState<string | null>(null)
   const { data: selectedDocument, isLoading: loadingDetail } = useGetDocumentByIdQuery(selectedDocumentId ?? '', {
@@ -35,10 +40,30 @@ export function ModLearningApprovalsPage() {
     setActionError(null)
     await approveDocument({ documentId: id }).unwrap()
   }
-  function openReasonDialog(mode: 'reject' | 'revision', documentId: string) {
+  async function onBulkApprove() {
+    const ids = Array.from(selectedDocumentIds)
+    if (ids.length === 0) return
+    setActionError(null)
+    await bulkApproveDocuments({ documentIds: ids }).unwrap()
+    setSelectedDocumentIds(new Set())
+  }
+  function openReasonDialog(mode: 'reject' | 'revision' | 'bulk-reject', documentId: string) {
     setActionError(null)
     setReasonDialog({ mode, documentId })
     setReasonInput('')
+  }
+  function toggleAll(checked: boolean) {
+    if (checked) {
+      setSelectedDocumentIds(new Set(docs.map((d) => d.id)))
+    } else {
+      setSelectedDocumentIds(new Set())
+    }
+  }
+  function toggleOne(id: string) {
+    const next = new Set(selectedDocumentIds)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSelectedDocumentIds(next)
   }
   async function submitReasonDialog() {
     if (!reasonDialog) return
@@ -49,8 +74,12 @@ export function ModLearningApprovalsPage() {
     }
     if (reasonDialog.mode === 'reject') {
       await rejectDocument({ documentId: reasonDialog.documentId, reason }).unwrap()
-    } else {
+    } else if (reasonDialog.mode === 'revision') {
       await requestRevision({ documentId: reasonDialog.documentId, reason }).unwrap()
+    } else if (reasonDialog.mode === 'bulk-reject') {
+      const ids = Array.from(selectedDocumentIds)
+      await bulkRejectDocuments({ documentIds: ids, reason }).unwrap()
+      setSelectedDocumentIds(new Set())
     }
     setReasonDialog(null)
     setReasonInput('')
@@ -83,10 +112,38 @@ export function ModLearningApprovalsPage() {
         <p className="font-semibold text-emerald-900">{t('mod.learning.scopeTitle')}</p>
         <p className="mt-1 text-emerald-900/90">{t('mod.learning.scopeBody')}</p>
       </div>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={busy || selectedDocumentIds.size === 0}
+          onClick={() => void onBulkApprove()}
+          className={btnPrimary}
+        >
+          {t('mod.learning.bulkApprove', 'Duyệt mục đã chọn')} ({selectedDocumentIds.size})
+        </button>
+        <button
+          type="button"
+          disabled={busy || selectedDocumentIds.size === 0}
+          onClick={() => openReasonDialog('bulk-reject', '')}
+          className={btnMuted}
+        >
+          {t('mod.learning.bulkReject', 'Từ chối mục đã chọn')} ({selectedDocumentIds.size})
+        </button>
+      </div>
+
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <table className="w-full table-auto text-left text-sm">
           <thead className="bg-slate-50 text-slate-600">
             <tr>
+              <th className="px-3 py-2 w-10">
+                <input
+                  type="checkbox"
+                  checked={docs.length > 0 && selectedDocumentIds.size === docs.length}
+                  onChange={(e) => toggleAll(e.target.checked)}
+                  className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                />
+              </th>
               <th className="px-3 py-2">{t('mod.learning.columns.title')}</th>
               <th className="px-3 py-2">{t('mod.learning.columns.uploader')}</th>
               <th className="px-3 py-2">{t('mod.learning.columns.created')}</th>
@@ -97,6 +154,14 @@ export function ModLearningApprovalsPage() {
           <tbody className="divide-y divide-slate-100">
             {docs.map((doc) => (
               <tr key={doc.id}>
+                <td className="px-3 py-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedDocumentIds.has(doc.id)}
+                    onChange={() => toggleOne(doc.id)}
+                    className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                  />
+                </td>
                 <td className="px-3 py-2">{doc.title}</td>
                 <td className="px-3 py-2">{doc.uploaderName ?? doc.uploaderId ?? '-'}</td>
                 <td className="px-3 py-2">{doc.createdAt ? new Date(doc.createdAt).toLocaleString() : '-'}</td>
@@ -131,7 +196,7 @@ export function ModLearningApprovalsPage() {
             ))}
             {docs.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-3 py-6 text-center text-sm text-slate-500">
+                <td colSpan={6} className="px-3 py-6 text-center text-sm text-slate-500">
                   {t('mod.learning.noPending')}
                 </td>
               </tr>
@@ -221,7 +286,9 @@ export function ModLearningApprovalsPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-base font-semibold text-slate-900">
-              {reasonDialog.mode === 'reject' ? t('mod.learning.reasonReject') : t('mod.learning.reasonRevision')}
+              {reasonDialog.mode === 'reject' || reasonDialog.mode === 'bulk-reject'
+                ? t('mod.learning.reasonReject')
+                : t('mod.learning.reasonRevision')}
             </h3>
             <textarea
               value={reasonInput}
@@ -229,7 +296,7 @@ export function ModLearningApprovalsPage() {
               rows={5}
               className="mt-3 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400"
               placeholder={
-                reasonDialog.mode === 'reject'
+                reasonDialog.mode === 'reject' || reasonDialog.mode === 'bulk-reject'
                   ? t('mod.learning.reasonPlaceholderReject')
                   : t('mod.learning.reasonPlaceholderRevision')
               }

@@ -19,6 +19,12 @@ import { RateDocumentCommand } from '../commands/rate-document.handler';
 import { RecordDocumentDownloadCommand } from '../commands/record-document-download.handler';
 import { GetCourseDocumentsQuery } from '../queries/get-course-documents.handler';
 import { GetDocumentsQuery } from '../queries/get-documents.handler';
+import { GetDocumentByIdQuery } from '../queries/get-document-by-id.handler';
+import { ApproveDocumentCommand } from '../commands/approve-document.handler';
+import { RejectDocumentCommand } from '../commands/reject-document.handler';
+import { RequestRevisionCommand } from '../commands/request-revision.handler';
+import { BulkApproveDocumentsCommand } from '../commands/bulk-approve-documents.handler';
+import { BulkRejectDocumentsCommand } from '../commands/bulk-reject-documents.handler';
 import { RateDocumentDto } from '../dtos/rate-document.dto';
 import { GetSystemSettingQuery } from '../../admin/queries/get-system-setting.handler';
 
@@ -75,6 +81,62 @@ export class DocumentsController {
         dto.courseId,
         dto.driveUrl,
       ),
+    );
+  }
+
+  @Post('bulk/approve')
+  @UseGuards(JwtAuthGuard)
+  async bulkApproveDocuments(@Body() dto: { documentIds: string[] }, @Req() req: any) {
+    return this.commandBus.execute(
+      new BulkApproveDocumentsCommand(dto.documentIds, req.user.userId),
+    );
+  }
+
+  @Post('bulk/reject')
+  @UseGuards(JwtAuthGuard)
+  async bulkRejectDocuments(
+    @Body() dto: { documentIds: string[]; reason: string },
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new BulkRejectDocumentsCommand(dto.documentIds, req.user.userId, dto.reason),
+    );
+  }
+
+  @Get(':id')
+  async getDocumentById(@Param('id') id: string) {
+    return this.queryBus.execute(new GetDocumentByIdQuery(id));
+  }
+
+  @Post(':id/approve')
+  @UseGuards(JwtAuthGuard)
+  async approveDocument(@Param('id') id: string, @Req() req: any) {
+    return this.commandBus.execute(
+      new ApproveDocumentCommand(id, req.user.userId),
+    );
+  }
+
+  @Post(':id/reject')
+  @UseGuards(JwtAuthGuard)
+  async rejectDocument(
+    @Param('id') id: string,
+    @Body() dto: { reason: string },
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new RejectDocumentCommand(id, req.user.userId, dto.reason),
+    );
+  }
+
+  @Post(':id/request-revision')
+  @UseGuards(JwtAuthGuard)
+  async requestRevision(
+    @Param('id') id: string,
+    @Body() dto: { comment: string },
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new RequestRevisionCommand(id, req.user.userId, dto.comment),
     );
   }
 

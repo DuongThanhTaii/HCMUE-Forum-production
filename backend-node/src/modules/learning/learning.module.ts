@@ -14,7 +14,12 @@ import { GetFacultiesHandler } from './queries/get-faculties.handler';
 import { GetCoursesHandler } from './queries/get-courses.handler';
 import { GetCourseDocumentsHandler } from './queries/get-course-documents.handler';
 import { GetDocumentsHandler } from './queries/get-documents.handler';
-
+import { GetDocumentByIdHandler } from './queries/get-document-by-id.handler';
+import { ApproveDocumentHandler } from './commands/approve-document.handler';
+import { RejectDocumentHandler } from './commands/reject-document.handler';
+import { RequestRevisionHandler } from './commands/request-revision.handler';
+import { BulkApproveDocumentsHandler } from './commands/bulk-approve-documents.handler';
+import { BulkRejectDocumentsHandler } from './commands/bulk-reject-documents.handler';
 const Handlers = [
   CreateFacultyHandler,
   CreateCourseHandler,
@@ -25,6 +30,12 @@ const Handlers = [
   GetCoursesHandler,
   GetCourseDocumentsHandler,
   GetDocumentsHandler,
+  GetDocumentByIdHandler,
+  ApproveDocumentHandler,
+  RejectDocumentHandler,
+  RequestRevisionHandler,
+  BulkApproveDocumentsHandler,
+  BulkRejectDocumentsHandler,
 ];
 
 @Module({
