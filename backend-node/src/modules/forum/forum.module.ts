@@ -36,6 +36,7 @@ import { DeleteCommentHandler } from './commands/delete-comment.handler';
 import { GetBookmarkedPostsHandler } from './queries/get-bookmarked-posts.handler';
 import { RejectPostHandler } from './commands/reject-post.handler';
 import { ApproveBulkPostsHandler } from './commands/approve-bulk-posts.handler';
+import { BulkDeletePostsHandler } from './commands/bulk-delete-posts.handler';
 import { CreateCategoryHandler } from './commands/create-category.handler';
 import { UpdateCategoryHandler } from './commands/update-category.handler';
 import { DeleteCategoryHandler } from './commands/delete-category.handler';
@@ -58,6 +59,7 @@ const CommandHandlers = [
   DeleteCommentHandler,
   RejectPostHandler,
   ApproveBulkPostsHandler,
+  BulkDeletePostsHandler,
   CreateCategoryHandler,
   UpdateCategoryHandler,
   DeleteCategoryHandler,

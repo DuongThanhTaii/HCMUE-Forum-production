@@ -5,6 +5,7 @@ export class GetPendingPostsQuery {
   constructor(
     public readonly page: number = 1,
     public readonly pageSize: number = 20,
+    public readonly status?: number,
   ) {}
 }
 
@@ -14,7 +15,12 @@ export class GetPendingPostsHandler implements IQueryHandler<GetPendingPostsQuer
 
   async execute(query: GetPendingPostsQuery) {
     const skip = (query.page - 1) * query.pageSize;
-    const where = { status: 1 }; // 1 = Pending
+    const where: any = {};
+    if (query.status !== undefined && !isNaN(query.status)) {
+      where.status = query.status;
+    } else {
+      where.status = 1; // Default to Pending if no status provided
+    }
 
     const totalCount = await this.prisma.posts.count({ where });
     const postsData = await this.prisma.posts.findMany({

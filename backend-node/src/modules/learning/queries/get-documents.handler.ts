@@ -5,6 +5,7 @@ export class GetDocumentsQuery {
   constructor(
     public readonly pageNumber: number = 1,
     public readonly pageSize: number = 10,
+    public readonly status?: number,
   ) {}
 }
 
@@ -14,13 +15,19 @@ export class GetDocumentsHandler implements IQueryHandler<GetDocumentsQuery> {
 
   async execute(query: GetDocumentsQuery) {
     const skip = (query.pageNumber - 1) * query.pageSize;
+    const where: any = {};
+    if (query.status !== undefined && !isNaN(query.status)) {
+      where.status = query.status;
+    }
+
     const [items, totalCount] = await Promise.all([
       this.prisma.documents.findMany({
+        where,
         skip,
         take: query.pageSize,
         orderBy: { created_at: 'desc' },
       }),
-      this.prisma.documents.count(),
+      this.prisma.documents.count({ where }),
     ]);
 
     // Prisma returns BigInt for file_size which can't be JSON serialized natively. Let's map it.

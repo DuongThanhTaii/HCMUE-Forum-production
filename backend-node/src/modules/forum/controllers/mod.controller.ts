@@ -5,6 +5,7 @@ import { GetPendingPostsQuery } from '../queries/get-pending-posts.handler';
 import { ResolveReportCommand } from '../commands/resolve-report.handler';
 import { RejectPostCommand } from '../commands/reject-post.handler';
 import { ApproveBulkPostsCommand } from '../commands/approve-bulk-posts.handler';
+import { BulkDeletePostsCommand } from '../commands/bulk-delete-posts.handler';
 import { JwtAuthGuard } from '../../identity/guards/jwt-auth.guard';
 import { RolesGuard } from '../../identity/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -39,10 +40,12 @@ export class ModController {
   async getPendingPosts(
     @Query('pageNumber') pageNumber?: string,
     @Query('pageSize') pageSize?: string,
+    @Query('status') status?: string,
   ) {
     const page = pageNumber ? parseInt(pageNumber, 10) : 1;
     const size = pageSize ? parseInt(pageSize, 10) : 20;
-    return this.queryBus.execute(new GetPendingPostsQuery(page, size));
+    const stat = status ? parseInt(status, 10) : undefined;
+    return this.queryBus.execute(new GetPendingPostsQuery(page, size, stat));
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -67,6 +70,18 @@ export class ModController {
   ) {
     return this.commandBus.execute(
       new ApproveBulkPostsCommand(postIds, req.user.userId),
+    );
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin', 'SuperAdmin', 'Moderator')
+  @Post('posts/bulk-delete')
+  async bulkDeletePosts(
+    @Body('postIds') postIds: string[],
+    @Req() req: any,
+  ) {
+    return this.commandBus.execute(
+      new BulkDeletePostsCommand(postIds, req.user.userId),
     );
   }
 }

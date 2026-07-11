@@ -20,6 +20,7 @@ import { RejectDocumentHandler } from './commands/reject-document.handler';
 import { RequestRevisionHandler } from './commands/request-revision.handler';
 import { BulkApproveDocumentsHandler } from './commands/bulk-approve-documents.handler';
 import { BulkRejectDocumentsHandler } from './commands/bulk-reject-documents.handler';
+import { BulkDeleteDocumentsHandler } from './commands/bulk-delete-documents.handler';
 const Handlers = [
   CreateFacultyHandler,
   CreateCourseHandler,
@@ -36,6 +37,7 @@ const Handlers = [
   RequestRevisionHandler,
   BulkApproveDocumentsHandler,
   BulkRejectDocumentsHandler,
+  BulkDeleteDocumentsHandler,
 ];
 
 @Module({

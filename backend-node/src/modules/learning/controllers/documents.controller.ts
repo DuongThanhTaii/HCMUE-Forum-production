@@ -25,6 +25,7 @@ import { RejectDocumentCommand } from '../commands/reject-document.handler';
 import { RequestRevisionCommand } from '../commands/request-revision.handler';
 import { BulkApproveDocumentsCommand } from '../commands/bulk-approve-documents.handler';
 import { BulkRejectDocumentsCommand } from '../commands/bulk-reject-documents.handler';
+import { BulkDeleteDocumentsCommand } from '../commands/bulk-delete-documents.handler';
 import { RateDocumentDto } from '../dtos/rate-document.dto';
 import { GetSystemSettingQuery } from '../../admin/queries/get-system-setting.handler';
 
@@ -39,10 +40,12 @@ export class DocumentsController {
   async getDocuments(
     @Query('pageNumber') pageNumber?: string,
     @Query('pageSize') pageSize?: string,
+    @Query('status') status?: string,
   ) {
     const page = parseInt(pageNumber || '') || 1;
     const size = parseInt(pageSize || '') || 5;
-    return this.queryBus.execute(new GetDocumentsQuery(page, size));
+    const stat = status ? parseInt(status) : undefined;
+    return this.queryBus.execute(new GetDocumentsQuery(page, size, stat));
   }
 
   @Get('course/:courseId')
@@ -100,6 +103,14 @@ export class DocumentsController {
   ) {
     return this.commandBus.execute(
       new BulkRejectDocumentsCommand(dto.documentIds, req.user.userId, dto.reason),
+    );
+  }
+
+  @Post('bulk/delete')
+  @UseGuards(JwtAuthGuard)
+  async bulkDeleteDocuments(@Body() dto: { documentIds: string[] }, @Req() req: any) {
+    return this.commandBus.execute(
+      new BulkDeleteDocumentsCommand(dto.documentIds, req.user.userId),
     );
   }
 

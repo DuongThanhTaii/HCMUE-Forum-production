@@ -8,15 +8,48 @@ function RejectModal({
   onClose,
   onConfirm,
   isRejecting,
+  isDelete,
 }: {
   isOpen: boolean
   onClose: () => void
   onConfirm: (reason: string) => void
   isRejecting: boolean
+  isDelete?: boolean
 }) {
   const [reason, setReason] = useState('')
 
   if (!isOpen) return null
+
+  if (isDelete) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+        <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+          <h3 className="text-lg font-semibold text-slate-900">Xóa bài viết</h3>
+          <p className="mt-2 text-sm text-slate-600">
+            Bạn có chắc chắn muốn xóa cứng các bài viết đã chọn khỏi hệ thống không? Hành động này không thể hoàn tác.
+          </p>
+          <div className="mt-6 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isRejecting}
+              className="rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+            >
+              Hủy
+            </button>
+            <button
+              type="button"
+              onClick={() => onConfirm('')}
+              disabled={isRejecting}
+              className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
+            >
+              Xác nhận xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
@@ -73,15 +106,19 @@ export function ModPostsPage() {
     onApprove,
     onReject,
     onApproveBulk,
+    onDeleteBulk,
     isPublishing,
     feedback,
     selectedIds,
     toggleSelection,
     toggleAll,
+    statusFilter,
+    setStatusFilter,
   } = useModPostsPage()
   
   const [previewPostId, setPreviewPostId] = useState<string | null>(null)
   const [rejectingPostId, setRejectingPostId] = useState<string | null>(null)
+  const [isDeletingBulk, setIsDeletingBulk] = useState(false)
 
   if (isLoading) {
     return <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">{t('common.loading')}</div>
@@ -103,21 +140,46 @@ export function ModPostsPage() {
     <section className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">{t('forum.mod.pendingPostsTitle', 'Bài viết chờ duyệt')}</h2>
-          <p className="mt-1 text-[13px] text-slate-600">{t('forum.mod.pendingPostsHint', 'Duyệt hoặc từ chối các bài viết từ cộng đồng.')}</p>
+          <h2 className="text-base font-semibold text-slate-900">{t('forum.mod.pendingPostsTitle', 'Quản lý Bài viết')}</h2>
+          <p className="mt-1 text-[13px] text-slate-600">{t('forum.mod.pendingPostsHint', 'Duyệt, từ chối hoặc xóa các bài viết từ cộng đồng.')}</p>
           {feedback ? <p className="mt-2 text-sm font-medium text-emerald-600">{feedback}</p> : null}
         </div>
         
-        {selectedIds.length > 0 && (
-          <button
-            type="button"
-            disabled={isPublishing}
-            onClick={() => void onApproveBulk()}
-            className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+        <div className="flex items-center gap-2">
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(Number(e.target.value))
+              if (selectedIds.length > 0) toggleAll() // clear selection
+            }}
+            className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
           >
-            Duyệt {selectedIds.length} bài viết
-          </button>
-        )}
+            <option value={1}>Chờ duyệt (Pending)</option>
+            <option value={2}>Đã đăng (Published)</option>
+            <option value={3}>Bị từ chối (Rejected)</option>
+          </select>
+          
+          {selectedIds.length > 0 && (
+            <>
+              <button
+                type="button"
+                disabled={isPublishing}
+                onClick={() => void onApproveBulk()}
+                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+              >
+                Duyệt {selectedIds.length} bài
+              </button>
+              <button
+                type="button"
+                disabled={isPublishing}
+                onClick={() => setIsDeletingBulk(true)}
+                className="inline-flex items-center gap-2 rounded-lg border border-rose-300 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+              >
+                Xóa {selectedIds.length} bài
+              </button>
+            </>
+          )}
+        </div>
       </header>
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
         <table className="w-full table-auto text-left text-sm">
@@ -204,11 +266,18 @@ export function ModPostsPage() {
       ) : null}
 
       <RejectModal
-        isOpen={rejectingPostId !== null}
-        onClose={() => setRejectingPostId(null)}
+        isOpen={rejectingPostId !== null || isDeletingBulk}
+        onClose={() => {
+          setRejectingPostId(null)
+          setIsDeletingBulk(false)
+        }}
         isRejecting={isPublishing}
+        isDelete={isDeletingBulk}
         onConfirm={(reason) => {
-          if (rejectingPostId) {
+          if (isDeletingBulk) {
+            void onDeleteBulk()
+            setIsDeletingBulk(false)
+          } else if (rejectingPostId) {
             void onReject(rejectingPostId, reason)
             setRejectingPostId(null)
           }

@@ -323,10 +323,18 @@ export const learningApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: 'Document', id: 'LIST' }],
     }),
     bulkRejectDocuments: builder.mutation<unknown, { documentIds: string[]; reason: string }>({
-      query: ({ documentIds, reason }) => ({
+      query: (data) => ({
         url: `/api/v1/documents/bulk/reject`,
         method: 'POST',
-        body: { documentIds, reason },
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'Document', id: 'LIST' }],
+    }),
+    bulkDeleteDocuments: builder.mutation<unknown, { documentIds: string[] }>({
+      query: (data) => ({
+        url: `/api/v1/documents/bulk/delete`,
+        method: 'POST',
+        body: data,
       }),
       invalidatesTags: [{ type: 'Document', id: 'LIST' }],
     }),
@@ -347,4 +355,5 @@ export const {
   useRequestRevisionDocumentMutation,
   useBulkApproveDocumentsMutation,
   useBulkRejectDocumentsMutation,
+  useBulkDeleteDocumentsMutation,
 } = learningApi

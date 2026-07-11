@@ -75,10 +75,10 @@ export const forumModerationApi = baseApi.injectEndpoints({
         { type: 'ForumPost', id: 'LIST' },
       ],
     }),
-    getModerationPendingPosts: builder.query<PendingModerationPost[], { pageNumber?: number; pageSize?: number } | void>({
+    getModerationPendingPosts: builder.query<PendingModerationPost[], { pageNumber?: number; pageSize?: number; status?: number } | void>({
       query: (arg) => ({
         url: '/api/v1/mod/posts',
-        params: { pageNumber: arg?.pageNumber ?? 1, pageSize: arg?.pageSize ?? 20 },
+        params: { pageNumber: arg?.pageNumber ?? 1, pageSize: arg?.pageSize ?? 20, ...(typeof arg?.status === 'number' ? { status: arg.status } : {}) },
       }),
       transformResponse: (response: unknown): PendingModerationPost[] => {
         const payload = unwrapData<RawPostsPayload>(response)
@@ -121,8 +121,19 @@ export const forumModerationApi = baseApi.injectEndpoints({
         { type: 'ForumPost', id: 'LIST' },
       ],
     }),
+    bulkDeleteModerationPosts: builder.mutation<void, { postIds: string[] }>({
+      query: ({ postIds }) => ({
+        url: `/api/v1/mod/posts/bulk-delete`,
+        method: 'POST',
+        body: { postIds },
+      }),
+      invalidatesTags: [
+        { type: 'ModerationPost', id: 'LIST' },
+        { type: 'ForumPost', id: 'LIST' },
+      ],
+    }),
   }),
-})
+});
 
 export const {
   useGetModerationReportsQuery,
@@ -130,4 +141,5 @@ export const {
   useGetModerationPendingPostsQuery,
   useRejectModerationPostMutation,
   useApproveBulkModerationPostsMutation,
-} = forumModerationApi
+  useBulkDeleteModerationPostsMutation,
+} = forumModerationApi;

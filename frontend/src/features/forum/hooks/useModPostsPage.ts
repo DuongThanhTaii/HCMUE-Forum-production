@@ -5,6 +5,7 @@ import {
   useGetModerationPendingPostsQuery,
   useRejectModerationPostMutation,
   useApproveBulkModerationPostsMutation,
+  useBulkDeleteModerationPostsMutation,
 } from '../api/forum.moderation.api'
 
 function readApiErrorMessage(err: unknown): string | null {
@@ -20,10 +21,12 @@ function readApiErrorMessage(err: unknown): string | null {
 
 export function useModPostsPage() {
   const { t } = useTranslation()
-  const { data = [], isLoading, isError } = useGetModerationPendingPostsQuery({ pageNumber: 1, pageSize: 30 })
+  const [statusFilter, setStatusFilter] = useState<number>(1)
+  const { data = [], isLoading, isError } = useGetModerationPendingPostsQuery({ pageNumber: 1, pageSize: 30, status: statusFilter })
   const [publishPost, { isLoading: isPublishing }] = usePublishForumPostMutation()
   const [rejectPost, { isLoading: isRejecting }] = useRejectModerationPostMutation()
   const [approveBulk, { isLoading: isApprovingBulk }] = useApproveBulkModerationPostsMutation()
+  const [deleteBulk, { isLoading: isDeletingBulk }] = useBulkDeleteModerationPostsMutation()
   const [feedback, setFeedback] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -72,6 +75,22 @@ export function useModPostsPage() {
     [approveBulk, selectedIds, t],
   )
 
+  const onDeleteBulk = useCallback(
+    async () => {
+      if (selectedIds.length === 0) return
+      setFeedback(null)
+      try {
+        await deleteBulk({ postIds: selectedIds }).unwrap()
+        setFeedback(`Đã xóa ${selectedIds.length} bài viết`)
+        setSelectedIds([])
+      } catch (err) {
+        const apiMessage = readApiErrorMessage(err)
+        setFeedback(apiMessage ?? 'Không thể xóa bài viết')
+      }
+    },
+    [deleteBulk, selectedIds, t],
+  )
+
   const toggleSelection = (id: string) => {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]))
   }
@@ -93,10 +112,13 @@ export function useModPostsPage() {
     onApprove,
     onReject,
     onApproveBulk,
-    isPublishing: isPublishing || isRejecting || isApprovingBulk,
+    onDeleteBulk,
+    isPublishing: isPublishing || isRejecting || isApprovingBulk || isDeletingBulk,
     feedback,
     selectedIds,
     toggleSelection,
     toggleAll,
+    statusFilter,
+    setStatusFilter,
   }
 }
