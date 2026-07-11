@@ -132,9 +132,7 @@ export function ModPostsPage() {
     )
   }
 
-  if (isEmpty) {
-    return <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">{t('forum.mod.noPendingPosts')}</div>
-  }
+  // Removed early return for isEmpty so the header and status filter are always visible
 
   return (
     <section className="space-y-3">
@@ -249,6 +247,13 @@ export function ModPostsPage() {
                 </td>
               </tr>
             ))}
+            {isEmpty ? (
+              <tr>
+                <td colSpan={7} className="px-3 py-6 text-center text-sm text-slate-500">
+                  {t('forum.mod.noPendingPosts')}
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
